@@ -31,7 +31,7 @@ const Header = () => {
                                   </NavDropdown.Item>
                               </NavDropdown> */}
                               <Nav.Link href="#home" className='nav-link'>Portfilo</Nav.Link>
-                              <Nav.Link href="#link" className='nav-link'>Contact</Nav.Link>
+                              <Nav.Link href="/contact" className='nav-link'>Contact</Nav.Link>
                           </Nav>
                       </Navbar.Collapse>
 
