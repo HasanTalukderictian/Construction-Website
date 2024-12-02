@@ -1,0 +1,27 @@
+[
+    {
+      "id": 1,
+      "title": "Speciality Construction 1",
+      "image": "https://i.ibb.co.com/68XxWGc/construction11212.jpg",
+      "description": "Speciality construction is a niche sector within the construction industry that focuses on projects requiring specialized skills, materials, and techniques."
+    },
+    {
+      "id": 2,
+      "title": "Speciality Construction 2",
+      "image": "https://i.ibb.co.com/y6BpTDc/construction122-2.jpg",
+      "description": "Speciality construction is a niche sector within the construction industry that focuses on projects requiring specialized skills, materials, and techniques."
+    },
+    {
+      "id": 3,
+      "title": "Speciality Construction 3",
+      "image": "https://i.ibb.co.com/7g0gWQP/construction5.jpg",
+      "description": "Speciality construction is a niche sector within the construction industry that focuses on projects requiring specialized skills, materials, and techniques."
+    },
+    {
+        "id": 4,
+        "title": "Speciality Construction 3",
+        "image": "https://i.ibb.co.com/n6Mpjd2/hero2.jpg",
+        "description": "Speciality construction is a niche sector within the construction industry that focuses on projects requiring specialized skills, materials, and techniques."
+      }
+  ]
+  

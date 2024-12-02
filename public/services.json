@@ -1,0 +1,26 @@
+[
+    {
+        "title": "Speciality Construction",
+        "description": "Speciality construction is a niche sector within the construction industry that focuses on projects requiring specialized skills, materials, and techniques.",
+        "image": "https://i.ibb.co.com/LQCGfft/construction2.jpg",
+        "link": "/services/speciality-construction"
+    },
+    {
+        "title": "Residential Construction",
+        "description": "Residential construction involves building and renovating homes and housing developments tailored to meet the needs of individuals and families.",
+        "image": "https://i.ibb.co.com/yR1gp0p/construction3.jpg",
+        "link": "/services/residential-construction"
+    },
+    {
+        "title": "Commercial Construction",
+        "description": "Commercial construction includes office buildings, retail centers, warehouses, and other non-residential projects.",
+        "image": "https://i.ibb.co.com/DMGxydV/construction4-2.jpg",
+        "link": "/services/commercial-construction"
+    },
+    {
+        "title": "Industrial Construction",
+        "description": "Industrial construction covers factories, plants, and other facilities that require specialized infrastructure.",
+        "image": "https://i.ibb.co.com/TkmkHXZ/construction4.jpg",
+        "link": "/services/industrial-construction"
+    }
+]

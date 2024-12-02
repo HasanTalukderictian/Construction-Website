@@ -1,0 +1,17 @@
+[
+    {
+        "icon": "../src//assets//images//icon-3.svg",
+        "title": "Cutting-Edge Solutions",
+        "description": "Small actions create big impacts. It all begins with each employee committing to safer work practices daily, ensuring they return home safely."
+    },
+    {
+        "icon": "../src//assets/images/icon-2.svg",
+        "title": "Expert Team",
+        "description": "Our expert team ensures quality and precision, backed by years of experience in handling complex projects with utmost dedication."
+    },
+    {
+        "icon": "../src//assets//images/icon-1.svg",
+        "title": "Customer-Centric Approach",
+        "description": "We prioritize our clients' needs, ensuring a seamless experience through open communication and timely project delivery."
+    }
+]

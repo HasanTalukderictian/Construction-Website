@@ -1,0 +1,42 @@
+[
+    {
+        "id": 1,
+        "name": "John Doe",
+        "designation": "Software Engineer",
+        "image": "https://i.ibb.co.com/zVJgbYr/pexels-sindre-fs-1040880.jpg",
+        "rating": 5,
+        "comment": "This service exceeded my expectations. Highly recommended!"
+    },
+    {
+        "id": 2,
+        "name": "Jane Smith",
+        "designation": "Project Manager",
+        "image": "https://i.ibb.co.com/zVJgbYr/pexels-sindre-fs-1040880.jpg",
+        "rating": 4,
+        "comment": "Great experience overall. Could improve on response time."
+    },
+    {
+        "id": 3,
+        "name": "Alice Brown",
+        "designation": "Graphic Designer",
+        "image": "https://i.ibb.co.com/zVJgbYr/pexels-sindre-fs-1040880.jpg",
+        "rating": 5,
+        "comment": "Fantastic team and excellent service!"
+    },
+    {
+        "id": 4,
+        "name": "Mark Wilson",
+        "designation": "Entrepreneur",
+        "image": "https://i.ibb.co.com/xDtjzFy/pexels-pixabay-220453.jpg",
+        "rating": 3,
+        "comment": "Good, but room for improvement in communication."
+    },
+    {
+        "id": 5,
+        "name": "Lucy Taylor",
+        "designation": "Data Analyst",
+        "image": "https://i.ibb.co.com/2d3nvBD/author-2.jpg",
+        "rating": 4,
+        "comment": "Efficient service and very professional team."
+    }
+]

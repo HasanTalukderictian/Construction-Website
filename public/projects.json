@@ -1,0 +1,66 @@
+[
+    {
+      "id": 1,
+      "title": "Rampura Projects",
+      "image": "https://i.ibb.co.com/4jxY1Z4/construction4.jpg",
+      "description": "Speciality construction is a niche sector within the construction industry that focuses on projects requiring specialized skills, materials, and techniques..",
+      "text": "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc"
+    },
+    {
+      "id": 2,
+      "title": "Uttra Projects",
+      "image": "https://i.ibb.co.com/p6HXmtb/construction6.jpg",
+      "description": "Speciality construction is a niche sector within the construction industry that focuses on projects requiring specialized skills, materials, and techniques..",
+      "text": "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc"
+    },
+    
+    {
+      "id": 3,
+      "title": "Dhanmodi Projects",
+      "image": "https://i.ibb.co.com/LzbZyZh/construction2.jpg",
+         "description": "Speciality construction is a niche sector within the construction industry that focuses on projects requiring specialized skills, materials, and techniques..",
+         "text": "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc",
+         "owner": {
+           "name": "Hasan Talukder",
+            "Address" : "Dhanmodi, Dhaka",
+            "Phone" : "01768712230"
+         }
+    },
+    {
+      "id": 4,
+      "title": "Rajshahi Projects",
+      "image": "https://i.ibb.co.com/4jxY1Z4/construction4.jpg",
+        "description": "Speciality construction is a niche sector within the construction industry that focuses on projects requiring specialized skills, materials, and techniques..",
+        "text": "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc",
+        "owner": {
+          "name": "Hasan Talukder",
+           "Address" : "Dhanmodi, Dhaka",
+           "Phone" : "01768712230"
+        }
+    },
+    {
+      "id": 5,
+      "title": "Tangail Projects",
+      "image": "https://i.ibb.co.com/TKhXTvD/construction6-2.jpg",
+       "description": "Speciality construction is a niche sector within the construction industry that focuses on projects requiring specialized skills, materials, and techniques..",
+       "text": "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc", 
+       "owner": {
+        "name": "Hasan Talukder",
+         "Address" : "Dhanmodi, Dhaka",
+         "Phone" : "01768712230"
+      }
+    },
+    {
+      "id": 6,
+      "title": "Khunla Projects",
+      "image": "https://i.ibb.co.com/n6Mpjd2/hero2.jpg",
+         "description": "Speciality construction is a niche sector within the construction industry that focuses on projects requiring specialized skills, materials, and techniques..",
+         "text": "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc", 
+         "owner": {
+          "name": "Hasan Talukder",
+           "Address" : "Dhanmodi, Dhaka",
+           "Phone" : "01768712230"
+        }
+    }
+  ]
+  
