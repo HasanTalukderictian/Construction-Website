@@ -3,28 +3,12 @@ import Header from '../common/Header';
 import Footer from '../common/Footer';
 import Common from '../common/Common';
 
-
-import DefaultImage from '../../assets/images/construction1.jpg';
 import { Link } from 'react-router-dom';
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch data using useEffect when the component mounts
-  // useEffect(() => {
-
-  //   fetch('projects.json')
-  //     .then(response => response.json()) 
-  //     .then(data => {
-  //       setProjects(data);
-  //       setLoading(false); 
-  //     })
-  //     .catch(error => {
-  //       console.error('Error fetching projects:', error);
-  //       setLoading(false); 
-  //     });
-  // }, []); 
 
 
   useEffect(() => {
