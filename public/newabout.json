@@ -1,0 +1,15 @@
+[
+    {
+      "Name": "Hafizur Rhaman",
+      "Designation": "Web Developer",
+      "image": "https://i.ibb.co.com/JpBBGZY/pexels-pixabay-220453.jpg",
+      "socialMediaLink": "https://linkedin.com/in/example"
+    },
+    {
+      "Name": "Another Member",
+      "Designation": "Graphic Designer",
+      "image": "https://i.ibb.co.com/KsXZz9s/pexels-sindre-fs-1040880.jpg",
+      "socialMediaLink": "https://linkedin.com/in/example2"
+    }
+  ]
+  

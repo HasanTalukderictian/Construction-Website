@@ -147,81 +147,20 @@ ul{
     }
 }
 
-// section-3{
 
-//     .item{
-//         position: relative;
-//         overflow: hidden;
-//         border-radius: 40px;
-//         .service-image{
-//             position: relative;
-//             overflow: hidden;
-//               img {
-//                 width: 100%;
-//                 border-radius: 40px;
-//                 aspect-ratio: 1 / 1.2;
-//                 /* Width to height ratio */
-//                 object-fit: cover;
-//             }
-//         }
-//         .service-body{
-//             position: absolute;
-//             left: 30px;
-//             right: 30;
-//             bottom: 30px;
-//             transform: translateY(80%);
-//             transition: all 0.4s ease-in-out;
-//         }
-//     }
-// }
 
-// .section-3 {
-//     .item {
-//         position: relative;
-//         overflow: hidden;
-//         border-radius: 40px;
-//         /* Apply the border-radius to the .item as well */
 
-//         .service-image {
-//             position: relative;
-//             overflow: hidden;
-//             &:hover{
-//                 .service-body{
-//                     transform: translateY(0%);
-//                     .service-content{
-//                         opacity: 1;
-//                     }
-//                 }
-//             }
-
-//             img {
-//                 width: 100%;
-//                 border-radius: 40px;
-//                 /* Border-radius applied to the image */
-//                 aspect-ratio: 1 / 1.2;
-//                 /* Maintain width to height ratio */
-//                 object-fit: cover;
-//             }
-//         }
-
-//         .service-body {
-//             position: absolute;
-//             left: 30px;
-//             right: 30px;
-//             /* Add px unit to fix */
-//             bottom: 30px;
-//             transform: translateY(80%);
-//             transition: all 0.4s ease-in-out;
-
-//             .service-content{
-//                 transition: all 0.4s ease-in-out;
-//                 opacity: 0;
-//             }
-//         }
-//     }
-// }
-
+.description-content{
+    overflow-y: auto;
+    color: white !important;  /* Force text color to white */
+    background-color: transparent;
+    border: none;
+}
 .section-3 {
+       
+    border-radius: 40px;
+    margin-bottom: 20px;
+
     .item {
         position: relative;
         overflow: hidden;

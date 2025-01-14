@@ -1,0 +1,7 @@
+/* Hover effect for nav links inside the sub-menu */
+.nav .nav-item .nav-link:hover {
+    color: #e4032e; /* Replace with your desired hover color */
+    text-decoration: none; /* Optional: remove underline */
+    transition: color 0.2s ease; /* Smooth transition for hover effect */
+  }
+  

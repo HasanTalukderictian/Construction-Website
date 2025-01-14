@@ -4,30 +4,49 @@ import Footer from '../common/Footer';
 import Common from '../common/Common';
 
 
-import DefaultImage from '../../assets/images/construction1.jpg'; 
+import DefaultImage from '../../assets/images/construction1.jpg';
 import { Link } from 'react-router-dom';
 
 const Projects = () => {
-  const [projects, setProjects] = useState([]); 
-  const [loading, setLoading] = useState(true); 
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   // Fetch data using useEffect when the component mounts
+  // useEffect(() => {
+
+  //   fetch('projects.json')
+  //     .then(response => response.json()) 
+  //     .then(data => {
+  //       setProjects(data);
+  //       setLoading(false); 
+  //     })
+  //     .catch(error => {
+  //       console.error('Error fetching projects:', error);
+  //       setLoading(false); 
+  //     });
+  // }, []); 
+
+
   useEffect(() => {
-   
-    fetch('projects.json')
-      .then(response => response.json()) 
-      .then(data => {
-        setProjects(data);
-        setLoading(false); 
+    // Fetch service data from the API
+    fetch('http://127.0.0.1:8000/api/get-projects')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
       })
-      .catch(error => {
-        console.error('Error fetching projects:', error);
-        setLoading(false); 
-      });
-  }, []); 
+      .then((data) => {
+        setProjects(data.data);
+        setLoading(false);
+        // Access the 'data' field in the response
+      })
+      .catch((error) => console.error('Error fetching services:', error));
+    setLoading(false);
+  }, []);
 
   if (loading) {
-    return <div>Loading...</div>; 
+    return <div>Loading...</div>;
   }
 
   return (
@@ -57,7 +76,7 @@ const Projects = () => {
                   <div className="item">
                     <div className="service-image">
                       <img
-                        src={project.image || DefaultImage} 
+                        src={`http://127.0.0.1:8000/storage/${project.image}`} // Assuming your images are in storage
                         alt={project.title}
                         className="w-100"
                       />
@@ -70,8 +89,8 @@ const Projects = () => {
                       <div className="service-content">
                         <p>{project.description}</p>
                         <Link to={`/project/${project.id}`} className="btn btn-primary">
-                                                    Read More
-                                                </Link>
+                          Read More
+                        </Link>
                       </div>
                     </div>
                   </div>
