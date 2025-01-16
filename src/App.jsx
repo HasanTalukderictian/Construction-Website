@@ -21,6 +21,7 @@ import Testominal from './components/Backend/Component/Page/Testominal';
 import BackendBlogs from './components/Backend/Component/Blogs';
 import Fortfilo from './components/Backend/Component/Fortfilo';
 import Admin from './components/Backend/Admin';
+import ServiceDetails from './components/frontend/ServiceDetails';
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
               <Route path='/' element={<Home></Home>}></Route>
               <Route path='/about' element={<About></About>}></Route>
               <Route path='/service' element={<Services></Services>}></Route>
+              <Route path='/services/:id' element={<ServiceDetails />} />
               <Route path='/projects' element={<Projects></Projects>}></Route>
               <Route path="/project/:id" element={<ProjectDetails />} />
               <Route path='/blogs' element={<Blogs></Blogs>}></Route>

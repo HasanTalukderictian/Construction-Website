@@ -16,6 +16,7 @@ import Testominal from './Testominal';
 
 
 
+
 const Home = () => {
 
     const [services, setServices] = useState([]);
@@ -135,47 +136,47 @@ const Home = () => {
 
                 {/* Our Services  */}
 
-                <section className="section-3 py-5">
-                    <div className="container-fluid py-5 px-5">
-                        <div className="section-header text-center">
-                            <span>Our Services</span>
-                            <h2>Our Construction Services</h2>
-                            <p>We Offer a diverse array of construction services, spanning residential, commercial, and industrial projects.</p>
-                        </div>
+              
 
-                        <div className="row mt-5 mb-4">
-                            {services.map((service, index) => (
-                                <div className="col-md-3 col-lg-3" key={index}>
-                                    <div className="item">
-                                        <div className="service-image">
-                                            <img
+                <section className='section-3 py-5'>
+        <div className='container py-5'>
+          <div className='section-header text-center'>
+            <span>Our Services</span>
+            <h2>Our Constructions Services</h2>
+            <p>We offer a diverse array of construction services, spanning residential, commercial, and industrial projects.</p>
+          </div>
+
+          <div className='row mt-5 mb-4'>
+            {services.map(service => (
+              <div className='col-md-4 col-lg-4' key={service.id}>
+                <div className='item'>
+                  <div className='service-image'>
+                  <img
                                                 src={`http://127.0.0.1:8000/storage/${service.image}`} // Assuming your images are in storage
                                                 alt={service.title}
                                                 className="w-100"
                                             />
-                                            <div className="service-title">
-                                                <h3>{service.title}</h3>
-                                            </div>
-                                        </div>
-
-                                        <div className="service-body">
-                                            <div className="service-content">
-
-                                                <div
-                                                    className="description-content "
-                                                    dangerouslySetInnerHTML={{ __html: service.description }}
-                                                ></div>
-                                                <a href={service.link} className="btn btn-primary">
-                                                    Read More
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+                    <div className='service-title'>
+                      <h3>{service.title}</h3>
                     </div>
-                </section>
+                  </div>
+
+                  <div className='service-body'>
+                    <div className='service-content'>
+                      <p>{service.description}</p>
+                      <Link to={`/services/${service.id}`} className='btn btn-primary'>Read More</Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
+
+             
 
                 {/* Why Choose Us */}
 
@@ -284,7 +285,7 @@ const Home = () => {
                         </div>
 
                         <div className="row pt-3">
-                            {blogs.map((blog, index) => (
+                            {blogs.map((blog) => (
                                 <div className="col-md-4 mb-3 d-flex align-items-stretch" key={blog.id}>
                                     <div className="card shadow border-0" style={{ width: "100%", height: "500px" }}>
                                         <div className="card-img-top">

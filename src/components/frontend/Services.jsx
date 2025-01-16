@@ -2,27 +2,30 @@ import { useEffect, useState } from 'react';
 import Common from "../common/Common";
 import Footer from "../common/Footer";
 import Header from "../common/Header";
-
-
-
+import { Link } from 'react-router-dom';
 
 const Services = () => {
-  const [services, setServices] = useState([]); 
-  const [loading, setLoading] = useState(true); 
+  const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Fetching services data when the component mounts
   useEffect(() => {
-    fetch('service.json') 
-      .then(response => response.json()) 
-      .then(data => {
-        setServices(data); 
-        setLoading(false); 
+    fetch('http://127.0.0.1:8000/api/get-service')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
       })
-      .catch(error => {
-        console.error('Error fetching services:', error); 
-        setLoading(false); 
+      .then((data) => {
+        setServices(data.data); // Access the 'data' field in the response
+        console.log('Services Data:', data.data);
+        setLoading(false); // Set loading to false
+      })
+      .catch((error) => {
+        console.error('Error fetching services:', error);
+        setLoading(false); // Set loading to false even if there’s an error
       });
-  }, []); 
+  }, []);
 
   if (loading) {
     return <div>Loading...</div>; 
@@ -31,9 +34,11 @@ const Services = () => {
   return (
     <>
       <Header />
-      <Common preHeading='Quality, Integrity, Value'
+      <Common 
+        preHeading='Quality, Integrity, Value'
         heading='Services'
-        text='We excel at transforming visions into reality through outstanding and precise execution.' />
+        text='We excel at transforming visions into reality through outstanding and precise execution.'
+      />
 
       <section className='section-3 py-5'>
         <div className='container py-5'>
@@ -48,7 +53,11 @@ const Services = () => {
               <div className='col-md-4 col-lg-4' key={service.id}>
                 <div className='item'>
                   <div className='service-image'>
-                    <img src={service.image } alt='Service Images' className='w-100' />
+                    <img
+                      src={`http://127.0.0.1:8000/storage/${service.image}`} // Assuming your images are in storage
+                      alt={service.title}
+                      className="w-100"
+                    />
                     <div className='service-title'>
                       <h3>{service.title}</h3>
                     </div>
@@ -57,7 +66,7 @@ const Services = () => {
                   <div className='service-body'>
                     <div className='service-content'>
                       <p>{service.description}</p>
-                      <a href='#' className='btn btn-primary'>Read More</a>
+                      <Link to={`/services/${service.id}`} className='btn btn-primary'>Read More</Link>
                     </div>
                   </div>
                 </div>
