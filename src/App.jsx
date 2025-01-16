@@ -22,6 +22,7 @@ import BackendBlogs from './components/Backend/Component/Blogs';
 import Fortfilo from './components/Backend/Component/Fortfilo';
 import Admin from './components/Backend/Admin';
 import ServiceDetails from './components/frontend/ServiceDetails';
+import BlogsDetails from './components/frontend/BlogsDetails';
 
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
               <Route path='/projects' element={<Projects></Projects>}></Route>
               <Route path="/project/:id" element={<ProjectDetails />} />
               <Route path='/blogs' element={<Blogs></Blogs>}></Route>
+              <Route path='/blog/:id' element={<BlogsDetails></BlogsDetails>}></Route>
               <Route path='/contact' element={<Contact></Contact>}></Route>
               <Route path='/protfilo' element={<Portfilo></Portfilo>}></Route>
               

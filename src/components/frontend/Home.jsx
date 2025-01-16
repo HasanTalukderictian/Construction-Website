@@ -307,9 +307,9 @@ const Home = () => {
                                                 </a>
                                             </h5>
 
-                                            <a href="#" className="btn btn-primary mt-2">
-                                                Read More
-                                            </a>
+                                            <Link to={`/blog/${blog.id}`} className="btn btn-primary">
+                                                    Read More
+                                                </Link>
                                         </div>
                                     </div>
                                 </div>
