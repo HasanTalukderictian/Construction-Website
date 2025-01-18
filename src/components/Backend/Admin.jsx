@@ -2,12 +2,15 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+import icon from '../../assets/images/Logo Icon.png';
+
 const Admin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [responseMessage, setResponseMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [submittedData, setSubmittedData] = useState(null);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false); // State to toggle password visibility
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -57,51 +60,90 @@ const Admin = () => {
     setSubmittedData({ email, password }); // Triggers useEffect for login
   };
 
-  
-
   return (
-    <div className="container mt-5">
-      <h2 className="text-center mb-4">Admin Login</h2>
+    <div 
+      className="container mt-5"
+      style={{
+        border: '5px solid rgb(223, 236, 228)',
+        width: '500px',
+        height: '600px',
+        margin: '0 auto',
+        padding: '20px',
+        borderRadius: '15px',
+      }}
+    >
       <div className="row justify-content-center">
-        <div className="col-md-6">
+        <div 
+          className="col-md-6"
+          style={{
+            width: '800px',
+            height: '900px',
+            padding: '50px',
+          }}
+        >
           <form
             className="p-4 shadow rounded"
             onSubmit={handleSubmit}
             style={{ background: "#f8f9fa" }}
-          >
+          >  
+            {/* Centered Circular Image */}
+            <div className="d-flex justify-content-center">
+              <img src={icon} alt="Icon" className="rounded-circle" style={{ width: '100px' }} />
+            </div>
+
+            <h2 className="text-center mb-4">Gazi Builders</h2>
+            
+            {/* Email Input */}
             <div className="mb-3">
               <label htmlFor="email" className="form-label">
                 Email address
               </label>
-              <input
-                type="email"
-                className="form-control"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
+              <div className="input-group">
+                <span className="input-group-text">
+                  <i className="bi bi-envelope-fill"></i>
+                </span>
+                <input
+                  type="email"
+                  className="form-control"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
             </div>
+
+            {/* Password Input */}
             <div className="mb-3">
               <label htmlFor="password" className="form-label">
                 Password
               </label>
-              <input
-                type="password"
-                className="form-control"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
+              <div className="input-group">
+                <span
+                  className="input-group-text"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => setIsPasswordVisible(!isPasswordVisible)} // Toggle password visibility
+                >
+                  <i className={`bi ${isPasswordVisible ? "bi-unlock-fill" : "bi-lock-fill"}`}></i>
+                </span>
+                <input
+                  type={isPasswordVisible ? "text" : "password"} // Toggle input type
+                  className="form-control"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
             </div>
+
             <button type="submit" className="btn btn-primary w-100">
               Login
             </button>
           </form>
         </div>
       </div>
-
+    
       {/* Modal */}
       <div
         className={`modal fade ${showModal ? "show" : ""}`}
@@ -126,12 +168,9 @@ const Admin = () => {
           </div>
         </div>
       </div>
-
+    
       {/* Backdrop */}
       {showModal && <div className="modal-backdrop fade show"></div>}
-
-      {/* Logout Button - Only visible after successful login */}
-     
     </div>
   );
 };

@@ -47,7 +47,7 @@ const Sidebar = () => {
                     `nav-link ${isActive ? "active" : "text-dark"}`
                 }
             >
-                Order List
+                Invoice
             </NavLink>
         </li>
         <li className="nav-item">

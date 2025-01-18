@@ -36,9 +36,9 @@ const Footer = () => {
                             </div>
                             <div className='col-md-3 text-white'>
                                 <h3>Contact Us</h3>
-                                <p>01768712230</p>
+                                <p className="text-white">01768712230</p>
                                 <p className="text-warning">info.gazibulider@gmail.com</p>
-                                <p>Mohammadpur Dhaka, 1202</p>
+                                <p className="text-white">Mohammadpur Dhaka, 1202</p>
                             </div>
                         </div>
                         <hr className='text-white' />

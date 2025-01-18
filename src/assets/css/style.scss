@@ -383,4 +383,28 @@ ul{
    .text-warning{
       margin-top: -441px !important;
    }
+
+   /* Sticky WhatsApp Button */
+.whatsapp-sticky {
+    position: fixed;
+    bottom: 20px; /* Adjust the space from the bottom of the screen */
+    right: 20px; /* Adjust the space from the right side of the screen */
+    z-index: 9999; /* Make sure it's on top of other elements */
+  }
+  
+  .whatsapp-sticky button {
+    border-radius: 50px; /* Rounded button */
+    padding: 12px 20px; /* Adjust padding */
+    background-color: #25D366; /* WhatsApp green */
+    color: white;
+    border: none;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .whatsapp-sticky button:hover {
+    background-color: #128C7E; /* Darker WhatsApp green on hover */
+  }
+  
 }

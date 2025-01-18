@@ -1,8 +1,5 @@
-
-
 import Footer from '../common/Footer';
 import Header from '../common/Header';
-
 
 import 'swiper/css/pagination';
 
@@ -13,7 +10,9 @@ import About from '../common/About';
 import { useState, useEffect } from 'react';
 import Testominal from './Testominal';
 
+import '../../assets/css/style.scss'
 
+import whatsapp from '../../assets/images/whatsapp-icon.png';
 
 
 
@@ -23,8 +22,6 @@ const Home = () => {
     const [features, setFeatures] = useState([]);
     const [blogs, setBlogs] = useState([]);
     const [projects, setProjects] = useState([]);
-
-
 
 
     useEffect(() => {
@@ -41,7 +38,6 @@ const Home = () => {
             })
             .catch((error) => console.error('Error fetching services:', error));
     }, []); // Empty dependency array means this effect runs only once on mount
-
 
 
     useEffect(() => {
@@ -94,13 +90,6 @@ const Home = () => {
             .catch((error) => console.error('Error fetching services:', error));
     }, []);
 
-
-   
-
-
-    
-
-
     return (
         <>
             <Header />
@@ -126,57 +115,48 @@ const Home = () => {
                     </div>
                 </section>
 
-
                 {/* About Us Section */}
-
 
                 <About />
 
-
-
                 {/* Our Services  */}
 
-              
-
                 <section className='section-3 py-5'>
-        <div className='container py-5'>
-          <div className='section-header text-center'>
-            <span>Our Services</span>
-            <h2>Our Constructions Services</h2>
-            <p>We offer a diverse array of construction services, spanning residential, commercial, and industrial projects.</p>
-          </div>
+                    <div className='container py-5'>
+                        <div className='section-header text-center'>
+                            <span>Our Services</span>
+                            <h2>Our Constructions Services</h2>
+                            <p>We offer a diverse array of construction services, spanning residential, commercial, and industrial projects.</p>
+                        </div>
 
-          <div className='row mt-5 mb-4'>
-            {services.map(service => (
-              <div className='col-md-4 col-lg-4' key={service.id}>
-                <div className='item'>
-                  <div className='service-image'>
-                  <img
+                        <div className='row mt-5 mb-4'>
+                            {services.map(service => (
+                                <div className='col-md-4 col-lg-4' key={service.id}>
+                                    <div className='item'>
+                                        <div className='service-image'>
+                                            <img
                                                 src={`http://127.0.0.1:8000/storage/${service.image}`} // Assuming your images are in storage
                                                 alt={service.title}
                                                 className="w-100"
                                             />
-                    <div className='service-title'>
-                      <h3>{service.title}</h3>
+                                            <div className='service-title'>
+                                                <h3>{service.title}</h3>
+                                            </div>
+                                        </div>
+
+                                        <div className='service-body'>
+                                            <div className='service-content'>
+                                            <p className='text-white'>{service.description.replace(/<[^>]*>/g, '')}</p>
+
+                                                <Link to={`/services/${service.id}`} className='btn btn-primary'>Read More</Link>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                  </div>
-
-                  <div className='service-body'>
-                    <div className='service-content'>
-                      <p>{service.description}</p>
-                      <Link to={`/services/${service.id}`} className='btn btn-primary'>Read More</Link>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-
-
-             
+                </section>
 
                 {/* Why Choose Us */}
 
@@ -222,7 +202,6 @@ const Home = () => {
                     </div>
                 </section>
 
-
                 {/* Our Projects */}
 
                 <section className="section-3 py-5">
@@ -238,7 +217,7 @@ const Home = () => {
                                 <div className="col-12 col-md-3 col-lg-3" key={project.id}>
                                     <div className="item">
                                         <div className="service-image">
-                                        <img
+                                            <img
                                                 src={`http://127.0.0.1:8000/storage/${project.image}`} // Assuming your images are in storage
                                                 alt={project.title}
                                                 className="w-100"
@@ -249,7 +228,7 @@ const Home = () => {
                                         </div>
                                         <div className="service-body">
                                             <div className="service-content">
-                                                <p>{project.description}</p>
+                                                <p className='text-white'>{project.description}</p>
                                                 <Link to={`/project/${project.id}`} className="btn btn-primary">
                                                     Read More
                                                 </Link>
@@ -265,11 +244,7 @@ const Home = () => {
 
                 {/* testomonial section  */}
 
-             
-                <Testominal/>
-              
-
-                     
+                <Testominal />
 
                 {/* blogs section */}
 
@@ -308,8 +283,8 @@ const Home = () => {
                                             </h5>
 
                                             <Link to={`/blog/${blog.id}`} className="btn btn-primary">
-                                                    Read More
-                                                </Link>
+                                                Read More
+                                            </Link>
                                         </div>
                                     </div>
                                 </div>
@@ -318,12 +293,38 @@ const Home = () => {
                     </div>
                 </section>
 
+                <section className="section-6 bg-light py-5">
+    <a 
+        href="https://wa.me/01758672876?text=Hi,How can I help you!" 
+        className="whatsapp-sticky" 
+        target="_blank"
+        style={{
+            position: 'fixed',
+            bottom: '20px',
+            right: '20px',
+            zIndex: '9999'
+        }}
+    >
+        <img 
+            src={whatsapp} 
+            alt="WhatsApp Chat" 
+            style={{
+                width: '80px',
+                height: '80px',
+                borderRadius: '50%',
+                cursor: 'pointer'
+            }} 
+        />
+    </a>
+</section>
+
+
+
 
 
             </main >
 
             <Footer />
-
 
         </>
     )
