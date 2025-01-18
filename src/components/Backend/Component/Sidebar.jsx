@@ -20,128 +20,124 @@ const Sidebar = () => {
       </button>
 
       <div
-    className={`d-flex flex-column bg-light p-3 vh-100 border rounded position-fixed mx-2 ${isSidebarOpen ? "sidebar-open" : "sidebar-closed"}`}
-    style={{
-        width: "250px",
-        transition: "all 0.3s ease",
-        border: "15px solid #ccc", // Increased border width for a bolder line
-        borderRadius: "10px", // Apply border-radius
-    }}
+  className={`d-flex flex-column p-3 vh-100 border rounded position-fixed mx-2 bg-success text-white bg-opacity-75 ${isSidebarOpen ? "sidebar-open" : "sidebar-closed"}`}
+  style={{
+    width: "250px",
+    transition: "all 0.3s ease",
+    border: "15px solid #ccc", // Increased border width for a bolder line
+    borderRadius: "10px", // Apply border-radius
+  }}
 >
-    <h2 className="mb-4">Gazi Builders</h2>
-    <ul className="nav nav-pills flex-column mb-auto">
-        <li className="nav-item">
+  <h2 className="mb-4">Gazi Builders</h2>
+  <ul className="nav nav-pills flex-column mb-auto">
+    <li className="nav-item">
+      <NavLink
+        to="/admin-home"
+        className={({ isActive }) =>
+          `nav-link ${isActive ? "active" : "text-white"}`
+        }
+      >
+       <i className="bi bi-speedometer2 me-2"></i> Dashboard
+      </NavLink>
+    </li>
+    <li className="nav-item">
+      <NavLink
+        to="/admin/orders"
+        className={({ isActive }) =>
+          `nav-link ${isActive ? "active" : "text-white"}`
+        }
+      >
+        <i className="bi bi-receipt me-2"></i> Invoice
+      </NavLink>
+    </li>
+    <li className="nav-item">
+      <NavLink
+        to="/admin/blogs"
+        className={({ isActive }) =>
+          `nav-link ${isActive ? "active" : "text-white"}`
+        }
+      >
+       <i className="bi bi-pencil-square me-2"></i> Blogs
+      </NavLink>
+    </li>
+    <li className="nav-item">
+      <NavLink
+        to="/admin/portfilo"
+        className={({ isActive }) =>
+          `nav-link ${isActive ? "active" : "text-white"}`
+        }
+      >
+       <i className="bi bi-image me-2"></i> Portfolio
+      </NavLink>
+    </li>
+    {/* Page Menu with Sub-links */}
+    <li className="nav-item">
+      <div
+        className="nav-link d-flex justify-content-between align-items-center"
+        onClick={togglePageLinks}
+        style={{ cursor: "pointer" }}
+      >
+          <i className="bi bi-file-earmark-text me-2"></i> Page
+        <span>{isPageOpen ? "▼" : "▶"}</span> {/* Arrow toggle indicator */}
+      </div>
+      {isPageOpen && (
+        <ul className="nav flex-column ms-3">
+          <li className="nav-item">
             <NavLink
-                to="/admin-home"
-                className={({ isActive }) =>
-                    `nav-link ${isActive ? "active" : "text-dark"}`
-                }
+              to="/admin/page/banner"
+              className={({ isActive }) =>
+                `nav-link ${isActive ? "active" : "text-white"}`
+              }
             >
-                Dashboard
+                <i className="bi bi-card-image me-2"></i> Banner
             </NavLink>
-        </li>
-        <li className="nav-item">
+          </li>
+          <li className="nav-item">
             <NavLink
-                to="/admin/orders"
-                className={({ isActive }) =>
-                    `nav-link ${isActive ? "active" : "text-dark"}`
-                }
+              to="/admin/page/about"
+              className={({ isActive }) =>
+                `nav-link ${isActive ? "active" : "text-white"}`
+              }
             >
-                Invoice
+             <i className="bi bi-info-circle me-2"></i> About Us
             </NavLink>
-        </li>
-        <li className="nav-item">
+          </li>
+          <li className="nav-item">
             <NavLink
-                to="/admin/blogs"
-                className={({ isActive }) =>
-                    `nav-link ${isActive ? "active" : "text-dark"}`
-                }
+              to="/admin/page/services"
+              className={({ isActive }) =>
+                `nav-link ${isActive ? "active" : "text-white"}`
+              }
             >
-                Blogs
+              <i className="bi bi-briefcase me-2"></i> Service
             </NavLink>
-        </li>
-        <li className="nav-item">
+          </li>
+          <li className="nav-item">
             <NavLink
-                to="/admin/portfilo"
-                className={({ isActive }) =>
-                    `nav-link ${isActive ? "active" : "text-dark"}`
-                }
+              to="/admin/page/projects"
+              className={({ isActive }) =>
+                `nav-link ${isActive ? "active" : "text-white"}`
+              }
             >
-                Portfolio
+             <i className="bi bi-building me-2"></i> Projects
             </NavLink>
-        </li>
-        {/* Page Menu with Sub-links */}
-        <li className="nav-item">
-            <div
-                className="nav-link text-dark d-flex justify-content-between align-items-center"
-                onClick={togglePageLinks}
-                style={{ cursor: "pointer" }}
+          </li>
+          <li className="nav-item">
+            <NavLink
+              to="/admin/page/testominal"
+              className={({ isActive }) =>
+                `nav-link ${isActive ? "active" : "text-white"}`
+              }
             >
-                Page
-                <span>{isPageOpen ? "▼" : "▶"}</span> {/* Arrow toggle indicator */}
-            </div>
-            {isPageOpen && (
-                <ul className="nav flex-column ms-3">
-                    <li className="nav-item">
-                        <NavLink
-                            to="/admin/page/banner"
-                            className={({ isActive }) =>
-                                `nav-link ${isActive ? "active" : "text-dark"}`
-                            }
-                            style={{ transition: "color 0.2s ease" }}
-                        >
-                            Banner
-                        </NavLink>
-                    </li>
-                    <li className="nav-item">
-                        <NavLink
-                            to="/admin/page/about"
-                            className={({ isActive }) =>
-                                `nav-link ${isActive ? "active" : "text-dark"}`
-                            }
-                            style={{ transition: "color 0.2s ease" }}
-                        >
-                            About Us
-                        </NavLink>
-                    </li>
-                    <li className="nav-item">
-                        <NavLink
-                            to="/admin/page/services"
-                            className={({ isActive }) =>
-                                `nav-link ${isActive ? "active" : "text-dark"}`
-                            }
-                            style={{ transition: "color 0.2s ease" }}
-                        >
-                            Service
-                        </NavLink>
-                    </li>
-                    <li className="nav-item">
-                        <NavLink
-                            to="/admin/page/projects"
-                            className={({ isActive }) =>
-                                `nav-link ${isActive ? "active" : "text-dark"}`
-                            }
-                            style={{ transition: "color 0.2s ease" }}
-                        >
-                            Projects
-                        </NavLink>
-                    </li>
-                    <li className="nav-item">
-                        <NavLink
-                            to="/admin/page/testominal"
-                            className={({ isActive }) =>
-                                `nav-link ${isActive ? "active" : "text-dark"}`
-                            }
-                            style={{ transition: "color 0.2s ease" }}
-                        >
-                            Testimonial
-                        </NavLink>
-                    </li>
-                </ul>
-            )}
-        </li>
-    </ul>
+               <i className="bi bi-chat-quote me-2"></i> Testimonial
+            </NavLink>
+          </li>
+        </ul>
+      )}
+    </li>
+  </ul>
 </div>
+
 
 
 

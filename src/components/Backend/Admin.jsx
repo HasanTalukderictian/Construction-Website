@@ -62,7 +62,7 @@ const Admin = () => {
 
   return (
     <div 
-      className="container mt-5"
+      className="container mt-5 bg-success p-2 text-dark bg-opacity-100"
       style={{
         border: '5px solid rgb(223, 236, 228)',
         width: '500px',
