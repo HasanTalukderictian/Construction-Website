@@ -4,6 +4,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 
 import icon from "../../../assets/images/Logo Icon.png";
+import Footer from "../Footer";
 
 const Orderlist = () => {
   const [formData, setFormData] = useState({
@@ -241,6 +242,8 @@ const Orderlist = () => {
           </button>
         </form>
       </div>
+
+      <Footer/>
     </Layout>
   );
 };
