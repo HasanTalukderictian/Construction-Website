@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useNavigate } from "react-router-dom";
 import { Pie, Bar } from "react-chartjs-2";
+
+
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from "chart.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 
 ChartJS.register(ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
@@ -145,9 +149,15 @@ const Dashboard = () => {
         <div className="container mt-1 border-2 bg-gradient-secondary">
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h2>Dashboard</h2>
-                <button className="btn btn-danger" onClick={handleLogout}>
-                    <i className="bi bi-box-arrow-right"></i> Logout
+                <button
+                    className="btn btn-danger rounded-pill px-4 py-2"
+                    onClick={handleLogout}
+                    style={{ fontSize: "1.50rem", marginLeft: '2px' }} // Adjust text size
+                >
+                    <FontAwesomeIcon icon={faRightFromBracket} />
+                     Logout
                 </button>
+
             </div>
 
             <div className="row g-4">

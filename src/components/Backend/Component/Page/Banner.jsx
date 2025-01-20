@@ -1,3 +1,4 @@
+import Footer from "../../Footer"
 import Layout from "../Layout"
 
 const Banner = () => {
@@ -7,6 +8,7 @@ const Banner = () => {
 <div className="container">
       <h2> Wellcome from Banner</h2>
     </div>
+    <Footer/>
     </Layout>
   )
 }

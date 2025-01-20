@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import 'react-quill/dist/quill.snow.css';
 import ReactQuill from "react-quill";
 import Layout from "../Layout";
+import Footer from "../../../Backend/Footer";
 
 const Service = () => {
   const [blogs, setBlogs] = useState([]);
@@ -170,18 +171,18 @@ const Service = () => {
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h2>Service Page</h2>
           <button className="btn btn-success" onClick={() => handleShowModal()}>
-            + Add Blog
+            + Add Service
           </button>
         </div>
 
         <table className="table table-bordered border-2">
           <thead className="thead-dark">
             <tr>
-              <th className="text-center border border-dark">No</th>
-              <th className="text-center border border-dark">Title</th>
-              <th className="text-center border border-dark">Description</th>
-              <th className="text-center border border-dark">Picture</th>
-              <th className="text-center border border-dark">Actions</th>
+              <th className="text-center border border-dark fs-3 ">No</th>
+              <th className="text-center border border-dark fs-3">Title</th>
+              <th className="text-center border border-dark fs-3">Description</th>
+              <th className="text-center border border-dark fs-3">Picture</th>
+              <th className="text-center border border-dark fs-3">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -205,7 +206,7 @@ const Service = () => {
                       <img
                         src={blog.image}
                         className="img-fluid"
-                        style={{ width: "100px", height: "auto" }}
+                        style={{ width: "80px", height: "80px" }}
                       />
                     )}
                   </td>
@@ -341,6 +342,7 @@ const Service = () => {
           </div>
         </div>
       )}
+      <Footer/>
     </Layout>
   );
 };

@@ -1,8 +1,29 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false); // State to check if admin is logged in
+  const navigate = useNavigate();
+
+  // Check if admin is logged in when component mounts
+  useEffect(() => {
+    const adminStatus = localStorage.getItem('isAdminLoggedIn');
+    if (adminStatus === 'true') {
+      setIsAdminLoggedIn(true);
+    }
+  }, []);
+
+  const handleDashboardClick = () => {
+    if (isAdminLoggedIn) {
+      navigate('/admin-home'); // Redirect to the dashboard
+    } else {
+      navigate('/admin'); // Redirect to the login page
+    }
+  };
+
   return (
     <>
       <header>
@@ -22,7 +43,10 @@ const Header = () => {
                 <Nav.Link href="/service" className="nav-link">Services</Nav.Link>
                 <Nav.Link href="/protfilo" className="nav-link">Portfilo</Nav.Link>
                 <Nav.Link href="/contact" className="nav-link">Contact</Nav.Link>
-                <Nav.Link href="/admin" className="nav-link">Login</Nav.Link>
+                {/* Conditional Login/Dashboard link */}
+                <Nav.Link onClick={handleDashboardClick} className="nav-link">
+                  {isAdminLoggedIn ? 'Dashboard' : 'Login'}
+                </Nav.Link>
               </Nav>
             </Navbar.Collapse>
           </Navbar>

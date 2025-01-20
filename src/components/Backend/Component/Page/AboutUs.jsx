@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import 'react-quill/dist/quill.snow.css';
 import ReactQuill from "react-quill";
 import Layout from "../Layout";
+import Footer from '../../../Backend/Footer.jsx';
 
 const AboutUs = () => {
   const [blogs, setBlogs] = useState([]);
@@ -169,18 +170,18 @@ const AboutUs = () => {
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h2>About Page</h2>
           <button className="btn btn-success" onClick={() => handleShowModal()}>
-            + Add Blog
+            + Add Banner
           </button>
         </div>
 
         <table className="table table-bordered border-2">
           <thead className="thead-dark">
             <tr>
-              <th className="text-center border border-dark">No</th>
-              <th className="text-center border border-dark">Heading</th>
-              <th className="text-center border border-dark">Description</th>
-              <th className="text-center border border-dark">Image</th>
-              <th className="text-center border border-dark">Actions</th>
+              <th className="text-center border border-dark fs-3">No</th>
+              <th className="text-center border border-dark fs-3">Heading</th>
+              <th className="text-center border border-dark fs-3">Description</th>
+              <th className="text-center border border-dark fs-3">Image</th>
+              <th className="text-center border border-dark fs-3">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -337,6 +338,8 @@ const AboutUs = () => {
           </div>
         </div>
       )}
+      <Footer/>
+      
     </Layout>
   );
 };

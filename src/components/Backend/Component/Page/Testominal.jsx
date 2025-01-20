@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import 'react-quill/dist/quill.snow.css';
 import ReactQuill from "react-quill";
 import Layout from "../Layout";
+import Footer from "../../Footer";
 
 const Testominal = () => {
   const [blogs, setBlogs] = useState([]);
@@ -187,12 +188,12 @@ const Testominal = () => {
         <table className="table table-bordered border-2">
           <thead className="thead-dark">
             <tr>
-              <th className="text-center border border-dark">No</th>
-              <th className="text-center border border-dark">Name</th> {/* Changed Title to Name */}
-              <th className="text-center border border-dark">Designation</th>
-              <th className="text-center border border-dark">Comment</th>
-              <th className="text-center border border-dark">Picture</th>
-              <th className="text-center border border-dark">Actions</th>
+              <th className="text-center border border-dark fs-3">No</th>
+              <th className="text-center border border-dark fs-3">Name</th> {/* Changed Title to Name */}
+              <th className="text-center border border-dark fs-3">Designation</th>
+              <th className="text-center border border-dark fs-3">Comment</th>
+              <th className="text-center border border-dark fs-3">Picture</th>
+              <th className="text-center border border-dark fs-3">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -200,8 +201,8 @@ const Testominal = () => {
               blogs.map((blog, index) => (
                 <tr key={blog.id} className="border border-dark">
                   <td className="text-center border border-dark">{index + 1}</td>
-                  <td className="border border-dark">{blog.name}</td> {/* Changed Title to Name */}
-                  <td className="border border-dark">
+                  <td className="border border-dark text-center">{blog.name}</td> {/* Changed Title to Name */}
+                  <td className="border border-dark text-center">
                     
                      { blog.designation }
                  
@@ -215,13 +216,13 @@ const Testominal = () => {
                       <img
                         src={blog.image}
                         className="img-fluid"
-                        style={{ width: "100px", height: "auto" }}
+                        style={{ width: "80px", height: "80px" }}
                       />
                     )}
                   </td>
                   <td className="border border-dark">
                     <button
-                      className="btn btn-outline-secondary mb-2"
+                      className="btn btn-outline-secondary mx-2"
                       onClick={() => handleShowModal(blog)}
                     >
                       <i className="bi bi-pencil-square"></i> {/* Edit Icon */}
@@ -383,6 +384,7 @@ const Testominal = () => {
           </div>
         </div>
       )}
+      <Footer/>
     </Layout>
   );
 };

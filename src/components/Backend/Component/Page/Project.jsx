@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "react-quill/dist/quill.snow.css";
 import ReactQuill from "react-quill";
 import Layout from "../Layout";
+import Footer from "../../Footer";
 
 const Project = () => {
   const [blogs, setBlogs] = useState([]);
@@ -180,12 +181,12 @@ const Project = () => {
         <table className="table table-bordered border-2">
           <thead className="thead-dark">
             <tr>
-              <th className="text-center border border-dark">No</th>
-              <th className="text-center border border-dark">Title</th>
-              <th className="text-center border border-dark">Description</th>
-              <th className="text-center border border-dark">Text</th>
-              <th className="text-center border border-dark">Picture</th>
-              <th className="text-center border border-dark">Actions</th>
+              <th className="text-center border border-dark fs-3">No</th>
+              <th className="text-center border border-dark fs-3">Title</th>
+              <th className="text-center border border-dark fs-3">Description</th>
+              <th className="text-center border border-dark fs-3">Text</th>
+              <th className="text-center border border-dark fs-3">Picture</th>
+              <th className="text-center border border-dark fs-3">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -208,20 +209,20 @@ const Project = () => {
                       <img
                         src={blog.image}
                         className="img-fluid"
-                        style={{ width: "100px", height: "auto" }}
+                        style={{ width: "80px", height: "80px" }}
                       />
                     )}
                   </td>
 
                   <td className="border border-dark mx-2">
                     <button
-                      className="btn btn-outline-secondary mx-3"
+                      className="btn btn-outline-secondary mx-3 mb-2"
                       onClick={() => handleShowModal(blog)}
                     >
                       <i className="bi bi-pencil-square"></i> {/* Edit Icon */}
                     </button>
                     <button
-                      className="btn btn-danger"
+                      className="btn btn-danger mx-3"
                       onClick={() => handleDeleteClick(blog.id)}
                     >
                       <i className="bi bi-trash"></i> {/* Delete Icon */}
@@ -372,6 +373,7 @@ const Project = () => {
           </div>
         )}
       </div>
+      <Footer/>
     </Layout>
   );
 };
