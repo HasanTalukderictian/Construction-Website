@@ -22,7 +22,7 @@ const AbountNew = () => {
             <div
               style={{
                 width: "100%",
-                height: "350px",
+                height: "550px",
                 overflow: "hidden",
                 display: "flex",
                 alignItems: "center",

@@ -19,7 +19,7 @@ const About = () => {
          {/* Our Team  */}
 
           <section className="section-8 py-5">
-                <div className="container mt-5">
+                <div className="mt-5">
                   <div className='section-header text-center'>
                       <span className="mt-10">Team</span>
                       <h2>Our Team</h2>

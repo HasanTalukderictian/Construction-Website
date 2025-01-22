@@ -32,7 +32,7 @@ const About = () => {
   // If data is loaded, render the section
   return (
     <section className="section-2 py-5 bg-light">
-      <div className="container">
+      <div className="py-5 px-4">
         <div className="row">
           <div className="col-md-6">
             <img
@@ -44,7 +44,7 @@ const About = () => {
 
           <div className="col-md-6">
             <span>About Us</span>
-            <h2>{data.heading}</h2>
+            <h2 className='mt-2 mb-2'>{data.heading}</h2>
             {/* Render the description as HTML */}
             <div dangerouslySetInnerHTML={{ __html: data.description }} />
           </div>

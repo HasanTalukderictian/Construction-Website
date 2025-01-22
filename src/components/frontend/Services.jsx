@@ -28,13 +28,13 @@ const Services = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>; 
+    return <div>Loading...</div>;
   }
 
   return (
     <>
       <Header />
-      <Common 
+      <Common
         preHeading='Quality, Integrity, Value'
         heading='Services'
         text='We excel at transforming visions into reality through outstanding and precise execution.'
@@ -65,7 +65,10 @@ const Services = () => {
 
                   <div className='service-body'>
                     <div className='service-content'>
-                      <p>{service.description}</p>
+                      <p className='text-white'>
+                        {service.description.replace(/<[^>]+>/g, '')}
+                      </p>
+
                       <Link to={`/services/${service.id}`} className='btn btn-primary'>Read More</Link>
                     </div>
                   </div>

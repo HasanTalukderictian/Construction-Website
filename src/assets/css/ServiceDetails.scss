@@ -1,0 +1,17 @@
+ 
+  .image-zoom-wrapper {
+    overflow: hidden; /* Ensures the zoomed image stays within bounds */
+    display: inline-block;
+    position: relative;
+    width: 100%; /* Adjust as needed */
+    height: 600px; /* Fixed height for a controlled zoom area */
+  }
+  
+  .image-zoom {
+    transition: transform 0.1s ease, transform-origin 0.1s ease; /* Smooth zoom effect */
+    will-change: transform, transform-origin; /* Improves performance */
+    height: 100%;
+    width: 100%;
+    object-fit: cover; /* Keeps the aspect ratio intact */
+  }
+  

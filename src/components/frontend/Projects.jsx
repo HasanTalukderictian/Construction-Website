@@ -40,6 +40,7 @@ const Projects = () => {
         <Common
           preHeading="Quality, Integrity, Value"
           heading="Our Projects"
+          className='text-white'
           text="We excel at transforming visions into reality through outstanding and precise execution."
         />
 
@@ -48,7 +49,7 @@ const Projects = () => {
             <div className="section-header text-center">
               <span>Our Current Projects</span>
               <h2>Discover our diverse range of projects</h2>
-              <p>
+              <p className='text-white'>
                 We offer a diverse array of construction services, spanning residential, commercial, and industrial
                 projects.
               </p>
@@ -71,7 +72,7 @@ const Projects = () => {
 
                     <div className="service-body">
                       <div className="service-content">
-                        <p>{project.description}</p>
+                        <p className='text-white'>{project.description}</p>
                         <Link to={`/project/${project.id}`} className="btn btn-primary">
                           Read More
                         </Link>

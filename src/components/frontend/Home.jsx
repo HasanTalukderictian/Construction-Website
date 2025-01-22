@@ -122,7 +122,7 @@ const Home = () => {
                 {/* Our Services  */}
 
                 <section className='section-3 py-5'>
-                    <div className='container py-5'>
+                    <div className='container-fluid py-5 px-5'>
                         <div className='section-header text-center'>
                             <span>Our Services</span>
                             <h2>Our Constructions Services</h2>
@@ -131,7 +131,7 @@ const Home = () => {
 
                         <div className='row mt-5 mb-4'>
                             {services.map(service => (
-                                <div className='col-md-4 col-lg-4' key={service.id}>
+                                <div className='col-12 col-md-3 col-lg-3' key={service.id}>
                                     <div className='item'>
                                         <div className='service-image'>
                                             <img
@@ -161,7 +161,7 @@ const Home = () => {
                 {/* Why Choose Us */}
 
                 <section className="section-4 py-5">
-                    <div className="container py-5">
+                    <div className="container-fluid py-5 px-5 ">
                         <div className="section-header text-center mb-4">
                             <span>Why Choose Us</span>
                             <h2>Discover our wide variety of projects</h2>
@@ -171,13 +171,13 @@ const Home = () => {
                             </p>
                         </div>
 
-                        <div className="row">
+                        <div className="row ">
                             {features.map((feature, index) => (
-                                <div className="col-md-4 mt-2 d-flex align-items-stretch" key={index}>
+                                <div className="col-md-4 mt-5 d-flex align-items-stretch" key={index}>
                                     <div
                                         className="card shadow p-4"
                                         style={{
-                                            width: '100%',
+                                            width: '80%',
                                             height: '400px', // Set a consistent height for all cards
                                         }}
                                     >
@@ -189,7 +189,7 @@ const Home = () => {
                                             />
                                         </div>
                                         <div className="card-title mt-3">
-                                            <h3>{feature.title}</h3>
+                                            <h3 className='text-center'>{feature.title}</h3>
                                         </div>
                                         <div className="mb-3">
                                             <p>{feature.description}</p>
