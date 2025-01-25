@@ -4,6 +4,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import 'react-quill/dist/quill.snow.css';
 import ReactQuill from "react-quill";
 import Footer from "../Footer";
+import axios from "axios";
+
 
 const BackendBlogs = () => {
   const [blogs, setBlogs] = useState([]);
@@ -18,9 +20,58 @@ const BackendBlogs = () => {
   const [blogToDelete, setBlogToDelete] = useState(null);
   const [errors, setErrors] = useState({});
 
+  const [images, setImages] = useState([]);
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+
+
+
+  //image preview start
+
+  const [imagePreviews, setImagePreviews] = useState([]);
+
+
+  const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+
+  useEffect(() => {
+    // Cleanup object URLs on component unmount
+    return () => {
+      imagePreviews.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [imagePreviews]);
+
+
+  / handle image upload function start/
+
+  const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+
+  const handleImageUpload = (event) => {
+    const files = Array.from(event.target.files);
+    const validFiles = files.filter((file) => file.size <= MAX_FILE_SIZE);
+
+    if (validFiles.length < files.length) {
+      alert("Some files exceed the 2MB size limit and were not added.");
+    }
+
+    const newPreviews = validFiles.map((file) => URL.createObjectURL(file));
+    setImagePreviews((prev) => [...prev, ...newPreviews]);
+    setImages((prev) => [...prev, ...validFiles]);
+  };
+
+
+  / handle image upload function end /
+
+  // Remove an image by index
+  const handleRemoveImage = (index) => {
+    const newPreviews = imagePreviews.filter((_, i) => i !== index);
+    const newImages = images.filter((_, i) => i !== index);
+    setImagePreviews(newPreviews);
+    setImages(newImages);
+  };
+
+  //image preview end
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -101,44 +152,52 @@ const BackendBlogs = () => {
     const formData = new FormData();
     formData.append("title", title);
     formData.append("description", description);
-    if (image) {
-      formData.append("image", image);
+
+    // Check if images array is populated before appending
+    if (images && images.length > 0) {
+      images.forEach((image) => {
+        formData.append("image[]", image);
+      });
+    } else {
+      console.log("No images to upload.");
+      return;
     }
 
     try {
-      let response;
-      if (editMode) {
-        // Edit blog
-        response = await fetch(`http://127.0.0.1:8000/api/edit-blog/${blogToDelete}`, {
-          method: "POST",
-          body: formData,
-        });
-      } else {
-        // Add new blog
-        response = await fetch("http://127.0.0.1:8000/api/blogs", {
-          method: "POST",
-          body: formData,
-        });
-      }
+      const response = await axios.post(
+        editMode
+          ? `http://127.0.0.1:8000/api/edit-blog/${blogToDelete}`
+          : "http://127.0.0.1:8000/api/blogs",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            "X-CSRF-TOKEN": csrfToken, // CSRF Token
+          },
+        }
+      );
+      setErrors(response.data.errors || {});
 
-      const result = await response.json();
-
-      if (response.ok) {
+      if (response.status === 201) {
+        const result = response.data;
         if (editMode) {
-          // Update the blogs array with the edited blog
           setBlogs(blogs.map((blog) => (blog.id === blogToDelete ? result : blog)));
         } else {
           setBlogs([...blogs, result]);
         }
         handleCloseModal();
       } else {
-        console.error("Failed to save the blog:", result);
-        setErrors(result.errors || {});
+        // Log errors if response status is not 200
+        setErrors(response.data.errors || {});
+        console.error("Failed to save the blog:", response.data);
       }
     } catch (error) {
-      console.error("Error submitting the form:", error);
+      console.error("Error submitting the form:", error.response.data);
     }
   };
+
+
+
 
   const deleteBlog = async (id) => {
     try {
@@ -176,6 +235,8 @@ const BackendBlogs = () => {
 
   const totalPages = Math.ceil(blogs.length / itemsPerPage);
 
+
+
   return (
     <Layout>
       <div className="container mt-4">
@@ -212,15 +273,46 @@ const BackendBlogs = () => {
                       dangerouslySetInnerHTML={{ __html: blog.description }}
                     ></div>
                   </td>
+
                   <td className="border border-dark">
-                    {blog.image && (
-                      <img
-                        src={blog.image}
-                        className="img-fluid"
-                        style={{ width: "80px", height: "80px" }}
-                      />
-                    )}
-                  </td>
+  {blog.image && (
+    Array.isArray(blog.image)
+      ? blog.image.map((img, index) => (
+          <img
+            key={index}
+            src={`${img.replace(/^blogs\//, '')}`}
+            className="img-fluid"
+            style={{ width: "80px", height: "80px", marginRight: "5px" }}
+            alt={`Image ${index + 1}`}
+          />
+        ))
+      : typeof blog.image === 'string' && blog.image.startsWith('[')
+      ? JSON.parse(blog.image).map((img, index) => (
+          <img
+            key={index}
+            src={`${img.replace(/^blogs\//, '')}`}
+            className="img-fluid"
+            style={{ width: "80px", height: "80px", marginRight: "5px" }}
+            alt={`Image ${index + 1}`}
+          />
+        ))
+      : (
+        <img
+          src={`${blog.image.replace(/^blogs\//, '')}`}
+          className="img-fluid"
+          style={{ width: "80px", height: "80px" }}
+          alt="Blog image"
+        />
+      )
+  )}
+</td>
+
+
+
+
+
+
+
                   <td className="border border-dark">
                     <button
                       className="btn btn-outline-secondary mb-2"
@@ -246,7 +338,9 @@ const BackendBlogs = () => {
             )}
           </tbody>
         </table>
+        <div>
 
+        </div>
         {/* Pagination */}
         <div className="d-flex justify-content-center mt-4">
           <button
@@ -309,9 +403,16 @@ const BackendBlogs = () => {
             </div>
           </div>
         )}
+
+
       </div>
 
       {/* Add/Edit Blog Modal */}
+
+      <input type="file" onChange={handleImageUpload} />
+
+      {/* showmadal functionality */}
+
       {showModal && (
         <div
           className="modal show d-block"
@@ -322,10 +423,12 @@ const BackendBlogs = () => {
           <div className="modal-dialog modal-xl" role="document">
             <div className="modal-content">
               <div className="modal-body">
+
                 <form onSubmit={handleSubmit}>
                   {/* Title Field */}
+                  <input type="hidden" name="_token" value={csrfToken} />
                   <div className="form-group">
-                    <label htmlFor="title">Title</label>
+                    <label htmlFor="title" className="fs-2">Title</label>
                     <input
                       type="text"
                       className="form-control"
@@ -341,7 +444,7 @@ const BackendBlogs = () => {
 
                   {/* Description Field */}
                   <div className="form-group mt-3">
-                    <label htmlFor="description">Description</label>
+                    <label htmlFor="description" className="fs-2">Description</label>
                     <ReactQuill
                       value={description}
                       onChange={setDescription}
@@ -352,34 +455,82 @@ const BackendBlogs = () => {
                     )}
                   </div>
 
-                  {/* Image Field */}
-                  <div className="form-group mt-3">
-                    <label htmlFor="image">Image</label>
+                  {/* Image Input Field */}
+                  <div className="form-group">
+                    <label htmlFor="image" className="fs-2">
+                      Images
+                    </label>
                     <input
                       type="file"
+                      name="image[]"
                       className="form-control"
                       id="image"
-                      onChange={(e) => setImage(e.target.files[0])}
+                      accept="image/*"
+                      multiple
+                      onChange={handleImageUpload}
                     />
-                    {errors.image && (
-                      <small className="text-danger">{errors.image}</small>
+                    {errors.images && (
+                      <small className="text-danger">{errors.images}</small>
                     )}
                   </div>
 
-                  {/* Submit Buttons */}
-                  <div className="modal-footer">
-                    <button
-                      type="button"
-                      className="btn btn-secondary"
-                      onClick={handleCloseModal}
-                    >
-                      Close
-                    </button>
-                    <button type="submit" className="btn btn-primary">
-                      {editMode ? "Save Changes" : "Add Blog"}
-                    </button>
+                  {/* Image Previews */}
+                  <div className="d-flex flex-wrap mt-3 gap-3">
+                    {imagePreviews.map((preview, index) => (
+                      <div
+                        key={index}
+                        style={{
+                          position: "relative",
+                          display: "inline-block",
+                        }}
+                      >
+                        <button
+                          type="button"
+                          className="btn btn-danger btn-sm"
+                          style={{
+                            position: "absolute",
+                            top: 0,
+                            right: 0,
+                            zIndex: 2,
+                            borderRadius: "50%",
+                          }}
+                          onClick={() => handleRemoveImage(index)}
+                        >
+                          X
+                        </button>
+                        <img
+                          src={preview}
+                          alt={`Preview ${index + 1}`}
+                          className="img-fluid"
+                          style={{
+                            maxWidth: "200px",
+                            maxHeight: "200px",
+                            borderRadius: "10px",
+                            marginRight: "10px",
+                          }}
+                        />
+                      </div>
+                    ))}
+
+
+                    {/* Submit Buttons */}
+                    <div>
+                      <div className="modal-footer">
+                        <button
+                          type="button"
+                          className="btn btn-secondary"
+                          onClick={handleCloseModal}
+                        >
+                          Close
+                        </button>
+                        <button type="submit" className="btn btn-primary">
+                          {editMode ? "Save Changes" : "Add Blog"}
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </form>
+
               </div>
             </div>
           </div>
