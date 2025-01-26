@@ -312,28 +312,33 @@ const Home = () => {
         </section>
 
                 <section className="section-6 bg-light py-5">
-    <a 
-        href="https://wa.me/01758672876?text=Hi,How can I help you!" 
-        className="whatsapp-sticky" 
-        target="_blank"
+                <a 
+    href="https://wa.me/8801768712230?text=Hi%2CHow%20can%20I%20help%20you%21" 
+    className="whatsapp-sticky" 
+    target="_blank"
+    rel="noopener noreferrer"
+    style={{
+        position: 'fixed',
+        bottom: '20px',
+        right: '20px',
+        zIndex: '9999'
+    }}
+>
+    <img 
+        src={whatsapp} 
+        alt="WhatsApp Chat" 
         style={{
-            position: 'fixed',
-            bottom: '20px',
-            right: '20px',
-            zIndex: '9999'
-        }}
-    >
-        <img 
-            src={whatsapp} 
-            alt="WhatsApp Chat" 
-            style={{
-                width: '80px',
-                height: '80px',
-                borderRadius: '50%',
-                cursor: 'pointer'
-            }} 
-        />
-    </a>
+            width: '80px',
+            height: '80px',
+            borderRadius: '50%',
+            cursor: 'pointer'
+        }} 
+    />
+</a>
+
+
+   
+
 </section>
 
 

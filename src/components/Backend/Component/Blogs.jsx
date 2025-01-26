@@ -275,37 +275,37 @@ const BackendBlogs = () => {
                   </td>
 
                   <td className="border border-dark">
-  {blog.image && (
-    Array.isArray(blog.image)
-      ? blog.image.map((img, index) => (
-          <img
-            key={index}
-            src={`${img.replace(/^blogs\//, '')}`}
-            className="img-fluid"
-            style={{ width: "80px", height: "80px", marginRight: "5px" }}
-            alt={`Image ${index + 1}`}
-          />
-        ))
-      : typeof blog.image === 'string' && blog.image.startsWith('[')
-      ? JSON.parse(blog.image).map((img, index) => (
-          <img
-            key={index}
-            src={`${img.replace(/^blogs\//, '')}`}
-            className="img-fluid"
-            style={{ width: "80px", height: "80px", marginRight: "5px" }}
-            alt={`Image ${index + 1}`}
-          />
-        ))
-      : (
-        <img
-          src={`${blog.image.replace(/^blogs\//, '')}`}
-          className="img-fluid"
-          style={{ width: "80px", height: "80px" }}
-          alt="Blog image"
-        />
-      )
-  )}
-</td>
+                    {blog.image && (
+                      Array.isArray(blog.image)
+                        ? blog.image.map((img, index) => (
+                          <img
+                            key={index}
+                            src={`${img.replace(/^blogs\//, '')}`}
+                            className="img-fluid"
+                            style={{ width: "80px", height: "80px", marginRight: "5px" }}
+                            alt={`Image ${index + 1}`}
+                          />
+                        ))
+                        : typeof blog.image === 'string' && blog.image.startsWith('[')
+                          ? JSON.parse(blog.image).map((img, index) => (
+                            <img
+                              key={index}
+                              src={`${img.replace(/^blogs\//, '')}`}
+                              className="img-fluid"
+                              style={{ width: "80px", height: "80px", marginRight: "5px" }}
+                              alt={`Image ${index + 1}`}
+                            />
+                          ))
+                          : (
+                            <img
+                              src={`${blog.image.replace(/^blogs\//, '')}`}
+                              className="img-fluid"
+                              style={{ width: "80px", height: "80px" }}
+                              alt="Blog image"
+                            />
+                          )
+                    )}
+                  </td>
 
 
 
