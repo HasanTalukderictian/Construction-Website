@@ -30,7 +30,7 @@ const Header = () => {
         <div className="container py-3">
           {/* Sticky navbar using sticky-top class */}
           <Navbar expand="lg" className="sticky-top bg-light">
-            <Navbar.Brand href="#home" className="logo">
+            <Navbar.Brand href="/" className="logo">
               <span>Gazi</span> Builders
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />

@@ -6,6 +6,7 @@ import ReactQuill from "react-quill";
 import Footer from "../Footer";
 import axios from "axios";
 
+import '../../../assets/css/common.scss';
 
 const BackendBlogs = () => {
   const [blogs, setBlogs] = useState([]);
@@ -247,21 +248,26 @@ const BackendBlogs = () => {
           </button>
         </div>
 
-        <table className="table table-bordered border-2">
-          <thead className="thead-dark">
-            <tr>
-              <th className="text-center border border-dark fs-3">No</th>
+        <table className="table" style={{
+        border: '5px solid rgb(185, 176, 176)', // 4px solid border with the specified color
+        borderRadius: '4px',         // Rounded corners with a 4px radius
+    }}>
+          <thead className="thead-dark" style={{  border: '5px solid rgb(185, 176, 176)', // 4px solid border with the specified color
+        borderRadius: '4px', }}> 
+            <tr className="border" style={{  border: '5px solid rgb(185, 176, 176)', // 4px solid border with the specified color
+        borderRadius: '4px', }} >
+              <th className="text-center border border-dark fs-3" >No</th>
               <th className="text-center border border-dark fs-3">Title</th>
               <th className="text-center border border-dark fs-3">Description</th>
               <th className="text-center border border-dark fs-3">Picture</th>
               <th className="text-center border border-dark fs-3">Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody >
             {currentBlogs.length > 0 ? (
               currentBlogs.map((blog, index) => (
                 <tr key={blog.id} className="border border-dark">
-                  <td className="text-center border border-dark">{index + 1}</td>
+                  <td className="text-center border border-dark" >{index + 1}</td>
                   <td className="border border-dark">{blog.title}</td>
                   <td className="border border-dark">
                     <div

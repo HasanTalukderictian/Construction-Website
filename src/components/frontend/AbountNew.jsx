@@ -16,17 +16,19 @@ const AbountNew = () => {
   return (
     <div className="row">
       {members.map((member, index) => (
-        <div key={index} className="col-md-6 col-lg-3 mb-3">
+        <div key={index} className="col-md-6 col-lg-3 mb-3 ml-4">
           <div className="card shadow border-0">
             {/* Image container with fixed size */}
             <div
+              className="p-4"
               style={{
                 width: "100%",
-                height: "550px",
+                height: "400px",
                 overflow: "hidden",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+
               }}
             >
               <img
@@ -39,8 +41,12 @@ const AbountNew = () => {
                 }}
               />
             </div>
-            <div className="card-title pb-0 mb-0">{member.Name}</div>
-            <div className="card-sub-title">{member.Designation}</div>
+            <div className="card-title pb-0 mb-0 p-2">{member.Name}</div>
+
+            <div className="card-sub-title">
+              <p dangerouslySetInnerHTML={{ __html: member.Designation }} />
+            </div>
+
             <div className="card-icon mb-2">
               <a
                 href={member.socialMediaLink}

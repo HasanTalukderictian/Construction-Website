@@ -1,3 +1,5 @@
+
+
 const Common = ({preHeading, heading,text}) => {
   return (
   <>
@@ -7,7 +9,7 @@ const Common = ({preHeading, heading,text}) => {
                       <div className='text-left'>
                           <span>{preHeading}</span>
                           <h1>{heading}</h1>
-                          <p dangerouslySetInnerHTML={{ __html: text }}></p>
+                          <p className="text-white" dangerouslySetInnerHTML={{ __html: text }}></p>
 
 
                       </div>

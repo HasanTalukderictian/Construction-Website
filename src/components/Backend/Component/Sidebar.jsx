@@ -4,10 +4,9 @@ import { NavLink } from "react-router-dom";
 import '../../../assets/css/Sidebar.scss';
 
 const Sidebar = () => {
-  const [isPageOpen, setIsPageOpen] = useState(false); // State to manage sub-links visibility
+  const [isPageOpen, setIsPageOpen] = useState(true); // Default open the Page menu
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State to manage sidebar visibility on mobile
 
-  const togglePageLinks = () => setIsPageOpen(!isPageOpen);
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen); // Toggle sidebar on mobile
 
   return (
@@ -81,14 +80,15 @@ const Sidebar = () => {
               <i className="bi bi-image me-2"></i> Portfolio
             </NavLink>
           </li>
+          
           {/* Page Menu with Sub-links */}
           <li className="nav-item">
             <div
               className="nav-link d-flex justify-content-between align-items-center"
-              onClick={togglePageLinks}
+              onClick={() => setIsPageOpen(!isPageOpen)} // Keep the menu open when clicked
               style={{ cursor: "pointer", fontSize: "1.5rem" }}
             >
-              <i className="bi bi-file-earmark-text me-2 text-white"></i>{" "}
+              <i className="bi bi-file-earmark-text me-2 text-white"></i>
               <span className="text-white">Page</span>
               <span className="text-white">{isPageOpen ? "▼" : "▶"}</span>
             </div>
