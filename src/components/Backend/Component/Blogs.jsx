@@ -7,6 +7,7 @@ import Footer from "../Footer";
 import axios from "axios";
 
 import '../../../assets/css/common.scss';
+import DashNav from "./DashNav";
 
 const BackendBlogs = () => {
   const [blogs, setBlogs] = useState([]);
@@ -240,6 +241,7 @@ const BackendBlogs = () => {
 
   return (
     <Layout>
+    <DashNav/>
       <div className="container mt-4">
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h2>Blogs Page</h2>

@@ -4,6 +4,7 @@ import 'react-quill/dist/quill.snow.css';
 import ReactQuill from "react-quill";
 import Layout from "../Layout";
 import Footer from "../../Footer";
+import DashNav from "../DashNav";
 
 const Testominal = () => {
   const [blogs, setBlogs] = useState([]);
@@ -177,6 +178,7 @@ const Testominal = () => {
 
   return (
     <Layout>
+    <DashNav/>
       <div className="container mt-4">
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h2>Testimonial Page</h2>

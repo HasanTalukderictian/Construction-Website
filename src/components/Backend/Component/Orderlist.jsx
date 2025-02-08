@@ -5,6 +5,7 @@ import "jspdf-autotable";
 
 import icon from "../../../assets/images/Logo Icon.png";
 import Footer from "../Footer";
+import DashNav from "./DashNav";
 
 const Orderlist = () => {
   const [formData, setFormData] = useState({
@@ -103,6 +104,7 @@ const Orderlist = () => {
   
   return (
     <Layout>
+     <DashNav/>
       <div className="container mt-4">
         <div className="d-flex align-items-center mb-4">
           <h2 className="me-3">Generate Invoice</h2>

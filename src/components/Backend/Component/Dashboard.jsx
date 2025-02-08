@@ -3,12 +3,37 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useNavigate } from "react-router-dom";
 import { Pie, Bar } from "react-chartjs-2";
 
-
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from "chart.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 
+import Tour from "reactour";
+import '../../../assets/css/dashboard.scss';
+
 ChartJS.register(ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
+
+const steps = [
+    {
+        selector: ".dashboard-title",
+        content: "Welcome to the Dashboard! Here you can see the overall data.",
+    },
+    {
+        selector: ".card-title",
+        content: "These cards show the total counts for Blogs, Services, Projects, etc.",
+    },
+    {
+        selector: ".pie-chart",
+        content: "This pie chart shows a visual representation of the data.",
+    },
+    {
+        selector: ".bar-chart",
+        content: "This bar chart shows a comparison of the data.",
+    },
+    {
+        selector: ".logout-btn",
+        content: "Click here to logout from the Dashboard.",
+    },
+];
 
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -20,7 +45,8 @@ const Dashboard = () => {
         teams: 0,
     });
 
-    // Function to fetch dashboard data
+    const [isTourOpen, setIsTourOpen] = useState(false);
+
     const fetchDashboardData = async () => {
         try {
             const response = await fetch("http://127.0.0.1:8000/api/admin/admin-all", {
@@ -40,6 +66,7 @@ const Dashboard = () => {
                     testimonials: data.testimonials.length,
                     teams: data.teams.length,
                 });
+                setIsTourOpen(true); // Start the tour after data is fetched
             } else if (response.status === 401) {
                 console.error("Unauthorized access. Redirecting to login...");
                 localStorage.removeItem("authToken");
@@ -53,12 +80,10 @@ const Dashboard = () => {
         }
     };
 
-    // Fetch data on component mount
     useEffect(() => {
         fetchDashboardData();
     }, []);
 
-    // Logout function
     const handleLogout = async () => {
         try {
             const response = await fetch("http://127.0.0.1:8000/api/admin/logout", {
@@ -81,7 +106,6 @@ const Dashboard = () => {
         }
     };
 
-    // Pie Chart Data
     const pieData = {
         labels: ["Blogs", "Services", "Projects", "Testimonials", "Teams"],
         datasets: [
@@ -113,7 +137,6 @@ const Dashboard = () => {
         ],
     };
 
-    // Bar Chart Data
     const barData = {
         labels: ["Blogs", "Services", "Projects", "Testimonials", "Teams"],
         datasets: [
@@ -147,25 +170,29 @@ const Dashboard = () => {
 
     return (
         <div className="container mt-1 border-2 bg-gradient-secondary">
+            <Tour
+                steps={steps}
+                isOpen={isTourOpen}
+                onRequestClose={() => setIsTourOpen(false)}
+                className="custom-tour"
+            />
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <h2>Dashboard</h2>
+                <h2 className="dashboard-title">Dashboard</h2>
                 <button
-                    className="btn btn-danger rounded-pill px-4 py-2"
+                    className="btn btn-danger rounded-pill px-4 py-2 logout-btn"
                     onClick={handleLogout}
-                    style={{ fontSize: "1.50rem", marginLeft: '2px' }} // Adjust text size
+                    style={{ fontSize: "1.50rem", marginLeft: '2px' }}
                 >
                     <FontAwesomeIcon icon={faRightFromBracket} />
-                     Logout
+                    Logout
                 </button>
-
             </div>
 
             <div className="row g-4">
-                {/* Dashboard Cards */}
                 <div className="col-lg-3 col-md-6">
                     <div className="card text-center bg-primary text-white">
                         <div className="card-body">
-                            <h5 className="card-title ">Total Blogs</h5>
+                            <h5 className="card-title">Total Blogs</h5>
                             <p className="card-text text-white display-4">{dashboardData.blogs}</p>
                         </div>
                     </div>
@@ -204,13 +231,14 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            {/* Charts Section */}
             <div className="row g-4 mt-4">
                 <div className="col-lg-6">
                     <div className="card">
                         <div className="card-body">
                             <h5 className="card-title">Pie Chart</h5>
-                            <Pie data={pieData} />
+                            <div className="pie-chart">
+                                <Pie data={pieData} />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -219,7 +247,9 @@ const Dashboard = () => {
                     <div className="card">
                         <div className="card-body">
                             <h5 className="card-title">Bar Chart</h5>
-                            <Bar data={barData} />
+                            <div className="bar-chart">
+                                <Bar data={barData} />
+                            </div>
                         </div>
                     </div>
                 </div>

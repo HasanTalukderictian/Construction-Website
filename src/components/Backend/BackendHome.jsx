@@ -1,5 +1,6 @@
-import { Navbar } from "react-bootstrap"
+
 import Dashboard from "./Component/Dashboard"
+import DashNav from "./Component/DashNav"
 import Layout from "./Component/Layout"
 import Footer from "./Footer"
 
@@ -10,7 +11,7 @@ const BackendHome = () => {
         <div className="d-flex">
       
       <div className="flex-grow-1">
-        <Navbar />
+        <DashNav/>
         <Dashboard />
         <Footer/>
       </div>
