@@ -13,6 +13,7 @@ import Testominal from './Testominal';
 import '../../assets/css/style.scss'
 
 import whatsapp from '../../assets/images/whatsapp-icon.png';
+import Video from './Video';
 
 
 
@@ -125,6 +126,9 @@ const Home = () => {
 
                 <About />
 
+                   {/* Video Section */}
+                   
+                   <Video/>
                 {/* Our Services  */}
 
                 <section className='section-3 py-5'>
@@ -163,6 +167,8 @@ const Home = () => {
                         </div>
                     </div>
                 </section>
+
+                 
 
                 {/* Why Choose Us */}
 
