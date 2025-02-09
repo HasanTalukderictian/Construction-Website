@@ -117,6 +117,8 @@ const AboutUs = () => {
           method: "POST",
           body: formData,
         });
+
+        console.log(response);
       }
 
       const result = await response.json();

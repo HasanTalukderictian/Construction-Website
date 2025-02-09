@@ -144,6 +144,17 @@ const Sidebar = () => {
                     <i className="bi bi-chat-quote me-2"></i> Testimonial
                   </NavLink>
                 </li>
+
+                <li className="nav-item">
+                  <NavLink
+                    to="/admin/page/customerfeedback"
+                    className={({ isActive }) =>
+                      `nav-link ${isActive ? "active" : "text-white"}`
+                    }
+                  >
+                    <i className="bi bi-chat-quote me-2"></i> Customer Feedback
+                  </NavLink>
+                </li>
               </ul>
             )}
           </li>

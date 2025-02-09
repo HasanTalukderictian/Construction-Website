@@ -8,13 +8,13 @@ const DashNav = () => {
                     {/* Left - Logo */}
                     <div className="d-flex align-items-center">
                         <img
-                            src="http://localhost:5173/src/assets/images/Logo%20Icon.png"
+                            src="https://i.ibb.co.com/kgghmZfy/Flying-Bird-logo-design-template.png"
                             alt="Paperfly Logo"
                             className="me-2"
                             style={{ height: "40px" }}
                         />
                         <h4 className="fw-bold text-primary">Gazi Builders</h4>
-                        <span className="text-muted small ms-1">Make your Buidling Happiness</span>
+                        <span className="text-muted small ms-1">Make your House more Happiness</span>
                     </div>
 
                     {/* Middle - User Profile */}
@@ -24,14 +24,14 @@ const DashNav = () => {
                             style={{ width: "100px", height: "100px", overflow: "hidden" }}
                         >
                             <img
-                                src="http://localhost:5173/src/assets/images/Logo%20Icon.png"
+                                src="https://i.ibb.co.com/rK7RzDJk/MY-pic-02.jpg"
                                 alt="User"
                                 style={{ width: "100px", height: "100px", objectFit: "cover", borderRadius: "50%" }}
                             />
                         </div>
                         <div className="mt-1 mb-1">
                             <span className="d-block text-muted">Hello,</span>
-                            <span className="fw-bold">Liton Ovi</span>
+                            <span className="fw-bold">Hasan Talukder</span>
                             <p className="small text-muted m-0 d-flex align-items-center">
                                 Welcome to our panel
                                 <span className="ms-2">😊</span>

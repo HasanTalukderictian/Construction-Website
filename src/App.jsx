@@ -1,6 +1,6 @@
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { BrowserRouter,  Navigate,  Route,  Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Home from './components/frontend/Home';
 import About from './components/frontend/About';
 import './assets/css/style.scss';
@@ -18,6 +18,7 @@ import AboutUs from './components/Backend/Component/Page/AboutUs';
 import Service from './components/Backend/Component/Page/Service';
 import Project from './components/Backend/Component/Page/Project';
 import Testominal from './components/Backend/Component/Page/Testominal';
+import CustomerFeedback from './components/Backend/Component/Page/CustomerFeedback';
 import BackendBlogs from './components/Backend/Component/Blogs';
 import Fortfilo from './components/Backend/Component/Fortfilo';
 import Admin from './components/Backend/Admin';
@@ -29,29 +30,29 @@ function App() {
 
 
   const isAdminLoggedIn = localStorage.getItem('isAdminLoggedIn');
-  
+
 
   return (
     <>
-       <BrowserRouter>
-         <Routes>
-              <Route path='/' element={<Home></Home>}></Route>
-              <Route path='/about' element={<About></About>}></Route>
-              <Route path='/service' element={<Services></Services>}></Route>
-              <Route path='/services/:id' element={<ServiceDetails />} />
-              <Route path='/projects' element={<Projects></Projects>}></Route>
-              <Route path="/project/:id" element={<ProjectDetails />} />
-              <Route path='/blogs' element={<Blogs></Blogs>}></Route>
-              <Route path='/blog/:id' element={<BlogsDetails></BlogsDetails>}></Route>
-              <Route path='/contact' element={<Contact></Contact>}></Route>
-              <Route path='/protfilo' element={<Portfilo></Portfilo>}></Route>
-              
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<Home></Home>}></Route>
+          <Route path='/about' element={<About></About>}></Route>
+          <Route path='/service' element={<Services></Services>}></Route>
+          <Route path='/services/:id' element={<ServiceDetails />} />
+          <Route path='/projects' element={<Projects></Projects>}></Route>
+          <Route path="/project/:id" element={<ProjectDetails />} />
+          <Route path='/blogs' element={<Blogs></Blogs>}></Route>
+          <Route path='/blog/:id' element={<BlogsDetails></BlogsDetails>}></Route>
+          <Route path='/contact' element={<Contact></Contact>}></Route>
+          <Route path='/protfilo' element={<Portfilo></Portfilo>}></Route>
 
-              {/* Admin Panel Routes */}
 
-              <Route path='/admin' element={<Admin></Admin>}></Route>
+          {/* Admin Panel Routes */}
 
-              <Route
+          <Route path='/admin' element={<Admin></Admin>}></Route>
+
+          <Route
             path='/admin-home'
             element={isAdminLoggedIn ? <BackendHome /> : <Navigate to="/admin" />}
           />
@@ -83,6 +84,11 @@ function App() {
             path="/admin/page/testominal"
             element={isAdminLoggedIn ? <Testominal /> : <Navigate to="/admin" />}
           />
+
+          <Route
+            path="/admin/page/customerfeedback"
+            element={isAdminLoggedIn ? <CustomerFeedback /> : <Navigate to="/admin" />}
+          />
           <Route
             path="/admin/blogs"
             element={isAdminLoggedIn ? <BackendBlogs /> : <Navigate to="/admin" />}
@@ -91,9 +97,9 @@ function App() {
             path="/admin/portfilo"
             element={isAdminLoggedIn ? <Fortfilo /> : <Navigate to="/admin" />}
           />
-              
-         </Routes>
-       </BrowserRouter>
+
+        </Routes>
+      </BrowserRouter>
 
     </>
   )

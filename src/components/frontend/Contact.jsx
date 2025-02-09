@@ -176,7 +176,7 @@ const Contact = () => {
                     </div>
                 </section>
                 <section className="py-5">
-                    <div className="container-fuild">
+                    <div className="container rounded-5">
                         <h3 className="text-center mb-4">Our Location</h3>
                         <div className="map-responsive">
                             <iframe
