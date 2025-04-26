@@ -16,7 +16,63 @@ const AddEmployee = () => {
 
   const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 
-  const handleImageUpload = (event) => {
+  const compressImage = (file) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.src = URL.createObjectURL(file);
+
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        // Resize
+        const MAX_WIDTH = 800;
+        const MAX_HEIGHT = 800;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width;
+            width = MAX_WIDTH;
+          }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width *= MAX_HEIGHT / height;
+            height = MAX_HEIGHT;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Compress
+        canvas.toBlob(
+          (blob) => {
+            if (blob) {
+              const compressedFile = new File([blob], file.name, {
+                type: "image/jpeg",
+                lastModified: Date.now(),
+              });
+              resolve(compressedFile);
+            } else {
+              reject(new Error("Compression failed."));
+            }
+          },
+          "image/jpeg",
+          0.7 // Compression quality (70%)
+        );
+      };
+
+      img.onerror = () => {
+        reject(new Error("Image load error."));
+      };
+    });
+  };
+
+  const handleImageUpload = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
 
@@ -25,8 +81,14 @@ const AddEmployee = () => {
       return;
     }
 
-    setImage(file);
-    setImagePreview(URL.createObjectURL(file));
+    try {
+      const compressed = await compressImage(file);
+      setImage(compressed);
+      setImagePreview(URL.createObjectURL(compressed));
+    } catch (error) {
+      console.error("Image compression error:", error);
+      alert("Failed to compress image.");
+    }
   };
 
   const handleRemoveImage = () => {
@@ -71,7 +133,6 @@ const AddEmployee = () => {
     formData.append("contact_no", contactNo);
     formData.append("image", image);
 
-    // Debug output
     formDataToJson(formData);
 
     const token = localStorage.getItem("authToken");
@@ -82,7 +143,6 @@ const AddEmployee = () => {
         body: formData,
         headers: {
           Authorization: `Bearer ${token}`,
-          // Content-Type is NOT needed for FormData
         },
       });
 
@@ -90,7 +150,6 @@ const AddEmployee = () => {
       console.log("Server Response:", result);
       alert("Employee added successfully!");
 
-      // Reset the form fields here
       setEmployeeId("");
       setEmployeeName("");
       setStatus("");
@@ -105,8 +164,7 @@ const AddEmployee = () => {
       console.error("API Error:", error);
       alert("Failed to add employee.");
     }
-};
-
+  };
 
   return (
     <Layout>
@@ -193,7 +251,7 @@ const AddEmployee = () => {
             </div>
 
             <div className="mb-3 flex-fill">
-              <label htmlFor="contactNo" className="form-label fs-5">CONTACT NO.</label>
+              <label htmlFor="contactNo" className="form-label fs-5">Contact No.</label>
               <input
                 type="tel"
                 className="form-control"

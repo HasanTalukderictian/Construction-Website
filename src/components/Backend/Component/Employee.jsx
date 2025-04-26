@@ -59,6 +59,27 @@ const Employee = () => {
     }
   };
 
+
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this employee?")) {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/api/del-employee/${id}`, {
+          method: "DELETE",
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to delete employee, status: ${response.status}`);
+        }
+
+        // After successful delete, refresh the employee list
+        fetchEmployees();
+      } catch (error) {
+        console.error("Delete error:", error);
+        alert("Failed to delete the employee. Please try again.");
+      }
+    }
+  };
+
   return (
     <Layout>
       <DashNav />
@@ -73,8 +94,9 @@ const Employee = () => {
             onKeyDown={handleKeyDown}
           />
           <button className="btn btn-sm btn-primary ms-2" onClick={handleSearch}>
-            Search
+            <i className="bi bi-search me-1"></i>
           </button>
+
           <Link to="/admin/add-employee">
             <button className="btn btn-sm btn-success ms-2">Create New</button>
           </Link>
@@ -110,9 +132,21 @@ const Employee = () => {
                       <td className="text-center">{employee.designation}</td>
                       <td className="text-center">
                         <div className="d-flex justify-content-center">
-                          <button className="btn btn-sm btn-primary me-2">View</button>
-                          <button className="btn btn-sm btn-primary me-2">Edit</button>
-                          <button className="btn btn-sm btn-danger">Delete</button>
+                          <button className="btn btn-sm btn-primary me-2">
+                            <i className="bi bi-eye me-1"></i> View
+                          </button>
+
+                          <button className="btn btn-sm btn-primary me-2">
+                            <i className="bi bi-pencil me-1"></i> Edit
+                          </button>
+
+                          <button
+                            className="btn btn-sm btn-danger me-2"
+                            onClick={() => handleDelete(employee.id)}
+                          >
+                            <i className="bi bi-trash me-1"></i> Delete
+                          </button>
+
                         </div>
                       </td>
                     </tr>
