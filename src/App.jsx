@@ -24,6 +24,8 @@ import Fortfilo from './components/Backend/Component/Fortfilo';
 import Admin from './components/Backend/Admin';
 import ServiceDetails from './components/frontend/ServiceDetails';
 import BlogsDetails from './components/frontend/BlogsDetails';
+import Employee from './components/Backend/Component/Employee';
+import AddEmployee from './components/Backend/Component/AddEmployee';
 
 
 function App() {
@@ -63,6 +65,16 @@ function App() {
           <Route
             path="/admin/orders"
             element={isAdminLoggedIn ? <Orderlist /> : <Navigate to="/admin" />}
+          />
+
+          <Route
+            path="/admin/employee"
+            element={isAdminLoggedIn ? <Employee /> : <Navigate to="/admin" />}
+          />
+
+          <Route
+            path="/admin/add-employee"
+            element={isAdminLoggedIn ? <AddEmployee /> : <Navigate to="/admin" />}
           />
           <Route
             path="/admin/page/banner"

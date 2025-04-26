@@ -47,6 +47,23 @@ const Sidebar = () => {
             </NavLink>
           </li>
 
+
+
+          <li className="nav-item">
+            <NavLink
+              to="/admin/employee"
+              className={({ isActive }) =>
+                `nav-link ${isActive ? "active" : "text-white"}`
+              }
+              style={{ fontSize: "1.5rem" }}
+            >
+              <i className="bi bi-receipt me-2"></i> Employee
+            </NavLink>
+          </li>
+          
+
+
+
           <li className="nav-item">
             <NavLink
               to="/admin/orders"
