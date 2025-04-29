@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import Layout from "./Layout";
 import jsPDF from "jspdf";
@@ -9,10 +10,13 @@ import DashNav from "./DashNav";
 
 const Orderlist = () => {
   const [formData, setFormData] = useState({
-    companyName: "Paperfly",
+    companyName: "Paperfly Private Limited",
+    address: "Behind the SKS Tower, Dhaka, Bangladesh",
+    companyPhone: "01768712230",
     invoiceNo: "04-27-25-01",
     date: "",
     customerName: "",
+    productName: "",
     price: "",
     discount: "",
     itemCount: "",
@@ -36,84 +40,106 @@ const Orderlist = () => {
     return discountedPrice - paidAmount;
   };
 
-  const generateInvoice = async () => {
-    const { companyName, invoiceNo, date, customerName, price, discount, itemCount, pay } = formData;
+  const generateInvoice = () => {
+    const {
+      companyName,
+      invoiceNo,
+      date,
+      customerName,
+      productName,
+      price,
+      discount,
+      itemCount,
+      pay,
+    } = formData;
 
-    if (!companyName || !invoiceNo || !date || !customerName || !price || !discount || !itemCount) {
+    if (!companyName || !invoiceNo || !date || !customerName || !price || !discount || !itemCount || !productName) {
       alert("Please fill in all required fields.");
       return;
     }
 
     const doc = new jsPDF();
 
-    const marginTop = 20;
+
     const marginLeft = 20;
-    const marginBottom = 20;
     const marginRight = 20;
+    const marginBottom = 20;
 
-    doc.setFontSize(20);
-    doc.text("Invoice", doc.internal.pageSize.width / 2, marginTop, { align: "center" });
+    const pageWidth = doc.internal.pageSize.width;
 
+    // Draw green header background
+    doc.setFillColor(9, 141, 49); // green color
+
+    doc.rect(0, 0, pageWidth, 40, "F");
+
+    doc.setFontSize(14);
+    doc.setTextColor(255, 255, 255); // white text
+    doc.text(companyName, pageWidth / 2, 20, { align: "center" });
+
+    doc.setFontSize(10);
+    doc.text(formData.address, pageWidth / 2, 26, { align: "center" });
+    doc.text(`Phone: ${formData.companyPhone}`, pageWidth / 2, 31, { align: "center" });
+
+    // Add logo
     const img = new Image();
     img.src = icon;
     img.onload = () => {
-      const imgWidth = 25;
-      const imgHeight = 25;
-      const pageWidth = doc.internal.pageSize.width;
+      const imgWidth = 10;
+      const imgHeight = 10;
       const imgX = pageWidth - imgWidth - marginRight;
-      const imgY = marginTop + 10;
-
+      const imgY = 2.5;
       doc.addImage(img, "PNG", imgX, imgY, imgWidth, imgHeight);
 
+      // Reset text color
+      doc.setTextColor(0, 0, 0);
       doc.setFontSize(12);
-      doc.text(`Company Name: ${companyName || "N/A"}`, marginLeft, marginTop + 40);
-      doc.text(`Date: ${date || "N/A"}`, marginLeft, marginTop + 50);
-      doc.text(`Invoice No: ${invoiceNo || "N/A"}`, marginLeft, marginTop + 60);
 
-      doc.text(`Price: $${price || 0} per item`, marginLeft, marginTop + 70);
-      doc.text(`Discount: ${discount || 0}%`, marginLeft, marginTop + 80);
-      doc.text(`Item Count: ${itemCount || 1}`, marginLeft, marginTop + 90);
-      doc.text(`Total Price After Discount: $${calculateDiscountedPrice()}`, marginLeft, marginTop + 100);
-      doc.text(`Amount Paid: $${pay || 0}`, marginLeft, marginTop + 110);
-      doc.text(`Due: $${calculateDue()}`, marginLeft, marginTop + 120);
+      // Invoice details
+      const yStart = 50;
+      doc.text(`Company Name: ${companyName}`, marginLeft, yStart);
+      doc.text(`Date: ${date}`, marginLeft, yStart + 10);
+      doc.text(`Invoice No: ${invoiceNo}`, marginLeft, yStart + 20);
+      doc.text(`Product Name: ${productName}`, marginLeft, yStart + 30);
+      doc.text(`Price: $${price} per item`, marginLeft, yStart + 40);
+      doc.text(`Discount: ${discount}%`, marginLeft, yStart + 50);
+      doc.text(`Item Count: ${itemCount}`, marginLeft, yStart + 60);
+      doc.text(`Total Price After Discount: $${calculateDiscountedPrice()}`, marginLeft, yStart + 70);
+      doc.text(`Amount Paid: $${pay}`, marginLeft, yStart + 80);
+      doc.text(`Due: $${calculateDue()}`, marginLeft, yStart + 90);
 
-      const tableColumn = ["#", "Order ID", "Customer", "Date", "Price", "Discount", "Item Count", "Total", "Paid", "Due"];
-      const tableRows = [
-        [
-          1,
-          invoiceNo || "N/A",
-          customerName || "N/A",
-          date || "N/A",
-          `$${price || 0}`,
-          `${discount || 0}%`,
-          itemCount || 1,
-          `$${calculateDiscountedPrice()}`,
-          `$${pay || 0}`,
-          `$${calculateDue()}`,
-        ],
-      ];
+      // Table
+      const tableColumn = ["Order ID", "Customer", "Date", "Price", "Discount", "Item Count", "Total", "Paid", "Due"];
+      const tableRows = [[
+        invoiceNo,
+        customerName,
+        date,
+        `$${price}`,
+        `${discount}%`,
+        itemCount,
+        `$${calculateDiscountedPrice()}`,
+        `$${pay}`,
+        `$${calculateDue()}`
+      ]];
 
       doc.autoTable({
-        startY: marginTop + 130,
+        startY: yStart + 100,
         head: [tableColumn],
         body: tableRows,
         theme: "striped",
         styles: { fontSize: 10 },
       });
 
-      const finalY = doc.lastAutoTable.finalY || (marginTop + 130);
+      const finalY = doc.lastAutoTable.finalY || (yStart + 100);
       doc.text(`Total Orders: 1`, marginLeft, finalY + 10);
 
       const pageHeight = doc.internal.pageSize.height;
       const rightMargin = doc.internal.pageSize.width - marginRight;
       doc.text("Author Sign: ____________________", rightMargin, pageHeight - marginBottom, { align: "right" });
-      doc.text(`Date: ${date || "N/A"}`, rightMargin, pageHeight - marginBottom + 10, { align: "right" });
+      doc.text(`Date: ${date}`, rightMargin, pageHeight - marginBottom + 10, { align: "right" });
 
       doc.save(`${customerName}-invoice.pdf`);
     };
   };
-
-  
 
   return (
     <Layout>
@@ -136,177 +162,159 @@ const Orderlist = () => {
         {/* Invoice Form */}
         <form>
           <div className="row">
-            <div className="col-md-6 mb-3">
-              <label htmlFor="companyName" className="form-label">
-                Company Name
-              </label>
+            <div className="col-md-4 mb-3">
+              <label className="form-label">Company Name</label>
               <input
                 type="text"
                 className="form-control"
-                id="companyName"
                 name="companyName"
                 value={formData.companyName}
                 onChange={handleChange}
                 required
               />
             </div>
-
-            <div className="col-md-6 mb-3">
-              <label htmlFor="invoiceNo" className="form-label">
-                Invoice Number
-              </label>
+            <div className="col-md-4 mb-3">
+              <label className="form-label">Invoice Number</label>
               <input
                 type="text"
                 className="form-control"
-                id="invoiceNo"
                 name="invoiceNo"
                 value={formData.invoiceNo}
                 onChange={handleChange}
                 required
               />
             </div>
+            <div className="col-md-4 mb-3">
+              <label className="form-label">Product Name</label>
+              <select
+                className="form-control"
+                name="productName"
+                value={formData.productName}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select Product</option>
+                <option value="Shirt">Shirt</option>
+                <option value="T-Shirt">T-Shirt</option>
+                <option value="Jeans">Jeans</option>
+                <option value="Bags">Bags</option>
+                <option value="Shoes">Shoes</option>
+                <option value="Panjabis">Panjabis</option>
+              </select>
+            </div>
+
           </div>
 
-          {/* Customer Name and Date */}
           <div className="row">
-            <div className="col-md-6 mb-3">
-              <label htmlFor="customerName" className="form-label">
-                Customer Name
-              </label>
+            <div className="col-md-4 mb-3">
+              <label className="form-label">Customer Name</label>
               <input
                 type="text"
                 className="form-control"
-                id="customerName"
                 name="customerName"
                 value={formData.customerName}
                 onChange={handleChange}
                 required
               />
             </div>
-
-            <div className="col-md-6 mb-3">
-              <label htmlFor="date" className="form-label">
-                Date
-              </label>
+            <div className="col-md-4 mb-3">
+              <label className="form-label">Date</label>
               <input
                 type="date"
                 className="form-control"
-                id="date"
                 name="date"
                 value={formData.date}
                 onChange={handleChange}
                 required
               />
             </div>
-          </div>
-
-          {/* Price and Discount Side by Side */}
-          <div className="row">
-            <div className="col-md-6 mb-3">
-              <label htmlFor="price" className="form-label">
-                Price per item
-              </label>
+            <div className="col-md-4 mb-3">
+              <label className="form-label">Price</label>
               <input
                 type="number"
                 className="form-control"
-                id="price"
                 name="price"
                 value={formData.price}
                 onChange={handleChange}
                 required
               />
             </div>
+          </div>
 
-            <div className="col-md-6 mb-3">
-              <label htmlFor="discount" className="form-label">
-                Discount (%)
-              </label>
+          <div className="row">
+            <div className="col-md-4 mb-3">
+              <label className="form-label">Discount (%)</label>
               <input
                 type="number"
                 className="form-control"
-                id="discount"
                 name="discount"
                 value={formData.discount}
                 onChange={handleChange}
                 required
               />
             </div>
+            <div className="col-md-4 mb-3">
+              <label className="form-label">Item Count</label>
+              <input
+                type="number"
+                className="form-control"
+                name="itemCount"
+                value={formData.itemCount}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="col-md-4 mb-3">
+              <label className="form-label">Amount Paid</label>
+              <input
+                type="number"
+                className="form-control"
+                name="pay"
+                value={formData.pay}
+                onChange={handleChange}
+              />
+            </div>
           </div>
 
-          {/* Item Count */}
-         
-
-         <div className='row'>
-            
-         <div className="col-md-6 mb-3">
-            <label htmlFor="itemCount" className="form-label">
-              Item Count
-            </label>
-            <input
-              type="number"
-              className="form-control"
-              id="itemCount"
-              name="itemCount"
-              value={formData.itemCount}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          {/* Amount Paid */}
-          <div className="col-md-6 mb-3">
-            <label htmlFor="pay" className="form-label">
-              Amount Paid
-            </label>
-            <input
-              type="number"
-              className="form-control"
-              id="pay"
-              name="pay"
-              value={formData.pay}
-              onChange={handleChange}
-            />
-          </div>
-
-         </div>
-
-          {/* Invoice Details Table */}
-          <h4 className="mt-4 text-center mb-2">Invoice Details</h4>
+          <button type="button" className="btn btn-success mt-3" onClick={generateInvoice}>
+            Generate Invoice PDF
+          </button>
+        </form>
+        {/* Show Table Preview on Webpage */}
+        <div className="table-responsive mt-5">
+          <h4>Invoice Preview</h4>
           <table className="table table-bordered">
-            <thead>
+            <thead className="table-success">
               <tr>
-                <th>Invoice Number</th>
-                <th>Price per item</th>
+                <th>Order ID</th>
                 <th>Customer</th>
+                <th>Date</th>
+                <th>Product</th>
+                <th>Price</th>
                 <th>Discount</th>
                 <th>Item Count</th>
-                <th>Total Price After Discount</th>
-                <th>Amount Paid</th>
+                <th>Total</th>
+                <th>Paid</th>
                 <th>Due</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>{formData.invoiceNo}</td>
-                <td>৳ {formData.price || 0}</td>
                 <td>{formData.customerName}</td>
-                <td>{formData.discount || 0}%</td>
-                <td>{formData.itemCount || 1}</td>
-                <td>৳ {calculateDiscountedPrice()}</td>
-                <td>৳ {formData.pay || 0}</td>
-                <td>৳ {calculateDue()}</td>
+                <td>{formData.date}</td>
+                <td>{formData.productName}</td>
+                <td>${formData.price}</td>
+                <td>{formData.discount}%</td>
+                <td>{formData.itemCount}</td>
+                <td>${calculateDiscountedPrice()}</td>
+                <td>${formData.pay}</td>
+                <td>${calculateDue()}</td>
               </tr>
             </tbody>
           </table>
+        </div>
 
-          {/* Buttons */}
-          <div className="d-flex justify-content-end gap-2 mt-4">
-            <button type="button" className="btn btn-primary" onClick={generateInvoice}>
-              Download Invoice
-            </button>
-           
-          </div>
-        </form>
       </div>
       <Footer />
     </Layout>
@@ -314,3 +322,5 @@ const Orderlist = () => {
 };
 
 export default Orderlist;
+
+
