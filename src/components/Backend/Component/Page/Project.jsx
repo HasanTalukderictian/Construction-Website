@@ -42,6 +42,55 @@ const Project = () => {
     fetchData();
   }, []);
 
+
+
+  const optimizeImage = (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target.result;
+
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const MAX_WIDTH = 800;
+          const scaleSize = MAX_WIDTH / img.width;
+          canvas.width = MAX_WIDTH;
+          canvas.height = img.height * scaleSize;
+
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+          canvas.toBlob(
+            (blob) => {
+              const optimizedFile = new File([blob], file.name, {
+                type: "image/jpeg",
+                lastModified: Date.now(),
+              });
+              resolve(optimizedFile);
+            },
+            "image/jpeg",
+            0.7 // compression quality
+          );
+        };
+      };
+    });
+  };
+
+
+
+
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const optimized = await optimizeImage(file);
+    setImage(optimized);
+  };
+
+
   const handleShowModal = (blog = null) => {
     if (blog) {
       setTitle(blog.title);
@@ -168,7 +217,7 @@ const Project = () => {
 
   return (
     <Layout>
-    <DashNav/>
+      <DashNav />
       <div className="container mt-4">
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h2>Project Page</h2>
@@ -307,19 +356,42 @@ const Project = () => {
                     </div>
 
                     {/* Image Upload Field */}
-                    <div className="form-group mt-5">
-                      <label htmlFor="image">Image</label>
+
+                    <div className="mt-5">
+                      <label className="form-label">Picture</label>
                       <input
                         type="file"
-                        className="form-control-file mt-2"
-                        id="image"
                         accept="image/*"
-                        onChange={(e) => setImage(e.target.files[0])}
+                        className={`form-control ${errors.image ? "is-invalid" : ""}`}
+                        onChange={handleImageChange}
                       />
                       {errors.image && (
-                        <small className="text-danger">{errors.image}</small>
+                        <div className="invalid-feedback">{errors.image}</div>
+                      )}
+
+                      {image && (
+                        <div className="position-relative mt-3" style={{ maxWidth: "150px" }}>
+                          <img
+                            src={URL.createObjectURL(image)}
+                            alt="Preview"
+                            className="img-thumbnail"
+                          />
+                          <button
+                            type="button"
+                            className="btn btn-sm btn-danger position-absolute top-0 end-0"
+                            onClick={() => setImage(null)}
+                            style={{
+                              borderRadius: "50%",
+                              padding: "0 6px",
+                              transform: "translate(50%, -50%)",
+                            }}
+                          >
+                            &times;
+                          </button>
+                        </div>
                       )}
                     </div>
+
 
                     {/* Buttons */}
                     <div className="d-flex justify-content-between mt-4">
@@ -375,7 +447,7 @@ const Project = () => {
           </div>
         )}
       </div>
-      <Footer/>
+      <Footer />
     </Layout>
   );
 };
