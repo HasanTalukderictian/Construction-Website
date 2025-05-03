@@ -19,13 +19,15 @@ import Service from './components/Backend/Component/Page/Service';
 import Project from './components/Backend/Component/Page/Project';
 import Testominal from './components/Backend/Component/Page/Testominal';
 import CustomerFeedback from './components/Backend/Component/Page/CustomerFeedback';
-import BackendBlogs from './components/Backend/Component/Blogs';
+// import BackendBlogs from './components/Backend/Component/Blogs';
 import Fortfilo from './components/Backend/Component/Fortfilo';
 import Admin from './components/Backend/Admin';
 import ServiceDetails from './components/frontend/ServiceDetails';
 import BlogsDetails from './components/frontend/BlogsDetails';
 import Employee from './components/Backend/Component/Employee';
 import AddEmployee from './components/Backend/Component/AddEmployee';
+import EditEmployee from './components/Backend/Component/Page/EditEmployee';
+import Blog from './components/Backend/Component/Page/Blog';
 
 
 function App() {
@@ -76,6 +78,15 @@ function App() {
             path="/admin/add-employee"
             element={isAdminLoggedIn ? <AddEmployee /> : <Navigate to="/admin" />}
           />
+
+
+<Route
+  path="/admin/edit-employee/:id"
+  element={isAdminLoggedIn ? <EditEmployee /> : <Navigate to="/admin" />}
+/>
+
+
+
           <Route
             path="/admin/page/banner"
             element={isAdminLoggedIn ? <Banner /> : <Navigate to="/admin" />}
@@ -103,7 +114,7 @@ function App() {
           />
           <Route
             path="/admin/blogs"
-            element={isAdminLoggedIn ? <BackendBlogs /> : <Navigate to="/admin" />}
+            element={isAdminLoggedIn ? <Blog /> : <Navigate to="/admin" />}
           />
           <Route
             path="/admin/portfilo"

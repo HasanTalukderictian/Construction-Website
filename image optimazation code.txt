@@ -80,3 +80,82 @@ const handleImageChange = async (e) => {
     </div>
   )}
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   public function update(Request $request, $id)
+{
+    // Find the employee by ID
+    $employee = Employee::find($id);
+
+    // Check if employee exists
+    if (!$employee) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Employee not found.'
+        ], 404);
+    }
+
+    // Validate the request data
+    $request->validate([
+        'employee_id'   => 'required|string|max:255|unique:employees,employee_id,' . $employee->id,
+        'employee_name' => 'required|string|max:255',
+        'status'         => 'required|in:Active,Deactive',
+        'joining_date'   => 'required|string', // Ensure correct format
+        'designation'    => 'required|string|max:255',
+        'department'     => 'required|string|max:255',
+        'contact_no'     => 'required|digits_between:10,11|unique:employees,contact_no,' . $employee->id,
+        'image'         => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
+
+    // Update the employee fields
+    $employee->employee_id   = $request->employee_id;
+    $employee->employee_name = $request->employee_name;
+    $employee->status         = $request->status;
+    $employee->joining_date   = Carbon::createFromFormat('d-m-Y', $request->joining_date)->format('Y-m-d');
+    $employee->designation    = $request->designation;
+    $employee->department     = $request->department;
+    $employee->contact_no     = $request->contact_no;
+
+    // Handle image upload if present
+    if ($request->hasFile('image')) {
+        // Delete the old image if a new one is uploaded
+        if ($employee->image && file_exists(public_path('storage/' . $employee->image))) {
+            unlink(public_path('storage/' . $employee->image));
+        }
+
+        // Store the new image
+        $imagePath = $request->file('image')->store('employees', 'public');
+        $employee->image = $imagePath;
+    }
+
+    // Save the updated employee
+    $employee->save();
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Employee updated successfully!',
+        'data' => $employee
+    ]);
+}
+
+

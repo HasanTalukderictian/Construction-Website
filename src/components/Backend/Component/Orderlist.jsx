@@ -1,12 +1,11 @@
-
 import { useState } from "react";
-import Layout from "./Layout";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 
 import icon from "../../../assets/images/Logo Icon.png";
-import Footer from "../Footer";
+import Layout from "./Layout";
 import DashNav from "./DashNav";
+import Footer from "../Footer";
 
 const Orderlist = () => {
   const [formData, setFormData] = useState({
@@ -30,8 +29,8 @@ const Orderlist = () => {
 
   const calculateDiscountedPrice = () => {
     const { price, discount, itemCount } = formData;
-    const totalPrice = price * itemCount;
-    return totalPrice - (totalPrice * discount) / 100;
+    const totalPrice = parseFloat(price) * parseInt(itemCount);
+    return totalPrice - (totalPrice * parseFloat(discount)) / 100;
   };
 
   const calculateDue = () => {
@@ -59,21 +58,16 @@ const Orderlist = () => {
     }
 
     const doc = new jsPDF();
-
-
     const marginLeft = 20;
     const marginRight = 20;
+    const pageWidth = doc.internal.pageSize.width;
     const marginBottom = 20;
 
-    const pageWidth = doc.internal.pageSize.width;
-
-    // Draw green header background
-    doc.setFillColor(9, 141, 49); // green color
-
+    // Green Header
+    doc.setFillColor(9, 141, 49);
     doc.rect(0, 0, pageWidth, 40, "F");
-
     doc.setFontSize(14);
-    doc.setTextColor(255, 255, 255); // white text
+    doc.setTextColor(255, 255, 255);
     doc.text(companyName, pageWidth / 2, 20, { align: "center" });
 
     doc.setFontSize(10);
@@ -90,12 +84,10 @@ const Orderlist = () => {
       const imgY = 2.5;
       doc.addImage(img, "PNG", imgX, imgY, imgWidth, imgHeight);
 
-      // Reset text color
       doc.setTextColor(0, 0, 0);
       doc.setFontSize(12);
-
-      // Invoice details
       const yStart = 50;
+
       doc.text(`Company Name: ${companyName}`, marginLeft, yStart);
       doc.text(`Date: ${date}`, marginLeft, yStart + 10);
       doc.text(`Invoice No: ${invoiceNo}`, marginLeft, yStart + 20);
@@ -103,9 +95,9 @@ const Orderlist = () => {
       doc.text(`Price: $${price} per item`, marginLeft, yStart + 40);
       doc.text(`Discount: ${discount}%`, marginLeft, yStart + 50);
       doc.text(`Item Count: ${itemCount}`, marginLeft, yStart + 60);
-      doc.text(`Total Price After Discount: $${calculateDiscountedPrice()}`, marginLeft, yStart + 70);
+      doc.text(`Total Price After Discount: $${calculateDiscountedPrice().toFixed(2)}`, marginLeft, yStart + 70);
       doc.text(`Amount Paid: $${pay}`, marginLeft, yStart + 80);
-      doc.text(`Due: $${calculateDue()}`, marginLeft, yStart + 90);
+      doc.text(`Due: $${calculateDue().toFixed(2)}`, marginLeft, yStart + 90);
 
       // Table
       const tableColumn = ["Order ID", "Customer", "Date", "Price", "Discount", "Item Count", "Total", "Paid", "Due"];
@@ -116,9 +108,9 @@ const Orderlist = () => {
         `$${price}`,
         `${discount}%`,
         itemCount,
-        `$${calculateDiscountedPrice()}`,
+        `$${calculateDiscountedPrice().toFixed(2)}`,
         `$${pay}`,
-        `$${calculateDue()}`
+        `$${calculateDue().toFixed(2)}`
       ]];
 
       doc.autoTable({
@@ -126,14 +118,26 @@ const Orderlist = () => {
         head: [tableColumn],
         body: tableRows,
         theme: "striped",
-        styles: { fontSize: 10 },
+        headStyles: {
+          fillColor: [9, 141, 49],
+          textColor: 255,
+          fontStyle: 'bold'
+        },
+        bodyStyles: {
+          fillColor: [245, 245, 245],
+          textColor: [0, 0, 0],
+        },
+        styles: {
+          fontSize: 8,
+          cellPadding: 3,
+        },
       });
 
       const finalY = doc.lastAutoTable.finalY || (yStart + 100);
       doc.text(`Total Orders: 1`, marginLeft, finalY + 10);
 
-      const pageHeight = doc.internal.pageSize.height;
       const rightMargin = doc.internal.pageSize.width - marginRight;
+      const pageHeight = doc.internal.pageSize.height;
       doc.text("Author Sign: ____________________", rightMargin, pageHeight - marginBottom, { align: "right" });
       doc.text(`Date: ${date}`, rightMargin, pageHeight - marginBottom + 10, { align: "right" });
 
@@ -159,7 +163,6 @@ const Orderlist = () => {
           />
         </div>
 
-        {/* Invoice Form */}
         <form>
           <div className="row">
             <div className="col-md-4 mb-3">
@@ -202,7 +205,6 @@ const Orderlist = () => {
                 <option value="Panjabis">Panjabis</option>
               </select>
             </div>
-
           </div>
 
           <div className="row">
@@ -280,41 +282,6 @@ const Orderlist = () => {
             Generate Invoice PDF
           </button>
         </form>
-        {/* Show Table Preview on Webpage */}
-        <div className="table-responsive mt-5">
-          <h4>Invoice Preview</h4>
-          <table className="table table-bordered">
-            <thead className="table-success">
-              <tr>
-                <th>Order ID</th>
-                <th>Customer</th>
-                <th>Date</th>
-                <th>Product</th>
-                <th>Price</th>
-                <th>Discount</th>
-                <th>Item Count</th>
-                <th>Total</th>
-                <th>Paid</th>
-                <th>Due</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{formData.invoiceNo}</td>
-                <td>{formData.customerName}</td>
-                <td>{formData.date}</td>
-                <td>{formData.productName}</td>
-                <td>${formData.price}</td>
-                <td>{formData.discount}%</td>
-                <td>{formData.itemCount}</td>
-                <td>${calculateDiscountedPrice()}</td>
-                <td>${formData.pay}</td>
-                <td>${calculateDue()}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
       </div>
       <Footer />
     </Layout>
@@ -322,5 +289,4 @@ const Orderlist = () => {
 };
 
 export default Orderlist;
-
 

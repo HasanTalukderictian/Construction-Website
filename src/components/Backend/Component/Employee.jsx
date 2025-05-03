@@ -1,7 +1,8 @@
+// Employee.jsx
 import Layout from "./Layout";
 import Footer from "../Footer";
 import DashNav from "./DashNav";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 const Employee = () => {
@@ -11,37 +12,46 @@ const Employee = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
+  const navigate = useNavigate();
+
   const fetchEmployees = async () => {
     setLoading(true);
     setError(null);
-
     try {
       let url = "http://127.0.0.1:8000/api/get-employee";
       if (searchQuery.trim()) {
         url += `?search=${encodeURIComponent(searchQuery)}`;
       }
-
-      console.log("Fetching:", url);
       const response = await fetch(url);
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch data, status: " + response.status);
-      }
+      if (!response.ok) throw new Error("Failed to fetch data");
 
       const result = await response.json();
       const employeeData = result.data;
 
-      if (Array.isArray(employeeData)) {
-        setEmployees(employeeData);
-      } else {
-        setEmployees([]);
-      }
+      setEmployees(Array.isArray(employeeData) ? employeeData : []);
     } catch (error) {
-      console.error("Error:", error);
       setError(error.message);
       setEmployees([]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleEdit = (id) => {
+    navigate(`/admin/edit-employee/${id}`);
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this employee?")) {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/api/del-employee/${id}`, {
+          method: "DELETE",
+        });
+        if (!response.ok) throw new Error("Delete failed");
+        fetchEmployees();
+      } catch (error) {
+        alert("Delete failed: " + error.message);
+      }
     }
   };
 
@@ -54,37 +64,14 @@ const Employee = () => {
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      handleSearch();
-    }
-  };
-
-
-  const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this employee?")) {
-      try {
-        const response = await fetch(`http://127.0.0.1:8000/api/del-employee/${id}`, {
-          method: "DELETE",
-        });
-
-        if (!response.ok) {
-          throw new Error(`Failed to delete employee, status: ${response.status}`);
-        }
-
-        // After successful delete, refresh the employee list
-        fetchEmployees();
-      } catch (error) {
-        console.error("Delete error:", error);
-        alert("Failed to delete the employee. Please try again.");
-      }
-    }
+    if (e.key === "Enter") handleSearch();
   };
 
   return (
     <Layout>
       <DashNav />
       <div className="container mt-4">
-        <div className="d-flex justify-content-between mt-2 mb-2 align-items-center">
+        <div className="d-flex justify-content-between align-items-center mb-3">
           <input
             type="text"
             className="form-control w-30"
@@ -96,18 +83,13 @@ const Employee = () => {
           <button className="btn btn-sm btn-primary ms-2" onClick={handleSearch}>
             <i className="bi bi-search me-1"></i>
           </button>
-
           <Link to="/admin/add-employee">
             <button className="btn btn-sm btn-success ms-2">Create New</button>
           </Link>
         </div>
 
         {loading ? (
-          <div className="text-center my-4">
-            <div className="spinner-border text-primary" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </div>
-          </div>
+          <div className="text-center my-4">Loading...</div>
         ) : error ? (
           <div className="text-danger">Error: {error}</div>
         ) : (
@@ -118,7 +100,7 @@ const Employee = () => {
                   <th className="text-center">Employee ID</th>
                   <th className="text-center">Name</th>
                   <th className="text-center">Phone</th>
-                  <th className="text-center">Address</th>
+                  <th className="text-center">Designation</th>
                   <th className="text-center">Action</th>
                 </tr>
               </thead>
@@ -132,30 +114,25 @@ const Employee = () => {
                       <td className="text-center">{employee.designation}</td>
                       <td className="text-center">
                         <div className="d-flex justify-content-center">
-                          <button className="btn btn-sm btn-primary me-2">
-                            <i className="bi bi-eye me-1"></i> View
-                          </button>
-
-                          <button className="btn btn-sm btn-primary me-2">
+                          <button
+                            className="btn btn-sm btn-primary me-2"
+                            onClick={() => handleEdit(employee.id)}
+                          >
                             <i className="bi bi-pencil me-1"></i> Edit
                           </button>
-
                           <button
-                            className="btn btn-sm btn-danger me-2"
+                            className="btn btn-sm btn-danger"
                             onClick={() => handleDelete(employee.id)}
                           >
                             <i className="bi bi-trash me-1"></i> Delete
                           </button>
-
                         </div>
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="5" className="text-center text-danger">
-                      {searchQuery ? "No employees found" : "No employee data available"}
-                    </td>
+                    <td colSpan="5" className="text-center">No employees found.</td>
                   </tr>
                 )}
               </tbody>
