@@ -1,9 +1,8 @@
-// Employee.jsx
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Layout from "./Layout";
 import Footer from "../Footer";
 import DashNav from "./DashNav";
-import { Link, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
 
 const Employee = () => {
   const [employees, setEmployees] = useState([]);
@@ -12,22 +11,24 @@ const Employee = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
   const navigate = useNavigate();
 
+  // Fetch employees with optional search
   const fetchEmployees = async () => {
     setLoading(true);
     setError(null);
     try {
-      let url = `http://127.0.0.1:8000/api/get-employee`;
+      let url = `${BASE_URL}/api/get-employee`;
       if (searchQuery.trim()) {
         url += `?search=${encodeURIComponent(searchQuery)}`;
       }
+
       const response = await fetch(url);
       if (!response.ok) throw new Error("Failed to fetch data");
 
       const result = await response.json();
       const employeeData = result.data;
-
       setEmployees(Array.isArray(employeeData) ? employeeData : []);
     } catch (error) {
       setError(error.message);
@@ -37,16 +38,30 @@ const Employee = () => {
     }
   };
 
+  // Navigate to edit page
   const handleEdit = (id) => {
     navigate(`/admin/edit-employee/${id}`);
   };
 
+  // Delete an employee
   const handleDelete = async (id) => {
+    const token = localStorage.getItem("authToken");
+
+    if (!token) {
+      alert("You are not authorized. Please log in again.");
+      return;
+    }
+
     if (window.confirm("Are you sure you want to delete this employee?")) {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/del-employee/${id}`, {
+        const response = await fetch(`${BASE_URL}/api/del-employee/${id}`, {
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         });
+
         if (!response.ok) throw new Error("Delete failed");
         fetchEmployees();
       } catch (error) {
@@ -55,10 +70,44 @@ const Employee = () => {
     }
   };
 
+  // Fetch on component mount & when searchQuery changes
   useEffect(() => {
-    fetchEmployees();
+    let isMounted = true;
+
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        let url = `${BASE_URL}/api/get-employee`;
+        if (searchQuery.trim()) {
+          url += `?search=${encodeURIComponent(searchQuery)}`;
+        }
+
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Failed to fetch data");
+
+        const result = await response.json();
+        const employeeData = result.data;
+        if (isMounted) {
+          setEmployees(Array.isArray(employeeData) ? employeeData : []);
+        }
+      } catch (error) {
+        if (isMounted) {
+          setError(error.message);
+          setEmployees([]);
+        }
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+
+    fetchData();
+    return () => {
+      isMounted = false;
+    };
   }, [searchQuery]);
 
+  // Handle search button click or Enter key
   const handleSearch = () => {
     setSearchQuery(searchTerm.trim());
   };
@@ -132,7 +181,9 @@ const Employee = () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="5" className="text-center">No employees found.</td>
+                    <td colSpan="5" className="text-center">
+                      No employees found.
+                    </td>
                   </tr>
                 )}
               </tbody>

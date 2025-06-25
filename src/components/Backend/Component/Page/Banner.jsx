@@ -9,7 +9,11 @@ const Banner = () => {
       <DashNav />
       <div className="container">
 
-        <h2> Wellcome from Banner</h2>
+         <div className="card rounded-5 shadow border-0">
+
+          <h2>Hello Check</h2>
+
+         </div>
       </div>
       <Footer />
     </Layout>
