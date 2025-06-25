@@ -25,7 +25,7 @@ const AboutUs = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/about");
+        const response = await fetch(`http://127.0.0.1:8000/api/about`);
         const result = await response.json();
 
         console.log(result);
@@ -166,7 +166,7 @@ const AboutUs = () => {
         });
       } else {
         // Add new blog
-        response = await fetch("http://127.0.0.1:8000/api/add-about", {
+        response = await fetch(`http://127.0.0.1:8000/api/add-about`, {
           method: "POST",
           body: formData,
         });

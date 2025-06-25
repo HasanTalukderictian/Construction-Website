@@ -23,7 +23,7 @@ const Fortfilo = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/get-team");
+        const response = await fetch(`http://127.0.0.1:8000/api/get-team`);
         if (!response.ok) throw new Error("Failed to fetch team data.");
         const result = await response.json();
         const updatedBlogs = result.data.map((blog) => ({
@@ -158,7 +158,7 @@ const Fortfilo = () => {
           }
         );
       } else {
-        response = await fetch("http://127.0.0.1:8000/api/add-team", {
+        response = await fetch(`http://127.0.0.1:8000/api/add-team`, {
           method: "POST",
           body: formData,
         });

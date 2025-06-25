@@ -18,7 +18,7 @@ const Employee = () => {
     setLoading(true);
     setError(null);
     try {
-      let url = "http://127.0.0.1:8000/api/get-employee";
+      let url = `http://127.0.0.1:8000/api/get-employee`;
       if (searchQuery.trim()) {
         url += `?search=${encodeURIComponent(searchQuery)}`;
       }

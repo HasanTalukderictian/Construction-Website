@@ -4,7 +4,7 @@ const AbountNew = () => {
   const [members, setMembers] = useState([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/get-team")
+    fetch(`http://127.0.0.1:8000/api/get-team`)
       .then((response) => response.json())
       .then((responseData) => {
         console.log(responseData); // Debugging purposes

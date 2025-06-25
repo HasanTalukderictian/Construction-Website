@@ -8,7 +8,7 @@ const About = () => {
     // Fetch data from the JSON file
     const fetchData = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/about'); // Adjust the path based on your API
+        const response = await fetch(`http://127.0.0.1:8000/api/about`); // Adjust the path based on your API
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }

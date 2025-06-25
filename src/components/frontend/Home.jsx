@@ -15,6 +15,8 @@ import '../../assets/css/style.scss'
 import whatsapp from '../../assets/images/whatsapp-icon.png';
 import Video from './Video';
 
+import API from '../../config/api.js';
+
 
 
 const Home = () => {
@@ -27,33 +29,43 @@ const Home = () => {
 
 
     useEffect(() => {
-        // Fetch service data from the API
-        fetch('http://127.0.0.1:8000/api/get-service')
-            .then((response) => {
+        const fetchServices = async () => {
+            try {
+                const response = await fetch(API.GET_SERVICES);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                return response.json();
-            })
-            .then((data) => {
+
+                const data = await response.json();
                 setServices(data.data); // Access the 'data' field in the response
-            })
-            .catch((error) => console.error('Error fetching services:', error));
+            } catch (error) {
+                console.error('Error fetching services:', error);
+            }
+        };
+
+        fetchServices();
     }, []); // Empty dependency array means this effect runs only once on mount
 
 
     useEffect(() => {
-        // Fetch data from the JSON file or API endpoint
-        fetch('whyChooseUs.json')
-            .then((response) => {
+        const fetchFeatures = async () => {
+            try {
+
+                const response = await fetch(API.GET_FEATURES);
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error(`Network response was not ok. Status: ${response.status}`);
                 }
-                return response.json();
-            })
-            .then((data) => setFeatures(data))
-            .catch((error) => console.error('Error fetching features:', error));
+
+                const data = await response.json();
+                setFeatures(data);
+            } catch (error) {
+                console.error('Error fetching features:', error.message);
+            }
+        };
+
+        fetchFeatures();
     }, []);
+
 
 
 
@@ -61,15 +73,22 @@ const Home = () => {
     useEffect(() => {
         const fetchBlogs = async () => {
             try {
-                const response = await fetch("http://127.0.0.1:8000/api/get-blogs");
+                const response = await fetch(API.GET_BLOGS);
+
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error(`HTTP error! Status: ${response.status}`);
                 }
+
                 const result = await response.json();
-                // console.log(result.data); // Log the fetched data
-                setBlogs(result.data); // Assuming `result.data` contains the array of blogs
+
+                // Optional: Check if result.data is an array
+                if (!Array.isArray(result.data)) {
+                    throw new Error('Invalid data format: Expected an array');
+                }
+
+                setBlogs(result.data);
             } catch (error) {
-                console.error("Error fetching blog data:", error);
+                console.error('Error fetching blog data:', error.message);
             }
         };
 
@@ -77,19 +96,23 @@ const Home = () => {
     }, []);
 
 
+
     useEffect(() => {
-        // Fetch service data from the API
-        fetch('http://127.0.0.1:8000/api/get-projects')
-            .then((response) => {
+        const fetchProjects = async () => {
+            try {
+                const response = await fetch(API.GET_PROJECTS);
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error(`Network response was not ok. Status: ${response.status}`);
                 }
-                return response.json();
-            })
-            .then((data) => {
+
+                const data = await response.json();
                 setProjects(data.data); // Access the 'data' field in the response
-            })
-            .catch((error) => console.error('Error fetching services:', error));
+            } catch (error) {
+                console.error('Error fetching projects:', error.message);
+            }
+        };
+
+        fetchProjects();
     }, []);
 
 
@@ -126,9 +149,9 @@ const Home = () => {
 
                 <About />
 
-                   {/* Video Section */}
-                   
-                   <Video/>
+                {/* Video Section */}
+
+                <Video />
                 {/* Our Services  */}
 
                 <section className='section-3 py-5'>
@@ -156,7 +179,7 @@ const Home = () => {
 
                                         <div className='service-body'>
                                             <div className='service-content'>
-                                            <p className='text-white'>{service.description.replace(/<[^>]*>/g, '')}</p>
+                                                <p className='text-white'>{service.description.replace(/<[^>]*>/g, '')}</p>
 
                                                 <Link to={`/services/${service.id}`} className='btn btn-primary'>Read More</Link>
                                             </div>
@@ -168,44 +191,44 @@ const Home = () => {
                     </div>
                 </section>
 
-                 
+
 
                 {/* Why Choose Us */}
 
-               <section className="section-4 py-5">
-  <div className="container-fluid py-5 px-3 px-md-5">
-    <div className="section-header text-center mb-4">
-      <span>Why Choose Us</span>
-      <h2>Discover our wide variety of projects</h2>
-      <p>
-        Created in close partnership with our clients and collaborators, this approach merges industry expertise,
-        decades of experience, innovation, and flexibility to consistently deliver excellence.
-      </p>
-    </div>
+                <section className="section-4 py-5">
+                    <div className="container-fluid py-5 px-3 px-md-5">
+                        <div className="section-header text-center mb-4">
+                            <span>Why Choose Us</span>
+                            <h2>Discover our wide variety of projects</h2>
+                            <p>
+                                Created in close partnership with our clients and collaborators, this approach merges industry expertise,
+                                decades of experience, innovation, and flexibility to consistently deliver excellence.
+                            </p>
+                        </div>
 
-    <div className="row">
-      {features.map((feature, index) => (
-        <div className="col-12 col-sm-6 col-md-4 d-flex align-items-stretch mt-4" key={index}>
-          <div className="card shadow p-4 w-100 h-100">
-            <div className="card-icon text-center mt-2">
-              <img
-                src={feature.icon}
-                alt={feature.title}
-                style={{ maxWidth: '80px', maxHeight: '80px' }}
-              />
-            </div>
-            <div className="card-title mt-3">
-              <h3 className="text-center">{feature.title}</h3>
-            </div>
-            <div className="mb-3">
-              <p>{feature.description}</p>
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-</section>
+                        <div className="row">
+                            {features.map((feature, index) => (
+                                <div className="col-12 col-sm-6 col-md-4 d-flex align-items-stretch mt-4" key={index}>
+                                    <div className="card shadow p-4 w-100 h-100">
+                                        <div className="card-icon text-center mt-2">
+                                            <img
+                                                src={feature.icon}
+                                                alt={feature.title}
+                                                style={{ maxWidth: '80px', maxHeight: '80px' }}
+                                            />
+                                        </div>
+                                        <div className="card-title mt-3">
+                                            <h3 className="text-center">{feature.title}</h3>
+                                        </div>
+                                        <div className="mb-3">
+                                            <p>{feature.description}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
 
                 {/* Our Projects */}
 
@@ -248,7 +271,7 @@ const Home = () => {
                 </section>
 
 
-         
+
 
                 {/* testomonial section  */}
 
@@ -257,88 +280,88 @@ const Home = () => {
                 {/* blogs section */}
 
                 <section className="section-6 bg-light py-5">
-            <div className="container">
-                <div className="section-header text-center mb-4">
-                    <span>Blog & News</span>
-                    <h2>Articles & Blog Posts</h2>
-                    <p>
-                        We specialize in a wide range of construction services, including residential and industrial
-                        projects.
-                    </p>
-                </div>
-
-                <div className="row pt-3">
-                    {blogs.slice(0, visibleBlogs).map((blog) => (
-                        <div className="col-md-4 mb-3 d-flex align-items-stretch" key={blog.id}>
-                            <div className="card shadow border-0" style={{ width: "100%", height: "500px" }}>
-                                <div className="card-img-top">
-                                    <img
-                                        src={`http://127.0.0.1:8000/storage/${blog.image}`}
-                                        className="w-100"
-                                        alt={blog.title}
-                                        style={{ height: "300px", objectFit: "cover" }}
-                                    />
-                                </div>
-                                <div className="card-body p-4 text-center">
-                                    <h5 className="card-title">
-                                        <a
-                                            href="#"
-                                            className="text-dark text-decoration-none"
-                                            style={{ fontWeight: "600" }}
-                                        >
-                                            {blog.title}
-                                        </a>
-                                    </h5>
-
-                                    <Link to={`/blog/${blog.id}`} className="btn btn-primary">
-                                        Read More
-                                    </Link>
-                                </div>
-                            </div>
+                    <div className="container">
+                        <div className="section-header text-center mb-4">
+                            <span>Blog & News</span>
+                            <h2>Articles & Blog Posts</h2>
+                            <p>
+                                We specialize in a wide range of construction services, including residential and industrial
+                                projects.
+                            </p>
                         </div>
-                    ))}
-                </div>
 
-                {/* More Button */}
-                {visibleBlogs < blogs.length && (
-                    <div className="text-center mt-4">
-                        <button className="btn btn-primary" onClick={showMoreBlogs}>
-                            More
-                        </button>
+                        <div className="row pt-3">
+                            {blogs.slice(0, visibleBlogs).map((blog) => (
+                                <div className="col-md-4 mb-3 d-flex align-items-stretch" key={blog.id}>
+                                    <div className="card shadow border-0" style={{ width: "100%", height: "500px" }}>
+                                        <div className="card-img-top">
+                                            <img
+                                                src={`http://127.0.0.1:8000/storage/${blog.image}`}
+                                                className="w-100"
+                                                alt={blog.title}
+                                                style={{ height: "300px", objectFit: "cover" }}
+                                            />
+                                        </div>
+                                        <div className="card-body p-4 text-center">
+                                            <h5 className="card-title">
+                                                <a
+                                                    href="#"
+                                                    className="text-dark text-decoration-none"
+                                                    style={{ fontWeight: "600" }}
+                                                >
+                                                    {blog.title}
+                                                </a>
+                                            </h5>
+
+                                            <Link to={`/blog/${blog.id}`} className="btn btn-primary">
+                                                Read More
+                                            </Link>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* More Button */}
+                        {visibleBlogs < blogs.length && (
+                            <div className="text-center mt-4">
+                                <button className="btn btn-primary" onClick={showMoreBlogs}>
+                                    More
+                                </button>
+                            </div>
+                        )}
                     </div>
-                )}
-            </div>
-        </section>
+                </section>
 
                 <section className="section-6 bg-light py-5">
-                <a 
-    href="https://wa.me/8801768712230?text=Hi%2CHow%20can%20I%20help%20you%21" 
-    className="whatsapp-sticky" 
-    target="_blank"
-    rel="noopener noreferrer"
-    style={{
-        position: 'fixed',
-        bottom: '20px',
-        right: '20px',
-        zIndex: '9999'
-    }}
->
-    <img 
-        src={whatsapp} 
-        alt="WhatsApp Chat" 
-        style={{
-            width: '80px',
-            height: '80px',
-            borderRadius: '50%',
-            cursor: 'pointer'
-        }} 
-    />
-</a>
+                    <a
+                        href="https://wa.me/8801768712230?text=Hi%2CHow%20can%20I%20help%20you%21"
+                        className="whatsapp-sticky"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                            position: 'fixed',
+                            bottom: '20px',
+                            right: '20px',
+                            zIndex: '9999'
+                        }}
+                    >
+                        <img
+                            src={whatsapp}
+                            alt="WhatsApp Chat"
+                            style={{
+                                width: '80px',
+                                height: '80px',
+                                borderRadius: '50%',
+                                cursor: 'pointer'
+                            }}
+                        />
+                    </a>
 
 
-   
 
-</section>
+
+                </section>
 
 
 
