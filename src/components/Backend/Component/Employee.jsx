@@ -87,7 +87,10 @@ const Employee = () => {
         if (!response.ok) throw new Error("Failed to fetch data");
 
         const result = await response.json();
+
         const employeeData = result.data;
+
+        console.log(employeeData);
         if (isMounted) {
           setEmployees(Array.isArray(employeeData) ? employeeData : []);
         }
@@ -115,6 +118,11 @@ const Employee = () => {
   const handleKeyDown = (e) => {
     if (e.key === "Enter") handleSearch();
   };
+
+  const handleView = (id) => {
+  navigate(`/admin/view-employee/${id}`);
+};
+
 
   return (
     <Layout>
@@ -151,6 +159,7 @@ const Employee = () => {
                   <th className="text-center">Phone</th>
                   <th className="text-center">Designation</th>
                   <th className="text-center">Action</th>
+                  <th className="text-center">Image</th>
                 </tr>
               </thead>
               <tbody>
@@ -165,28 +174,49 @@ const Employee = () => {
                         <div className="d-flex justify-content-center">
                           <button
                             className="btn btn-sm btn-primary me-2"
+                            onClick={() => handleView(employee.id)}
+                          >
+                            <i className="bi bi-eye fs-5 me-1"></i> View
+                          </button>
+
+
+                          <button
+                            className="btn btn-sm btn-primary me-2"
                             onClick={() => handleEdit(employee.id)}
                           >
-                            <i className="bi bi-pencil me-1"></i> Edit
+                            <i className="bi bi-pencil fs-5 me-1"></i> Edit
                           </button>
                           <button
                             className="btn btn-sm btn-danger"
                             onClick={() => handleDelete(employee.id)}
                           >
-                            <i className="bi bi-trash me-1"></i> Delete
+                            <i className="bi bi-trash fs-5 me-1"></i> Delete
                           </button>
                         </div>
+                      </td>
+                      <td className="text-center">
+                        {employee.image ? (
+                          <img
+                            src={`${BASE_URL}/storage/${employee.image}`}
+                            alt={employee.employee_name}
+                            style={{ width: "50px", height: "50px", objectFit: "cover" }}
+                          />
+
+                        ) : (
+                          "No Image"
+                        )}
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="5" className="text-center">
+                    <td colSpan="6" className="text-center">
                       No employees found.
                     </td>
                   </tr>
                 )}
               </tbody>
+
             </table>
           </div>
         )}

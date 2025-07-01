@@ -28,6 +28,7 @@ import Employee from './components/Backend/Component/Employee';
 import AddEmployee from './components/Backend/Component/AddEmployee';
 import EditEmployee from './components/Backend/Component/Page/EditEmployee';
 import Blog from './components/Backend/Component/Page/Blog';
+import ViewEmployee from './components/Backend/Component/Page/ViewEmployee';
 
 
 function App() {
@@ -80,10 +81,12 @@ function App() {
           />
 
 
-<Route
-  path="/admin/edit-employee/:id"
-  element={isAdminLoggedIn ? <EditEmployee /> : <Navigate to="/admin" />}
-/>
+          <Route
+            path="/admin/edit-employee/:id"
+            element={isAdminLoggedIn ? <EditEmployee /> : <Navigate to="/admin" />}
+          />
+
+          <Route path="/admin/view-employee/:id" element={isAdminLoggedIn ? <ViewEmployee /> : <Navigate to="/admin" />} />
 
 
 
