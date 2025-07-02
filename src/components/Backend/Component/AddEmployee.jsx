@@ -2,6 +2,7 @@ import Layout from "./Layout";
 import Footer from "../Footer";
 import DashNav from "./DashNav";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AddEmployee = () => {
   const [employeeId, setEmployeeId] = useState("");
@@ -16,6 +17,8 @@ const AddEmployee = () => {
 
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+
+  const navigate = useNavigate();
 
   const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 
@@ -358,6 +361,8 @@ const AddEmployee = () => {
       setPhoneNumber("");
       setImage(null);
       setImagePreview(null);
+
+        navigate("/admin/employee");
 
     } catch (error) {
       console.error("API Error:", error);
