@@ -10,8 +10,10 @@ const ProjectDetails = () => {
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+
   useEffect(() => {
-    fetch(`http://127.0.0.1:8000/api/get-projects/${id}`) // API endpoint for specific project
+    fetch(`${BASE_URL}/api/get-projects/${id}`) // API endpoint for specific project
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -56,7 +58,7 @@ const ProjectDetails = () => {
         <div className="row align-items-center p-2">
           <div className="col-md-7">
             <div className="image-zoom-wrapper"> 
-            <img src={`http://127.0.0.1:8000/storage/${project.image}`}
+            <img src={`${BASE_URL}/storage/${project.image}`}
              alt={project.title}
              className="img-fluid rounded-2 image-zoom"
                 onMouseMove={handleMouseMove} // Adjust zoom origin dynamically

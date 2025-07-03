@@ -6,6 +6,8 @@ const DashNav = () => {
     const [yourName, setYourName] = useState('');
     const [image, setImage] = useState(null);
 
+    const BASE_URL = import.meta.env.VITE_BASE_URL;
+
     // Local form state
     const [formCompanyName, setFormCompanyName] = useState('');
     const [formYourName, setFormYourName] = useState('');
@@ -13,7 +15,7 @@ const DashNav = () => {
 
     const fetchUserInfo = async () => {
         try {
-            const response = await fetch('http://127.0.0.1:8000/api/get-userInfo', {
+            const response = await fetch(`${BASE_URL}/api/get-userInfo`, {
                 headers: {
                     'Accept': 'application/json',
                 },
@@ -57,7 +59,7 @@ const DashNav = () => {
         }
     
         try {
-            const response = await fetch('http://127.0.0.1:8000/api/add-userInfo', {
+            const response = await fetch(`${BASE_URL}/api/add-userInfo`, {
                 method: 'POST',
                 body: formData,
             });

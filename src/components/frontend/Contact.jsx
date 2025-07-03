@@ -15,6 +15,8 @@ const Contact = () => {
     const [errors, setErrors] = useState({});
     const [statusMessage, setStatusMessage] = useState('');
 
+    const BASE_URL = import.meta.env.VITE_BASE_URL;
+
     const validateForm = () => {
         const newErrors = {};
         if (!form.name) newErrors.name = 'Name is required';
@@ -45,7 +47,7 @@ const Contact = () => {
 
         if (validateForm()) {
             try {
-                const response = await fetch(`http://127.0.0.1:8000/api/contact`, {
+                const response = await fetch(`${BASE_URL}/api/contact`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -62,7 +64,7 @@ const Contact = () => {
                     setStatusMessage(data.message || 'An error occurred while submitting the form.');
                 }
             } catch (error) {
-                setStatusMessage('Failed to submit the form. Please try again later.');
+               error.setStatusMessage('Failed to submit the form. Please try again later.');
             }
         }
     };

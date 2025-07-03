@@ -8,8 +8,10 @@ const Services = () => {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/api/get-service')
+    fetch(`${BASE_URL}/api/get-service`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -54,7 +56,7 @@ const Services = () => {
                 <div className='item'>
                   <div className='service-image'>
                     <img
-                      src={`http://127.0.0.1:8000/storage/${service.image}`} // Assuming your images are in storage
+                      src={`${BASE_URL}/storage/${service.image}`} // Assuming your images are in storage
                       alt={service.title}
                       className="w-100"
                     />

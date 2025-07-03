@@ -20,6 +20,8 @@ const AddEmployee = () => {
 
   const navigate = useNavigate();
 
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+
   const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 
   const countryCodes = [
@@ -339,7 +341,7 @@ const AddEmployee = () => {
     const token = localStorage.getItem("authToken");
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/add-employee", {
+      const response = await fetch(`${BASE_URL}/api/add-employee`, {
         method: "POST",
         body: formData,
         headers: {
@@ -455,7 +457,7 @@ const AddEmployee = () => {
             </div>
 
             <div className="mb-3 flex-fill">
-              <label className="form-label fs-5">Contact No.</label>
+              <label className="form-label fs-5 ">Contact No.</label>
               <div className="input-group">
                 <select
                   className="form-select"

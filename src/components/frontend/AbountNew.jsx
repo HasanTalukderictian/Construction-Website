@@ -3,8 +3,10 @@ import { useState, useEffect } from "react";
 const AbountNew = () => {
   const [members, setMembers] = useState([]);
 
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+
   useEffect(() => {
-    fetch(`http://127.0.0.1:8000/api/get-team`)
+    fetch(`${BASE_URL}/api/get-team`)
       .then((response) => response.json())
       .then((responseData) => {
         console.log(responseData); // Debugging purposes
@@ -32,7 +34,7 @@ const AbountNew = () => {
               }}
             >
               <img
-                src={`http://127.0.0.1:8000/storage/${member.image}`} // Adjust the URL for the image path
+                src={`${BASE_URL}/storage/${member.image}`} // Adjust the URL for the image path
                 alt={member.Name}
                 style={{
                   width: "100%",

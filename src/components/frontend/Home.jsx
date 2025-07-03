@@ -27,6 +27,8 @@ const Home = () => {
     const [projects, setProjects] = useState([]);
     const [visibleBlogs, setVisibleBlogs] = useState(6);
 
+      const BASE_URL = import.meta.env.VITE_BASE_URL;
+
 
     useEffect(() => {
         const fetchServices = async () => {
@@ -168,7 +170,7 @@ const Home = () => {
                                     <div className='item'>
                                         <div className='service-image'>
                                             <img
-                                                src={`http://127.0.0.1:8000/storage/${service.image}`} // Assuming your images are in storage
+                                                src={`${BASE_URL}/storage/${service.image}`} // Assuming your images are in storage
                                                 alt={service.title}
                                                 className="w-100"
                                             />
@@ -246,7 +248,7 @@ const Home = () => {
                                     <div className="item">
                                         <div className="service-image">
                                             <img
-                                                src={`http://127.0.0.1:8000/storage/${project.image}`} // Assuming your images are in storage
+                                                src={`${BASE_URL}/storage/${project.image}`} // Assuming your images are in storage
                                                 alt={project.title}
                                                 className="w-100"
                                             />
@@ -296,7 +298,7 @@ const Home = () => {
                                     <div className="card shadow border-0" style={{ width: "100%", height: "500px" }}>
                                         <div className="card-img-top">
                                             <img
-                                                src={`http://127.0.0.1:8000/storage/${blog.image}`}
+                                                src={`${BASE_URL}/storage/${blog.image}`}
                                                 className="w-100"
                                                 alt={blog.title}
                                                 style={{ height: "300px", objectFit: "cover" }}

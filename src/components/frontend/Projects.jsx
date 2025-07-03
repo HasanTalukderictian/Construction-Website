@@ -9,11 +9,13 @@ const Projects = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+
 
 
   useEffect(() => {
     // Fetch service data from the API
-    fetch('http://127.0.0.1:8000/api/get-projects')
+    fetch(`${BASE_URL}/api/get-projects`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -61,7 +63,7 @@ const Projects = () => {
                   <div className="item">
                     <div className="service-image">
                       <img
-                        src={`http://127.0.0.1:8000/storage/${project.image}`} // Assuming your images are in storage
+                        src={`${BASE_URL}/storage/${project.image}`} // Assuming your images are in storage
                         alt={project.title}
                         className="w-100"
                       />

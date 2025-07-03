@@ -9,8 +9,10 @@ const ServiceDetails = () => {
   const [service, setService] = useState(null);
   const [loading, setLoading] = useState(true);
 
+    const BASE_URL = import.meta.env.VITE_BASE_URL;
+
   useEffect(() => {
-    fetch(`http://127.0.0.1:8000/api/get-service/${id}`) // Corrected template literal
+    fetch(`${BASE_URL}/api/get-service/${id}`) // Corrected template literal
       .then((response) => {
         if (!response.ok) {
           throw new Error('Failed to fetch service details');
@@ -58,7 +60,7 @@ const ServiceDetails = () => {
                 src={
                   service.image.startsWith('http')
                     ? service.image
-                    : `http://127.0.0.1:8000/storage/${service.image}`
+                    : `${BASE_URL}/storage/${service.image}`
                 }
                 alt={service.title}
                 className="img-fluid rounded image-zoom"

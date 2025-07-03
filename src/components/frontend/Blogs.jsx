@@ -8,11 +8,13 @@ import { Link } from "react-router-dom";
 const Blogs = () => {
 
      const [blogs, setBlogs] = useState([]);
+
+     const BASE_URL = import.meta.env.VITE_BASE_URL;
    
       useEffect(() => {
             const fetchBlogs = async () => {
                 try {
-                    const response = await fetch(`http://127.0.0.1:8000/api/get-blogs`);
+                    const response = await fetch(`${BASE_URL}/api/get-blogs`);
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
@@ -54,7 +56,7 @@ const Blogs = () => {
                                                 <div className="card shadow border-0" style={{ width: "100%", height: "500px" }}>
                                                     <div className="card-img-top">
                                                         <img
-                                                            src={`http://127.0.0.1:8000/storage/${blog.image}`}
+                                                            src={`${BASE_URL}/${blog.image}`}
                                                             className="w-100"
                                                             alt={blog.title}
                                                             style={{ height: "300px", objectFit: "cover" }}

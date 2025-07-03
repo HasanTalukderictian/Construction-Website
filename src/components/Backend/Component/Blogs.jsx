@@ -27,6 +27,8 @@ const BackendBlogs = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+
 
 
   //image preview start
@@ -78,7 +80,7 @@ const BackendBlogs = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/get-blogs");
+        const response = await fetch(`${BASE_URL}/api/get-blogs`);
         const result = await response.json();
 
         console.log(result);
@@ -87,7 +89,7 @@ const BackendBlogs = () => {
         const updatedBlogs = result.data.map((blog) => ({
           ...blog,
           image: blog.image
-            ? `http://127.0.0.1:8000/storage/${blog.image}`
+            ? `${BASE_URL}/storage/${blog.image}`
             : null,
         }));
 
@@ -168,8 +170,8 @@ const BackendBlogs = () => {
     try {
       const response = await axios.post(
         editMode
-          ? `http://127.0.0.1:8000/api/edit-blog/${blogToDelete}`
-          : "http://127.0.0.1:8000/api/blogs",
+          ? `${BASE_URL}/edit-blog/${blogToDelete}`
+          : `${BASE_URL}/api/blogs`,
         formData,
         {
           headers: {
@@ -203,7 +205,7 @@ const BackendBlogs = () => {
 
   const deleteBlog = async (id) => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/delete-blog/${id}`, {
+      const response = await fetch(`${BASE_URL}/api/delete-blog/${id}`, {
         method: "DELETE",
       });
 

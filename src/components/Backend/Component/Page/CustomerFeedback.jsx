@@ -8,13 +8,14 @@ import DashNav from "../DashNav";
 const CustomerFeedback = () => {
   const [blogs, setBlogs] = useState([]);
 
-
+  
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/get-contact");
+        const response = await fetch(`${BASE_URL}/api/get-contact`);
         const result = await response.json();
 
         console.log(result);
@@ -23,7 +24,7 @@ const CustomerFeedback = () => {
         const updatedBlogs = result.data.map((blog) => ({
           ...blog,
           image: blog.image
-            ? `http://127.0.0.1:8000/storage/${blog.image}`
+            ? `${BASE_URL}/storage/${blog.image}`
             : null,
         }));
 

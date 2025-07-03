@@ -4,11 +4,13 @@ const About = () => {
   const [data, setData] = useState(null); // State to store the fetched data
   const [loading, setLoading] = useState(true); // State for loading status
 
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+
   useEffect(() => {
     // Fetch data from the JSON file
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/about`); // Adjust the path based on your API
+        const response = await fetch(`${BASE_URL}/api/about`); // Adjust the path based on your API
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
@@ -36,7 +38,7 @@ const About = () => {
         <div className="row">
           <div className="col-md-6">
             <img
-              src={`http://127.0.0.1:8000/storage/${data.imageUrl}`} // Ensure it matches the URL pattern your Laravel app uses
+              src={`${BASE_URL}/storage/${data.imageUrl}`} // Ensure it matches the URL pattern your Laravel app uses
               className="w-100"
               alt="About Us"
             />

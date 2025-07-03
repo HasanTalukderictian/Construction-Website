@@ -13,13 +13,15 @@ const Admin = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false); // State to toggle password visibility
   const navigate = useNavigate();
 
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+
   useEffect(() => {
     if (submittedData) {
       const { email, password } = submittedData;
 
       const login = async () => {
         try {
-          const response = await fetch(`http://127.0.0.1:8000/api/admin/login`, {
+          const response = await fetch(`${BASE_URL}/api/admin/login`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

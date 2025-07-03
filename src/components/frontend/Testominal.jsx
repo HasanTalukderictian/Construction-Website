@@ -5,11 +5,13 @@ const Testominal = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [slides, setSlides] = useState([]); // State to hold the fetched data
 
+    const BASE_URL = import.meta.env.VITE_BASE_URL;
+
   // Fetching data from a JSON endpoint
   useEffect(() => {
     const fetchSlides = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/get-testominal'); // Replace with your JSON URL
+        const response = await fetch(`${BASE_URL}/api/get-testominal`); // Replace with your JSON URL
         const data = await response.json();
         setSlides(data.data); // Set the fetched data to the state
       } catch (error) {
@@ -60,7 +62,7 @@ const Testominal = () => {
           <div key={slide.id} className="swiper-slide">
             <div className="testimonial-card">
               <img
-                src={`http://127.0.0.1:8000/storage/${slide.image}`} // Ensure correct path to image
+                src={`${BASE_URL}/storage/${slide.image}`} // Ensure correct path to image
                 alt={slide.name}
                 className="testimonial-image"
               />

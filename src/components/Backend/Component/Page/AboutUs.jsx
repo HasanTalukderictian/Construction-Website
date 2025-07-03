@@ -22,10 +22,12 @@ const AboutUs = () => {
   const [errors, setErrors] = useState({});
   const [image, setImage] = useState(null);
 
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/about`);
+        const response = await fetch(`${BASE_URL}/api/about`);
         const result = await response.json();
 
         console.log(result);
@@ -34,7 +36,7 @@ const AboutUs = () => {
         const updatedBlogs = result.data.map((blog) => ({
           ...blog,
           imageUrl: blog.imageUrl
-            ? `http://127.0.0.1:8000/storage/${blog.imageUrl}`
+            ? `${BASE_URL}/storage/${blog.imageUrl}`
             : null,
         }));
 
@@ -160,13 +162,13 @@ const AboutUs = () => {
       let response;
       if (editMode) {
         // Edit blog
-        response = await fetch(`http://127.0.0.1:8000/api/edit-about/${blogToDelete}`, {
+        response = await fetch(`${BASE_URL}/api/edit-about/${blogToDelete}`, {
           method: "POST",
           body: formData,
         });
       } else {
         // Add new blog
-        response = await fetch(`http://127.0.0.1:8000/api/add-about`, {
+        response = await fetch(`${BASE_URL}/api/add-about`, {
           method: "POST",
           body: formData,
         });
@@ -195,7 +197,7 @@ const AboutUs = () => {
 
   const deleteBlog = async (id) => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/del-about/${id}`, {
+      const response = await fetch(`${BASE_URL}/api/del-about/${id}`, {
         method: "DELETE",
       });
 

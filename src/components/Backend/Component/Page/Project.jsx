@@ -10,6 +10,7 @@ const Project = () => {
   const [blogs, setBlogs] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
 
   // Form fields state
   const [title, setTitle] = useState("");
@@ -23,14 +24,14 @@ const Project = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/get-projects");
+        const response = await fetch(`${BASE_URL}/api/get-projects`);
         const result = await response.json();
 
         // Update blogs with image URLs
         const updatedBlogs = result.data.map((blog) => ({
           ...blog,
           image: blog.image
-            ? `http://127.0.0.1:8000/storage/${blog.image}`
+            ? `${BASE_URL}/storage/${blog.image}`
             : null,
         }));
         setBlogs(updatedBlogs);
@@ -153,14 +154,14 @@ const Project = () => {
       let response;
       if (editMode) {
         response = await fetch(
-          `http://127.0.0.1:8000/api/edit-projects/${blogToDelete}`,
+          `${BASE_URL}/api/edit-projects/${blogToDelete}`,
           {
             method: "POST",
             body: formData,
           }
         );
       } else {
-        response = await fetch("http://127.0.0.1:8000/api/add-projects", {
+        response = await fetch(`${BASE_URL}/api/add-projects`, {
           method: "POST",
           body: formData,
         });
@@ -188,7 +189,7 @@ const Project = () => {
   const deleteBlog = async (id) => {
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/api/del-projects/${id}`,
+        `${BASE_URL}/api/del-projects/${id}`,
         {
           method: "DELETE",
         }

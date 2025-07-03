@@ -21,10 +21,12 @@ const Testominal = () => {
   const [blogToDelete, setBlogToDelete] = useState(null);
   const [errors, setErrors] = useState({});
 
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/get-testominal");
+        const response = await fetch(`${BASE_URL}/api/get-testominal`);
         const result = await response.json();
 
         console.log(result);
@@ -33,7 +35,7 @@ const Testominal = () => {
         const updatedBlogs = result.data.map((blog) => ({
           ...blog,
           image: blog.image
-            ? `http://127.0.0.1:8000/storage/${blog.image}`
+            ? `${BASE_URL}/storage/${blog.image}`
             : null,
         }));
 
@@ -166,13 +168,13 @@ const Testominal = () => {
       let response;
       if (editMode) {
         // Edit blog
-        response = await fetch(`http://127.0.0.1:8000/api/edit-testominal/${blogToDelete}`, {
+        response = await fetch(`${BASE_URL}/api/edit-testominal/${blogToDelete}`, {
           method: "POST",
           body: formData,
         });
       } else {
         // Add new blog
-        response = await fetch("http://127.0.0.1:8000/api/add-testominal", {
+        response = await fetch(`${BASE_URL}/api/add-testominal`, {
           method: "POST",
           body: formData,
         });
@@ -199,7 +201,7 @@ const Testominal = () => {
 
   const deleteBlog = async (id) => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/del-testominal/${id}`, {
+      const response = await fetch(`${BASE_URL}/api/del-testominal/${id}`, {
         method: "DELETE",
       });
 

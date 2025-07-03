@@ -8,6 +8,8 @@ const EditEmployee = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+
   const [employee, setEmployee] = useState({
     employee_id: "",
     employee_name: "",
@@ -22,7 +24,7 @@ const EditEmployee = () => {
 
   const fetchEmployee = async () => {
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/view-employee/${id}`);
+      const res = await fetch(`${BASE_URL}/api/view-employee/${id}`);
       const result = await res.json();
       setEmployee(result.data);
     } catch (error) {
@@ -52,7 +54,7 @@ const EditEmployee = () => {
     }
 
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/edit-employee/${id}`, {
+      const res = await fetch(`${BASE_URL}/api/edit-employee/${id}`, {
         method: "POST",
         body: formData,
       });
