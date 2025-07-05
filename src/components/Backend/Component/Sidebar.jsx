@@ -118,7 +118,7 @@ const Sidebar = () => {
                       `nav-link ${isActive ? "active" : "text-white"}`
                     }
                   >
-                    <i className="bi bi-card-image me-2"></i> Banner
+                    <i className="bi bi-card-image me-2"></i> Team
                   </NavLink>
                 </li>
                 <li className="nav-item">
