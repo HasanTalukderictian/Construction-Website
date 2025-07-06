@@ -5,6 +5,7 @@ const DashNav = () => {
     const [companyName, setCompanyName] = useState('');
     const [yourName, setYourName] = useState('');
     const [image, setImage] = useState(null);
+    const [userId, setUserId] = useState(null); // store user id
 
     const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -22,10 +23,14 @@ const DashNav = () => {
             });
             const data = await response.json();
 
-            if (response.ok && data) {
-                setCompanyName(data.CompanyName || '');
-                setYourName(data.YourName || '');
-                setImage(data.image || null);
+            console.log("API response data:", data);
+
+            if (response.ok && data.data && data.data.length > 0) {
+                const user = data.data[0];
+                setCompanyName(user.CompanyName || '');
+                setYourName(user.YourName || '');
+                setImage(user.image ? `${BASE_URL}/storage/${user.image}` : null);
+                setUserId(user.id); // set user id for update
             } else {
                 console.error('Failed to fetch user info:', data);
             }
@@ -46,48 +51,44 @@ const DashNav = () => {
     };
 
     const handleCloseModal = () => setShowModal(false);
-    
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
         const formData = new FormData();
         formData.append('CompanyName', formCompanyName);
         formData.append('YourName', formYourName);
         if (formImage instanceof File) {
             formData.append('image', formImage);
         }
-    
+
         try {
-            const response = await fetch(`${BASE_URL}/api/add-userInfo`, {
-                method: 'POST',
+            const response = await fetch(`${BASE_URL}/api/edit-userInfo/${userId}`, {
+                method: 'POST', // use 'PUT' if your backend expects it
                 body: formData,
             });
-    
+
             const data = await response.json();
-    
+
             if (response.ok) {
-                alert('User info submitted successfully!');
+                alert('User info updated successfully!');
                 setShowModal(false);
-    
-                // Call fetchUserInfo to refresh data after form submit
-                await fetchUserInfo(); // Wait for the data to refresh
-    
-                // Optionally reset form state after submit
+
+                await fetchUserInfo(); // Refresh data after update
+
+                // Reset form state
                 setFormCompanyName('');
                 setFormYourName('');
-                setFormImage(null); // Reset image input after successful submission
+                setFormImage(null);
             } else {
-                alert('Submission failed: ' + (data.message || 'Check console for details.'));
+                alert('Update failed: ' + (data.message || 'Check console for details.'));
                 console.error(data);
             }
         } catch (error) {
             console.error('Fetch error:', error);
-            alert('An error occurred while submitting the form.');
+            alert('An error occurred while updating the form.');
         }
     };
-    
-
 
     return (
         <>
@@ -111,7 +112,7 @@ const DashNav = () => {
                         >
                             <img
                                 src={
-                                    typeof image === 'string'
+                                    image
                                         ? `${image}?${new Date().getTime()}`
                                         : "https://i.ibb.co.com/rK7RzDJk/MY-pic-02.jpg"
                                 }
@@ -122,7 +123,7 @@ const DashNav = () => {
                         <div className="mt-1 mb-1">
                             <span className="d-block text-muted">Hello,</span>
                             <span className="fw-bold" style={{ cursor: "pointer", color: "#0d6efd" }} onClick={handleOpenModal}>
-                                {yourName || 'Hasan Talukder'}
+                                {yourName || 'Admin'}
                             </span>
                             <p className="small text-muted m-0 d-flex align-items-center">
                                 Welcome to our panel

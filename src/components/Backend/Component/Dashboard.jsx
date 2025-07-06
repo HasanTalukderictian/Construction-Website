@@ -436,7 +436,7 @@ const Dashboard = () => {
         { title: "Total Services", value: dashboardData.services, className: "card-title-services", color: "bg-success", url: "/admin/page/services" },
         { title: "Total Projects", value: dashboardData.projects, className: "card-title-projects", color: "bg-warning text-dark", url: "/admin/page/projects" },
         { title: "Total Testimonials", value: dashboardData.testimonials, className: "card-title-testimonials", color: "bg-info", url: "/admin/page/testominal" },
-        { title: "Total Teams", value: dashboardData.teams, className: "card-title-teams", color: "bg-secondary", url: "/admin/teams" },
+        { title: "Total Teams", value: dashboardData.teams, className: "card-title-teams", color: "bg-secondary", url: "/admin/page/banner" },
         { title: "Total Employee", value: dashboardData.employee, className: "card-title-employee", color: "bg-success", url: "/admin/employee" },
     ];
 
