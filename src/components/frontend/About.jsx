@@ -3,6 +3,7 @@ import Header from "../common/Header"
 
 import Common from "../common/Common";
 import AbountNew from "./AbountNew";
+import Whatsapp from "./Whatsapp";
 
 const About = () => {
   return (
@@ -32,6 +33,11 @@ const About = () => {
 
                   </div>
 
+                </div>
+
+                <div>
+
+                  <Whatsapp/>
                 </div>
           </section>
 

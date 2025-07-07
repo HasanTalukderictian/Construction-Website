@@ -3,6 +3,7 @@ import Common from "../common/Common"
 import Footer from "../common/Footer"
 import Header from "../common/Header"
 import { Link } from "react-router-dom";
+import Whatsapp from "./Whatsapp";
 
 
 const Blogs = () => {
@@ -81,6 +82,11 @@ const Blogs = () => {
                                             </div>
                                         ))}
                                     </div>
+                                </div>
+
+
+                                <div>
+                                    <Whatsapp/>
                                 </div>
                             </section>
             

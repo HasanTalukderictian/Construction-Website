@@ -1,7 +1,10 @@
 .swiper-container {
   position: relative;
   width: 100%;
+  padding: auto;
   margin: 0 auto;
+  margin-top: 10px;
+  margin-bottom: 20px;
   overflow: hidden;
 }
 
@@ -21,20 +24,39 @@
 }
 
 .testimonial-card {
-  background: #fff;
-  border-radius: 8px;
+  background: #ece8e8;
+  border-radius: 10px;
   padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+  width: 350px;
+  height: 450px;
+  box-shadow: 0 4px 10px rgba(105, 104, 104, 0.1);
   text-align: center;
 }
 
 .testimonial-image {
   width: 100px;
   height: 100px;
+  margin-top: 12px;
   border-radius: 50%;
   object-fit: cover;
 }
 
+
+.prev-button{
+      position: absolute;
+    left: 10px;
+    top: 55%;
+    transform: translateY(100%) !important;
+}
+
+
+.next-button {
+    position: absolute;
+    right: 10px;
+    top: 55%;
+    transform: translateY(100%) !important;;
+}
 h3 {
   margin: 10px 0;
   font-size: 1.5rem;

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Common from "../common/Common";
 import Footer from "../common/Footer";
 import Header from "../common/Header";
+import Whatsapp from './Whatsapp';
 
 const Contact = () => {
     const [form, setForm] = useState({
@@ -191,6 +192,11 @@ const Contact = () => {
                                 referrerPolicy="no-referrer-when-downgrade"
                             ></iframe>
                         </div>
+                    </div>
+
+
+                    <div>
+                        <Whatsapp/>
                     </div>
                 </section>
             </main>

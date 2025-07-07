@@ -5,6 +5,7 @@ import Common from "../common/Common";
 import Protflio from '../../assets/images/construction122.jpg';
 import Footer from "../common/Footer";
 import '../../assets/css/ServiceDetails.scss';
+import Whatsapp from "./Whatsapp";
 
 
 const Portfilo = () => {
@@ -61,6 +62,10 @@ const Portfilo = () => {
                                     </p>
                                 </div>
                             </div>
+                        </div>
+
+                        <div>
+                            <Whatsapp/>
                         </div>
 
                     </section>
