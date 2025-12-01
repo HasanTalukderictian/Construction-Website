@@ -11,6 +11,7 @@ import Item from './components/frontend/Item';
 import Productdetails from './components/frontend/Productdetails';
 import Cart from './components/frontend/Cart'; // we'll create this page
 import { CartProvider } from './components/frontend/CartContext.jsx';
+import Checkout from './components/frontend/Checkout.jsx';
 
 
 
@@ -28,6 +29,7 @@ function App() {
           <Route path='/items' element={<Item />} />
           <Route path='/product/:id' element={<Productdetails />} />
           <Route path='/cart' element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
         </Routes>
       </BrowserRouter>
     </CartProvider>

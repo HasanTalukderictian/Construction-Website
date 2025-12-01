@@ -1,15 +1,38 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import Header from "../common/Header";
 import Footer from "../common/Footer";
 import { CartContext } from "./CartContext";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
     const { cartItems, increaseQuantity, decreaseQuantity, removeFromCart } = useContext(CartContext);
+
+    const [deliveryCharge, setDeliveryCharge] = useState(0);
+    const [selectedDelivery, setSelectedDelivery] = useState(""); // track which option selected
+
+    const navigate = useNavigate();
 
     const totalPrice = cartItems.reduce(
         (total, item) => total + item.price * item.quantity,
         0
     );
+
+    const finalTotal = totalPrice + deliveryCharge;
+
+    const handleCheckout = () => {
+        if (!selectedDelivery) {
+            alert("Please select a delivery option!");
+            return;
+        }
+
+        navigate("/checkout", {
+            state: {
+                cartItems,
+                deliveryCharge,
+                totalPrice,
+            },
+        });
+    };
 
     return (
         <>
@@ -66,10 +89,58 @@ const Cart = () => {
                             </div>
                         ))}
 
-                        <div className="mt-4 text-end">
-                            <h4>Total Price: {totalPrice}৳</h4>
-                            <button className="btn btn-primary mt-2">Checkout</button>
+                        {/* Delivery Charge Section */}
+                        <div className="mt-4 p-3 border rounded">
+                            <h5>Delivery Charge</h5>
+
+                            <div className="form-check mt-2">
+                                <input
+                                    type="radio"
+                                    className="form-check-input"
+                                    name="delivery"
+                                    checked={selectedDelivery === "inside"}
+                                    onChange={() => {
+                                        setDeliveryCharge(80);
+                                        setSelectedDelivery("inside");
+                                    }}
+                                />
+                                <label className="form-check-label">
+                                    Inside Dhaka (80৳)
+                                </label>
+                            </div>
+
+                            <div className="form-check mt-2">
+                                <input
+                                    type="radio"
+                                    className="form-check-input"
+                                    name="delivery"
+                                    checked={selectedDelivery === "outside"}
+                                    onChange={() => {
+                                        setDeliveryCharge(150);
+                                        setSelectedDelivery("outside");
+                                    }}
+                                />
+                                <label className="form-check-label">
+                                    Outside Dhaka (150৳)
+                                </label>
+                            </div>
                         </div>
+
+                        {/* Total Section */}
+                        <div className="mt-4 text-end mb-4">
+                            <h5>Products Total: {totalPrice}৳</h5>
+                            <h5>Delivery Charge: {deliveryCharge}৳</h5>
+                            <h4 className="mt-2">Final Total: {finalTotal}৳</h4>
+
+                            <button
+                                className="btn btn-primary mt-3"
+                                onClick={handleCheckout}
+                                disabled={!selectedDelivery} // disable until delivery selected
+                            >
+                                Checkout
+                            </button>
+                        </div>
+
                     </div>
                 )}
             </div>
