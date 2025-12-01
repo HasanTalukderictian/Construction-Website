@@ -1,10 +1,16 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import '../../../src/assets/css/product.scss';
+import Toast from "react-bootstrap/Toast";
+import { CartContext } from "./CartContext";
 
 const Item = () => {
     const [team, setTeam] = useState([]);
+    const [showToast, setShowToast] = useState(false);
+    const [toastMessage, setToastMessage] = useState("");
     const navigate = useNavigate();
+
+    const { addToCart } = useContext(CartContext);
 
     useEffect(() => {
         fetch("../../../public/product.json")
@@ -12,6 +18,13 @@ const Item = () => {
             .then(data => setTeam(data))
             .catch(err => console.log("Error Loading JSON", err));
     }, []);
+
+    const handleAddToCart = (product) => {
+        addToCart(product);
+        setToastMessage(`${product.productName} added to cart!`);
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 3000); // auto hide after 3s
+    };
 
     return (
         <section className="section-8 py-5">
@@ -55,14 +68,14 @@ const Item = () => {
 
                                 <div className="text-center mt-auto mb-2">
                                     <button
-                                        className="btn highlight-btn w-80"
-                                        style={{ backgroundColor: "#e4032e" }}
+                                        onClick={() => handleAddToCart(item)}
+                                        className="btn highlight-btn w-50"
+                                        style={{ backgroundColor: "#e4032e", color: "#fff", fontWeight: "bold" }}
                                     >
                                         Add to Cart
                                     </button>
-
                                     <button
-                                        className="btn highlight-btn w-80 ml-2"
+                                        className="btn highlight-btn w-80 ms-2"
                                         style={{ backgroundColor: "#11cc1aff" }}
                                         onClick={() => navigate(`/product/${item.id}`)}
                                     >
@@ -74,6 +87,23 @@ const Item = () => {
                         </div>
                     ))}
                 </div>
+            </div>
+
+            {/* Toast Notification */}
+            <div
+                style={{
+                    position: "fixed",
+                    bottom: "20px",
+                    right: "20px",
+                    zIndex: 9999,
+                }}
+            >
+                <Toast show={showToast} bg="success" onClose={() => setShowToast(false)} delay={3000} autohide>
+                    <Toast.Header>
+                        <strong className="me-auto">Cart</strong>
+                    </Toast.Header>
+                    <Toast.Body>{toastMessage}</Toast.Body>
+                </Toast>
             </div>
         </section>
     );
