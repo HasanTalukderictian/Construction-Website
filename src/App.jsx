@@ -9,6 +9,8 @@ import Services from './components/frontend/Services';
 import Projects from './components/frontend/Projects';
 import Blogs from './components/frontend/Blogs';
 import Contact from './components/frontend/Contact';
+import Item from './components/frontend/Item';
+import Productdetails from './components/frontend/Productdetails';
 
 
 function App() {
@@ -24,6 +26,9 @@ function App() {
               <Route path='/projects' element={<Projects></Projects>}></Route>
               <Route path='/blogs' element={<Blogs></Blogs>}></Route>
               <Route path='/contact' element={<Contact></Contact>}></Route>
+              <Route path="/" element={<Item />} />
+        <Route path="/product/:id" element={<Productdetails />} />
+              
          </Routes>
        </BrowserRouter>
 

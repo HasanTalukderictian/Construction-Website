@@ -1,0 +1,183 @@
+[
+  { 
+    "id": 1,
+    "imageUrl": "https://i.ibb.co/hFdRHJ9n/pax-moly-doctor-whitening-cream-300x300.jpg",
+    "productName": "Wireless Earbuds",
+    "price": 1299,
+    "rating": 4.5,
+    "quantity": 15,
+     "description": "Track your daily activities and health metrics with this sleek fitness band."
+  },
+  { 
+     "id": 2,
+    "imageUrl": "https://i.ibb.co/Fbnc4kJd/T6-OFb-Hk8t-AIq-A2-P35py-VDz-R4-QVlm-CCW1-I27-Tqawv.webp",
+    "productName": "Bluetooth Speaker",
+    "price": 1899,
+    "rating": 4.3,
+    "quantity": 20,
+     "description": "Track your daily activities and health metrics with this sleek fitness band."
+  },
+  {
+      "id": 3,
+    "imageUrl": "https://i.ibb.co/ZR8frmth/images-2.jpg",
+    "productName": "Smartwatch Series 5",
+    "price": 4999,
+    "rating": 4.7,
+    "quantity": 10,
+     "description": "Track your daily activities and health metrics with this sleek fitness band."
+  },
+  {
+      "id": 4,
+    "imageUrl": "https://i.ibb.co/hFdRHJ9n/pax-moly-doctor-whitening-cream-300x300.jpg",
+    "productName": "Gaming Keyboard",
+    "price": 2599,
+    "rating": 4.4,
+    "quantity": 12,
+     "description": "Track your daily activities and health metrics with this sleek fitness band."
+  },
+  {
+      "id": 5,
+    "imageUrl": "https://i.ibb.co/hFdRHJ9n/pax-moly-doctor-whitening-cream-300x300.jpg",
+    "productName": "Gaming Mouse",
+    "price": 899,
+    "rating": 4.6,
+    "quantity": 18,
+     "description": "Track your daily activities and health metrics with this sleek fitness band."
+  },
+  {
+      "id": 6,
+    "imageUrl": "https://i.ibb.co/hFdRHJ9n/pax-moly-doctor-whitening-cream-300x300.jpg",
+    "productName": "Laptop Cooling Pad",
+    "price": 750,
+    "rating": 4.1,
+    "quantity": 25,
+     "description": "Track your daily activities and health metrics with this sleek fitness band."
+  },
+  {
+      "id": 7,
+    "imageUrl": "https://i.ibb.co/hFdRHJ9n/pax-moly-doctor-whitening-cream-300x300.jpg",
+    "productName": "USB-C Charger",
+    "price": 550,
+    "rating": 4.2,
+    "quantity": 30,
+     "description": "Track your daily activities and health metrics with this sleek fitness band."
+  },
+  { 
+      "id": 8,
+    "imageUrl": "https://i.ibb.co/hFdRHJ9n/pax-moly-doctor-whitening-cream-300x300.jpg",
+    "productName": "Smart LED Bulb",
+    "price": 350,
+    "rating": 4.0,
+    "quantity": 40,
+     "description": "Track your daily activities and health metrics with this sleek fitness band."
+  },
+  {   
+      "id": 9,
+    "imageUrl": "https://i.ibb.co/hFdRHJ9n/pax-moly-doctor-whitening-cream-300x300.jpg",
+    "productName": "Power Bank 20000mAh",
+    "price": 1699,
+    "rating": 4.4,
+    "quantity": 22,
+     "description": "Track your daily activities and health metrics with this sleek fitness band."
+  },
+  {
+      "id": 10,
+    "imageUrl": "https://i.ibb.co/hFdRHJ9n/pax-moly-doctor-whitening-cream-300x300.jpg",
+    "productName": "Portable Tripod",
+    "price": 499,
+    "rating": 4.1,
+    "quantity": 28,
+     "description": "Track your daily activities and health metrics with this sleek fitness band."
+  },
+  { 
+      "id": 11,
+    "imageUrl": "https://i.ibb.co/hFdRHJ9n/pax-moly-doctor-whitening-cream-300x300.jpg",
+    "productName": "Phone Holder",
+    "price": 299,
+    "rating": 4.3,
+    "quantity": 35,
+     "description": "Track your daily activities and health metrics with this sleek fitness band."
+  },
+  {   
+      "id": 12,
+    "imageUrl": "https://i.ibb.co/hFdRHJ9n/pax-moly-doctor-whitening-cream-300x300.jpg",
+    "productName": "Wireless Charger",
+    "price": 799,
+    "rating": 4.2,
+    "quantity": 14,
+     "description": "Track your daily activities and health metrics with this sleek fitness band."
+  },
+  {
+
+      "id": 13,
+    "imageUrl": "https://i.ibb.co/hFdRHJ9n/pax-moly-doctor-whitening-cream-300x300.jpg",
+    "productName": "LED Strip Light",
+    "price": 650,
+    "rating": 4.5,
+    "quantity": 33,
+     "description": "Track your daily activities and health metrics with this sleek fitness band."
+  },
+  {
+      "id": 14,
+    "imageUrl": "https://i.ibb.co/hFdRHJ9n/pax-moly-doctor-whitening-cream-300x300.jpg",
+    "productName": "Action Camera",
+    "price": 3499,
+    "rating": 4.6,
+    "quantity": 8,
+     "description": "Track your daily activities and health metrics with this sleek fitness band."
+  },
+  {  
+      "id": 15,
+    "imageUrl": "https://i.ibb.co/hFdRHJ9n/pax-moly-doctor-whitening-cream-300x300.jpg",
+    "productName": "Mini Projector",
+    "price": 5599,
+    "rating": 4.3,
+    "quantity": 6,
+     "description": "Track your daily activities and health metrics with this sleek fitness band."
+  },
+  { 
+      "id": 16,
+   "imageUrl": "https://i.ibb.co/hFdRHJ9n/pax-moly-doctor-whitening-cream-300x300.jpg",
+    "productName": "Smart Plug",
+    "price": 899,
+    "rating": 4.1,
+    "quantity": 19,
+     "description": "Track your daily activities and health metrics with this sleek fitness band."
+  },
+  { 
+      "id": 17,
+    "imageUrl": "https://i.ibb.co/hFdRHJ9n/pax-moly-doctor-whitening-cream-300x300.jpg",
+    "productName": "Portable SSD 500GB",
+    "price": 4599,
+    "rating": 4.7,
+    "quantity": 11,
+     "description": "Track your daily activities and health metrics with this sleek fitness band."
+  },
+  { 
+      "id": 18,
+   "imageUrl": "https://i.ibb.co/hFdRHJ9n/pax-moly-doctor-whitening-cream-300x300.jpg",
+    "productName": "Fitness Band",
+    "price": 1499,
+    "rating": 4.2,
+    "quantity": 26,
+    "description": "Track your daily activities and health metrics with this sleek fitness band."
+  },
+  {  
+      "id": 19,
+    "imageUrl": "https://i.ibb.co/hFdRHJ9n/pax-moly-doctor-whitening-cream-300x300.jpg",
+    "productName": "Noise Cancelling Headphones",
+    "price": 3299,
+    "rating": 4.6,
+    "quantity": 9, 
+    "description": "Track your daily activities and health metrics with this sleek fitness band."
+  },
+  { 
+      "id": 20,
+    "imageUrl": "https://i.ibb.co/hFdRHJ9n/pax-moly-doctor-whitening-cream-300x300.jpg",
+    "productName": "Rechargeable Desk Lamp",
+    "price": 999,
+    "rating": 4.4,
+    "quantity": 17,
+     "description": "Track your daily activities and health metrics with this sleek fitness band."
+  }
+]

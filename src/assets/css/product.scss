@@ -1,0 +1,18 @@
+.highlight-btn {
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.highlight-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+
+.product-image:hover img.zoom-image {
+  transform: scale(1.2); /* Zoom in */
+}
+
+.product-image:hover .overlay {
+  opacity: 1; /* Show overlay */
+}
