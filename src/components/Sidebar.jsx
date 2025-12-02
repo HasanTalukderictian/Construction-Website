@@ -76,13 +76,13 @@ const Sidebar = () => {
                     </li>
                     <li className="nav-item">
                         <NavLink
-                            to="/admin/blogs"
+                            to="/admin-store"
                             className={({ isActive }) =>
                                 `nav-link ${isActive ? "active" : "text-white"}`
                             }
                             style={{ fontSize: "1.5rem" }}
                         >
-                            <i className="bi bi-pencil-square me-2"></i> Blogs
+                            <i className="bi bi-pencil-square me-2"></i> Store Settings
                         </NavLink>
                     </li>
                     <li className="nav-item">
