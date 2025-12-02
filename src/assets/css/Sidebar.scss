@@ -1,0 +1,11 @@
+/* Hover effect for sidebar links */
+.nav-link {
+    transition: all 0.3s ease; /* Smooth transition */
+  }
+  
+  .nav-link:hover {
+    background-color: #69ad87; /* Primary hover color */
+    color: #fff !important; /* Text color on hover */
+  }
+
+

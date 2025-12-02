@@ -55,7 +55,7 @@ const Checkout = () => {
         console.log("Order Data:", orderData);
 
         setShowToast(true);
-        setTimeout(() => setShowToast(false), 3000);
+        setTimeout(() => setShowToast(false), 10000);
 
         // এখানে তুমি চাইলে API call দিয়ে order save করতে পারো
 

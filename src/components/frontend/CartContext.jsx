@@ -7,6 +7,7 @@ export const CartProvider = ({ children }) => {
         const savedCart = localStorage.getItem("cart");
         return savedCart ? JSON.parse(savedCart) : [];
     });
+    
 
     const addToCart = (product) => {
         setCartItems((prev) => {
