@@ -35,37 +35,64 @@ const Checkout = () => {
         }
     }, [selectedDistrict, districts]);
 
-    const handleConfirmOrder = () => {
-        if (!customerName || !phone || !address || !selectedDistrict || !selectedThana) {
-            alert("Please fill all the fields!");
-            return;
+   const handleConfirmOrder = async () => {
+    if (!customerName || !phone || !address || !selectedDistrict || !selectedThana) {
+        alert("Please fill all the fields!");
+        return;
+    }
+
+    const orderData = {
+        customerName,
+        phone,
+        address,
+        district: selectedDistrict,
+        thana: selectedThana,
+        cartItems,
+        deliveryCharge,
+        totalPrice,
+        finalTotal
+    };
+
+    try {
+        const response = await fetch("http://127.0.0.1:8000/api/order/store", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(orderData),
+        });
+
+        const data = await response.json();
+        console.log("API Response:", data);
+
+        if (data.status) {
+
+            // 🔥 SUCCESS — CLEAR CART FROM LOCAL STORAGE
+            localStorage.removeItem("cart");
+
+            setShowToast(true);
+
+            // Reset all form fields
+            setCustomerName("");
+            setPhone("");
+            setAddress("");
+            setSelectedDistrict("");
+            setSelectedThana("");
+
+            // Hide Toast
+            setTimeout(() => setShowToast(false), 5000);
+
+        } else {
+            alert(data.message);
         }
 
-        const orderData = {
-            customerName,
-            phone,
-            address,
-            district: selectedDistrict,
-            thana: selectedThana,
-            cartItems,
-            deliveryCharge,
-            totalPrice,
-            finalTotal
-        };
-        console.log("Order Data:", orderData);
+    } catch (error) {
+        console.error("Order Submit Error:", error);
+        alert("Something went wrong. Try again!");
+    }
+};
 
-        setShowToast(true);
-        setTimeout(() => setShowToast(false), 10000);
 
-        // এখানে তুমি চাইলে API call দিয়ে order save করতে পারো
-
-        // Reset all input fields
-        setCustomerName("");
-        setPhone("");
-        setAddress("");
-        setSelectedDistrict("");
-        setSelectedThana("");
-    };
 
     return (
         <>

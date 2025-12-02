@@ -50,13 +50,13 @@ const Sidebar = () => {
 
                     <li className="nav-item">
                         <NavLink
-                            to="/admin/employee"
+                            to="/admin-orders"
                             className={({ isActive }) =>
                                 `nav-link ${isActive ? "active" : "text-white"}`
                             }
                             style={{ fontSize: "1.5rem" }}
                         >
-                            <i className="bi bi-receipt me-2"></i> Employee
+                            <i className="bi bi-receipt me-2"></i> Orders
                         </NavLink>
                     </li>
 
@@ -87,13 +87,13 @@ const Sidebar = () => {
                     </li>
                     <li className="nav-item">
                         <NavLink
-                            to="/admin/portfilo"
+                            to="/admin-couirer"
                             className={({ isActive }) =>
                                 `nav-link ${isActive ? "active" : "text-white"}`
                             }
                             style={{ fontSize: "1.5rem" }}
                         >
-                            <i className="bi bi-image me-2"></i> Portfolio
+                            <i className="bi bi-image me-2"></i> Couirer Settings
                         </NavLink>
                     </li>
 

@@ -14,6 +14,8 @@ import { CartProvider } from './components/frontend/CartContext.jsx';
 import Checkout from './components/frontend/Checkout.jsx';
 import Login from './backend/login.jsx';
 import BackendHome from './backend/BackendHome.jsx';
+import Orderlist from './backend/Orderlist.jsx';
+import CourierSettings from './backend/CourierSettings.jsx';
 
 
 
@@ -32,8 +34,10 @@ function App() {
           <Route path='/product/:id' element={<Productdetails />} />
           <Route path='/cart' element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
-           <Route path="/admin" element={<Login />} />
-            <Route path="/admin-home" element={<BackendHome />} />
+          <Route path="/admin" element={<Login />} />
+          <Route path="/admin-home" element={<BackendHome />} />
+          <Route path="/admin-orders" element={<Orderlist />} />
+          <Route path="/admin-couirer" element={<CourierSettings />} />
         </Routes>
       </BrowserRouter>
     </CartProvider>
