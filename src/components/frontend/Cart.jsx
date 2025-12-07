@@ -25,9 +25,18 @@ const Cart = () => {
             return;
         }
 
+        // map cart items to match backend structure
+        const mappedCartItems = cartItems.map(item => ({
+            id: item.id,
+            productName: item.productName,
+            imageUrl: item.imageUrl,
+            price: item.price,
+            quantity: item.quantity,
+        }));
+
         navigate("/checkout", {
             state: {
-                cartItems,
+                cartItems: mappedCartItems,
                 deliveryCharge,
                 totalPrice,
             },
@@ -51,7 +60,7 @@ const Cart = () => {
                             >
                                 <div className="d-flex align-items-center">
                                     <img
-                                        src={item.imageUrl}
+                                        src={item.image_url}
                                         alt={item.productName}
                                         style={{ width: "100px", height: "100px", objectFit: "cover", borderRadius: "8px", marginRight: "15px" }}
                                     />
@@ -89,57 +98,67 @@ const Cart = () => {
                             </div>
                         ))}
 
-                        {/* Delivery Charge Section */}
-                        <div className="mt-4 p-3 border rounded">
-                            <h5>Delivery Charge</h5>
+                        {/* Combined Box for Delivery + Price Calculation */}
+                        <div className="mt-4 p-4 border rounded">
+                            <div className="row">
 
-                            <div className="form-check mt-2">
-                                <input
-                                    type="radio"
-                                    className="form-check-input"
-                                    name="delivery"
-                                    checked={selectedDelivery === "inside"}
-                                    onChange={() => {
-                                        setDeliveryCharge(80);
-                                        setSelectedDelivery("inside");
-                                    }}
-                                />
-                                <label className="form-check-label">
-                                    Inside Dhaka (80৳)
-                                </label>
-                            </div>
+                                {/* LEFT: Delivery Charge */}
+                                <div className="col-md-6 border-end">
+                                    <h2>Delivery Charge</h2>
 
-                            <div className="form-check mt-2">
-                                <input
-                                    type="radio"
-                                    className="form-check-input"
-                                    name="delivery"
-                                    checked={selectedDelivery === "outside"}
-                                    onChange={() => {
-                                        setDeliveryCharge(150);
-                                        setSelectedDelivery("outside");
-                                    }}
-                                />
-                                <label className="form-check-label">
-                                    Outside Dhaka (150৳)
-                                </label>
+                                    <div className="form-check mt-2">
+                                        <input
+                                            type="radio"
+                                            className="form-check-input"
+                                            name="delivery"
+                                            checked={selectedDelivery === "inside"}
+                                            onChange={() => {
+                                                setDeliveryCharge(80);
+                                                setSelectedDelivery("inside");
+                                            }}
+                                        />
+                                        <label className="form-check-label">
+                                                <h4> Inside Dhaka (80৳)</h4>
+                                        </label>
+                                    </div>
+
+                                    <div className="form-check mt-2">
+                                        <input
+                                            type="radio"
+                                            className="form-check-input"
+                                            name="delivery"
+                                            checked={selectedDelivery === "outside"}
+                                            onChange={() => {
+                                                setDeliveryCharge(150);
+                                                setSelectedDelivery("outside");
+                                            }}
+                                        />
+                                        <label className="form-check-label">
+                                             <h4> Outside Dhaka (150৳)</h4>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                {/* RIGHT: Totals */}
+                                <div className="col-md-6">
+                                    <h5 className="text-end">Products Total: {totalPrice}৳</h5>
+                                    <h5 className="text-end mt-2">Delivery Charge: {deliveryCharge}৳</h5>
+                                    <h4 className="text-end mt-3 fw-bold">Final Total: {finalTotal}৳</h4>
+
+                                    <div className="text-end mt-3">
+                                        <button
+                                            className="btn btn-primary"
+                                            onClick={handleCheckout}
+                                            disabled={!selectedDelivery}
+                                        >
+                                            Checkout
+                                        </button>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
 
-                        {/* Total Section */}
-                        <div className="mt-4 text-end mb-4">
-                            <h5>Products Total: {totalPrice}৳</h5>
-                            <h5>Delivery Charge: {deliveryCharge}৳</h5>
-                            <h4 className="mt-2">Final Total: {finalTotal}৳</h4>
-
-                            <button
-                                className="btn btn-primary mt-3"
-                                onClick={handleCheckout}
-                                disabled={!selectedDelivery} // disable until delivery selected
-                            >
-                                Checkout
-                            </button>
-                        </div>
 
                     </div>
                 )}

@@ -133,97 +133,97 @@ const Orderlist = () => {
                                 className="table table-bordered table-striped align-middle text-center"
                                 style={{ fontSize: "13px" }}
                             >
-                               <thead className="table-dark" style={{ fontSize: "12px" }}>
-    <tr>
-        <th>Customer</th>
-        <th>Phone</th>
-        <th>District</th>
-        <th>Thana</th>
-        <th>Products</th>
-        <th>Total</th>
-        <th>Delivery</th>
-        <th>Final</th>
-        <th>Date</th>
-        <th>Tracking Number</th> {/* NEW COLUMN */}
-        <th>Confirm</th>
-    </tr>
-</thead>
+                                <thead className="table-dark" style={{ fontSize: "12px" }}>
+                                    <tr>
+                                        <th>Customer</th>
+                                        <th>Phone</th>
+                                        <th>District</th>
+                                        <th>Thana</th>
+                                        <th>Products</th>
+                                        <th>Total</th>
+                                        <th>Delivery</th>
+                                        <th>Final</th>
+                                        <th>Date</th>
+                                        <th>Tracking Number</th> {/* NEW COLUMN */}
+                                        <th>Confirm</th>
+                                    </tr>
+                                </thead>
 
-<tbody>
-    {orders.length > 0 ? (
-        orders.map((order) => (
-            <tr key={order.id}>
-                <td>{order.customer_name}</td>
-                <td>{order.phone}</td>
-                <td>{order.district}</td>
-                <td>{order.thana}</td>
+                                <tbody>
+                                    {orders.length > 0 ? (
+                                        orders.map((order) => (
+                                            <tr key={order.id}>
+                                                <td>{order.customer_name}</td>
+                                                <td>{order.phone}</td>
+                                                <td>{order.district}</td>
+                                                <td>{order.thana}</td>
 
-                {/* ========== Products Column (keep your existing code) ========== */}
-                <td style={{ minWidth: "240px" }}>
-                    <div
-                        className="d-flex flex-row flex-wrap"
-                        style={{ gap: "6px", justifyContent: "center" }}
-                    >
-                        {order.items?.length > 0 ? (
-                            order.items.map((item, index) => (
-                                <div
-                                    key={index}
-                                    className="border rounded p-1 bg-light d-flex align-items-center"
-                                    style={{ width: "180px", gap: "6px" }}
-                                >
-                                    <img
-                                        src={item.image_url}
-                                        alt={item.product_name}
-                                        style={{
-                                            width: "45px",
-                                            height: "45px",
-                                            objectFit: "cover",
-                                            borderRadius: "4px"
-                                        }}
-                                    />
-                                    <div className="text-start" style={{ fontSize: "11px" }}>
-                                        <strong>{item.product_name}</strong>
-                                        <div>Price: {item.price}৳</div>
-                                        <div>Qty: {item.quantity}</div>
-                                    </div>
-                                </div>
-                            ))
-                        ) : (
-                            <span>No Products</span>
-                        )}
-                    </div>
-                </td>
-                {/* =============================================================== */}
+                                                {/* ========== Products Column (keep your existing code) ========== */}
+                                                <td style={{ minWidth: "240px" }}>
+                                                    <div
+                                                        className="d-flex flex-row flex-wrap"
+                                                        style={{ gap: "6px", justifyContent: "center" }}
+                                                    >
+                                                        {order.items?.length > 0 ? (
+                                                            order.items.map((item, index) => (
+                                                                <div
+                                                                    key={index}
+                                                                    className="border rounded p-1 bg-light d-flex align-items-center"
+                                                                    style={{ width: "180px", gap: "6px" }}
+                                                                >
+                                                                    <img
+                                                                        src={item.image_url}
+                                                                        alt={item.product_name}
+                                                                        style={{
+                                                                            width: "45px",
+                                                                            height: "45px",
+                                                                            objectFit: "cover",
+                                                                            borderRadius: "4px"
+                                                                        }}
+                                                                    />
+                                                                    <div className="text-start" style={{ fontSize: "11px" }}>
+                                                                        <strong>{item.product_name}</strong>
+                                                                        <div>Price: {item.price}৳</div>
+                                                                        <div>Qty: {item.quantity}</div>
+                                                                    </div>
+                                                                </div>
+                                                            ))
+                                                        ) : (
+                                                            <span>No Products</span>
+                                                        )}
+                                                    </div>
+                                                </td>
+                                                {/* =============================================================== */}
 
-                <td>{order.total_price}৳</td>
-                <td>{order.delivery_charge}৳</td>
-                <td className="fw-bold text-success">{order.final_total}৳</td>
-                <td>{order.created_at}</td>
+                                                <td>{order.total_price}৳</td>
+                                                <td>{order.delivery_charge}৳</td>
+                                                <td className="fw-bold text-success">{order.final_total}৳</td>
+                                                <td>{order.created_at}</td>
 
-                {/* ========== Tracking Number Column ========== */}
-                <td>{paperflyTracking[order.id] || "-"}</td>
+                                                {/* ========== Tracking Number Column ========== */}
+                                                <td>{paperflyTracking[order.id] || "-"}</td>
 
-                {/* ========== Confirm Button Column ========== */}
-                <td>
-                    <button
-                        className={`btn btn-sm ${paperflyTracking[order.id] ? "btn-secondary" : "btn-primary"}`}
-                        style={{ fontSize: "11px", padding: "2px 6px" }}
-                        onClick={() => sendToPaperfly(order)}
-                        disabled={!!paperflyTracking[order.id]}
-                    >
-                        {paperflyTracking[order.id] ? "Already Sent" : "Send"}
-                    </button>
-                </td>
-            </tr>
-        ))
-    ) : (
-        <tr>
-            <td colSpan="11" className="text-center py-3">
-                Loading orders...
-            </td>
-        </tr>
-    )}
-</tbody>
+                                                {/* ========== Confirm Button Column ========== */}
+                                                <td>
+                                                    <button
+                                                        className={`btn btn-sm ${paperflyTracking[order.id] ? "btn-secondary" : "btn-primary"}`}
+                                                        style={{ fontSize: "11px", padding: "2px 6px" }}
+                                                        onClick={() => sendToPaperfly(order)}
+                                                        disabled={!!paperflyTracking[order.id]}
+                                                    >
+                                                        {paperflyTracking[order.id] ? "Already Sent" : "Send"}
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td colSpan="11" className="text-center py-3">
+                                                Loading orders...
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
 
 
                             </table>
@@ -289,8 +289,10 @@ const Orderlist = () => {
                                                     <input
                                                         type="text"
                                                         className="form-control"
-                                                        readOnly
-                                                        value={value}
+                                                        name={key}
+                                                        value={formData[key] !== undefined ? formData[key] : value}
+                                                        onChange={handleChange}
+                                                        readOnly={!(key === "address" || key === "phone")}
                                                     />
                                                 </div>
                                             ) : null

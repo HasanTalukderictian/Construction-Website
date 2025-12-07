@@ -10,20 +10,20 @@ const Productdetails = () => {
     const [product, setProduct] = useState(null);
     const [relatedProducts, setRelatedProducts] = useState([]);
     const { addToCart } = useContext(CartContext);
-
-    const [showToast, setShowToast] = useState(false); // for Toast
+    const [showToast, setShowToast] = useState(false);
 
     useEffect(() => {
-        fetch("../../../public/product.json")
+        fetch("http://127.0.0.1:8000/api/products")
             .then((res) => res.json())
             .then((data) => {
                 const selectedProduct = data.find((item) => item.id === parseInt(id));
                 setProduct(selectedProduct);
 
+                // Related products based on same category (if category exists)
                 const related = data.filter(
                     (item) =>
                         item.id !== parseInt(id) &&
-                        item.category === selectedProduct.category
+                        item.category === selectedProduct?.category
                 );
                 setRelatedProducts(related);
             })
@@ -34,15 +34,16 @@ const Productdetails = () => {
 
     const handleAddToCart = () => {
         addToCart(product);
-        setShowToast(true); // show toast
-        setTimeout(() => setShowToast(false), 3000); // auto hide after 3s
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 3000);
     };
 
     return (
         <>
             <Header />
+
             <div className="container mt-5 position-relative">
-                {/* Toast */}
+                {/* Toast Notification */}
                 <div
                     style={{
                         position: "fixed",
@@ -61,8 +62,9 @@ const Productdetails = () => {
                     </Toast>
                 </div>
 
+                {/* Product Details */}
                 <div
-                    className="product-details d-flex"
+                    className="product-details d-flex flex-wrap"
                     style={{ gap: "40px", alignItems: "flex-start" }}
                 >
                     {/* Image Section */}
@@ -70,6 +72,7 @@ const Productdetails = () => {
                         className="product-image"
                         style={{
                             flex: 1,
+                            minWidth: "300px",
                             maxWidth: "50%",
                             position: "relative",
                             overflow: "hidden",
@@ -77,8 +80,8 @@ const Productdetails = () => {
                         }}
                     >
                         <img
-                            src={product.imageUrl}
-                            alt={product.productName}
+                            src={product.image_url}
+                            alt={product.name}
                             style={{
                                 width: "100%",
                                 height: "600px",
@@ -90,8 +93,8 @@ const Productdetails = () => {
                     </div>
 
                     {/* Details Section */}
-                    <div className="product-info" style={{ flex: 1, maxWidth: "50%" }}>
-                        <h2>{product.productName}</h2>
+                    <div className="product-info" style={{ flex: 1, minWidth: "300px", maxWidth: "50%" }}>
+                        <h2>{product.name}</h2>
                         <p><strong>Price:</strong> {product.price}৳</p>
                         <p><strong>Rating:</strong> ⭐ {product.rating}</p>
                         <p><strong>Quantity:</strong> {product.quantity}</p>
@@ -101,7 +104,11 @@ const Productdetails = () => {
                             <button
                                 onClick={handleAddToCart}
                                 className="btn highlight-btn w-50"
-                                style={{ backgroundColor: "#e4032e", color: "#fff", fontWeight: "bold" }}
+                                style={{
+                                    backgroundColor: "#e4032e",
+                                    color: "#fff",
+                                    fontWeight: "bold",
+                                }}
                             >
                                 Add to Cart
                             </button>
@@ -115,16 +122,20 @@ const Productdetails = () => {
                         <h3>Related Products</h3>
                         <div className="d-flex flex-wrap" style={{ gap: "20px" }}>
                             {relatedProducts.map((item) => (
-                                <div key={item.id} className="card" style={{ width: "200px", borderRadius: "8px" }}>
+                                <div
+                                    key={item.id}
+                                    className="card"
+                                    style={{ width: "200px", borderRadius: "8px" }}
+                                >
                                     <img
-                                        src={item.imageUrl}
+                                        src={item.image_url}
                                         className="card-img-top"
-                                        alt={item.productName}
+                                        alt={item.name}
                                         style={{ height: "150px", objectFit: "cover" }}
                                     />
                                     <div className="card-body">
                                         <h5 className="card-title" style={{ fontSize: "16px" }}>
-                                            {item.productName}
+                                            {item.name}
                                         </h5>
                                         <p className="mb-1"><strong>Price:</strong> {item.price}৳</p>
                                         <Link to={`/product/${item.id}`} className="btn btn-primary btn-sm">
@@ -137,6 +148,7 @@ const Productdetails = () => {
                     </div>
                 )}
             </div>
+
             <Footer />
         </>
     );

@@ -13,7 +13,7 @@ const Item = () => {
     const { addToCart } = useContext(CartContext);
 
     useEffect(() => {
-        fetch("../../../public/product.json")
+        fetch("http://127.0.0.1:8000/api/products")
             .then(res => res.json())
             .then(data => setTeam(data))
             .catch(err => console.log("Error Loading JSON", err));
@@ -21,11 +21,10 @@ const Item = () => {
 
     const handleAddToCart = (product) => {
         addToCart(product);
-        setToastMessage(`${product.productName} added to cart!`);
+        setToastMessage("Your order has been created successfully"); // changed message
         setShowToast(true);
         setTimeout(() => setShowToast(false), 3000); // auto hide after 3s
     };
-
     return (
         <section className="section-8 py-5">
             <div className="container mt-5">
@@ -41,8 +40,8 @@ const Item = () => {
                             <div className='card h-100 shadow border-0 p-2 d-flex flex-column'>
 
                                 <img
-                                    src={item.imageUrl}
-                                    alt={item.productName}
+                                    src={item.image_url || '/placeholder.png'}
+                                    alt={item.name}
                                     style={{
                                         width: "100%",
                                         height: "220px",
@@ -52,7 +51,6 @@ const Item = () => {
                                         marginTop: "4px"
                                     }}
                                 />
-
                                 <div className='card-body text-start d-flex flex-column'>
                                     <h5
                                         className='card-title mb-1'
