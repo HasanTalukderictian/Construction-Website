@@ -94,6 +94,7 @@ const Productdetails = () => {
 
                     {/* Details Section */}
                     <div className="product-info" style={{ flex: 1, minWidth: "300px", maxWidth: "50%" }}>
+                        
                         <h2>{product.name}</h2>
                         <p><strong>Price:</strong> {product.price}৳</p>
                         <p><strong>Rating:</strong> ⭐ {product.rating}</p>

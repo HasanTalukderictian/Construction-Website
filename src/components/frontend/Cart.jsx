@@ -65,12 +65,12 @@ const Cart = () => {
                                         style={{ width: "100px", height: "100px", objectFit: "cover", borderRadius: "8px", marginRight: "15px" }}
                                     />
                                     <div>
-                                        <h5>{item.productName}</h5>
+                                        <h5>{item.name}</h5>
                                         <p>Price: {item.price}৳</p>
                                     </div>
                                 </div>
 
-                                <div className="d-flex align-items-center">
+                                {/* <div className="d-flex align-items-center">
                                     <button
                                         className="btn btn-sm btn-danger me-2"
                                         onClick={() => decreaseQuantity(item.id)}
@@ -84,7 +84,30 @@ const Cart = () => {
                                     >
                                         +
                                     </button>
+                                </div> */}
+
+                                <div
+                                    className="d-flex align-items-center justify-content-center"
+                                    style={{ width: "200px" }}
+                                >
+                                    <button
+                                        className="btn btn-sm btn-danger me-2"
+                                        onClick={() => decreaseQuantity(item.id)}
+                                    >
+                                        -
+                                    </button>
+
+                                    <span style={{ margin: "0 10px" }}>{item.quantity}</span>
+
+                                    <button
+                                        className="btn btn-sm btn-success ms-2"
+                                        onClick={() => increaseQuantity(item.id)}
+                                    >
+                                        +
+                                    </button>
                                 </div>
+
+
 
                                 <div>
                                     <p>Total: {item.price * item.quantity}৳</p>
@@ -99,7 +122,7 @@ const Cart = () => {
                         ))}
 
                         {/* Combined Box for Delivery + Price Calculation */}
-                        <div className="mt-4 p-4 border rounded">
+                        <div className="mt-4 p-4 border rounded " style={{ backgroundColor: "#84e1e3" , marginBottom: "5px"}}>
                             <div className="row">
 
                                 {/* LEFT: Delivery Charge */}
@@ -118,7 +141,7 @@ const Cart = () => {
                                             }}
                                         />
                                         <label className="form-check-label">
-                                                <h4> Inside Dhaka (80৳)</h4>
+                                            <h4> Inside Dhaka (80৳)</h4>
                                         </label>
                                     </div>
 
@@ -134,7 +157,7 @@ const Cart = () => {
                                             }}
                                         />
                                         <label className="form-check-label">
-                                             <h4> Outside Dhaka (150৳)</h4>
+                                            <h4> Outside Dhaka (150৳)</h4>
                                         </label>
                                     </div>
                                 </div>

@@ -29,7 +29,6 @@ const Item = () => {
         <section className="section-8 py-5">
             <div className="container mt-5">
                 <div className='section-header text-center'>
-                    <span className="mt-10">Cream</span>
                     <h2>New available</h2>
                     <p>We offer a diverse array of construction services...</p>
                 </div>
@@ -53,11 +52,13 @@ const Item = () => {
                                 />
                                 <div className='card-body text-start d-flex flex-column'>
                                     <h5
-                                        className='card-title mb-1'
-                                        style={{ minHeight: "48px", overflow: "hidden" }}
+                                        className=' mb-1'
+                        
                                     >
-                                        {item.productName}
+                                        <strong>Product Name:</strong>   {item.name}
+                                     
                                     </h5>
+
 
                                     <p className="mb-1"><strong>Price:</strong> {item.price}৳</p>
                                     <p className="mb-1"><strong>Rating:</strong> ⭐ {item.rating}</p>

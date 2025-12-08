@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-
+import {useNavigate } from "react-router-dom";
 import '../../src/assets/css/Sidebar.scss';
 
 const Sidebar = () => {
@@ -8,6 +8,15 @@ const Sidebar = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State to manage sidebar visibility on mobile
 
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen); // Toggle sidebar on mobile
+    const navigate = useNavigate();
+
+    // Logout function
+    const handleLogout = () => {
+        // Remove token or user data from localStorage/sessionStorage
+        localStorage.removeItem("authToken"); // adjust key if different
+        // Redirect to login or homepage
+        navigate("/admin");
+    };
 
     return (
         <>
@@ -98,16 +107,15 @@ const Sidebar = () => {
                     </li>
 
 
-                    <li className="nav-item">
-                        <NavLink
-                            to="/"
-                            className={({ isActive }) =>
-                                `nav-link ${isActive ? "active" : "text-white"}`
-                            }
-                            style={{ fontSize: "1.5rem" }}
+                    {/* Logout button */}
+                    <li className="nav-item mt-3">
+                        <button
+                            onClick={handleLogout}
+                            className="nav-link text-white w-100 text-start"
+                            style={{ fontSize: "1.5rem", background: "none", border: "none" }}
                         >
-                            <i className="bi bi-image me-2"></i> Home
-                        </NavLink>
+                            <i className="bi bi-box-arrow-right me-2"></i> Logout
+                        </button>
                     </li>
                 </ul>
             </div>

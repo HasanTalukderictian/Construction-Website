@@ -118,6 +118,73 @@ const Orderlist = () => {
         setShowModal(false);
     };
 
+    const printInvoice = (order) => {
+    const invoiceWindow = window.open("", "_blank", "height=800,width=600");
+
+    if (!invoiceWindow) {
+        alert("Popup blocked! Please allow popup in your browser.");
+        return;
+    }
+
+    const htmlContent = `
+        <html>
+        <head>
+            <title>Invoice #${order.id}</title>
+            <style>
+                body { font-family: Arial; padding: 20px; }
+                h2 { text-align: center; }
+                table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                table, th, td { border: 1px solid #000; }
+                th, td { padding: 8px; text-align: left; }
+            </style>
+        </head>
+        <body>
+            <h2>Invoice</h2>
+            <p><strong>Customer:</strong> ${order.customer_name}</p>
+            <p><strong>Phone:</strong> ${order.phone}</p>
+            <p><strong>Address:</strong> ${order.address}</p>
+
+            <h4>Products</h4>
+            <table>
+                <tr>
+                    <th>Product</th>
+                    <th>Qty</th>
+                    <th>Price</th>
+                </tr>
+                ${order.items
+                    .map(
+                        (item) => `
+                        <tr>
+                            <td>${item.product_name}</td>
+                            <td>${item.quantity}</td>
+                            <td>${item.price}৳</td>
+                        </tr>`
+                    )
+                    .join("")}
+            </table>
+
+            <h3 style="margin-top:20px">
+                Total: ${order.final_total}৳
+            </h3>
+
+            <p style="margin-top:30px; text-align:center;">Thank you for your purchase!</p>
+        </body>
+        </html>
+    `;
+
+    invoiceWindow.document.open();
+    invoiceWindow.document.write(htmlContent);
+    invoiceWindow.document.close();
+
+    // 🔥 WAIT UNTIL NEW WINDOW LOADS → THEN PRINT
+    invoiceWindow.onload = () => {
+        invoiceWindow.focus();
+        invoiceWindow.print();
+    };
+};
+
+
+
 
     return (
         <Layout>
@@ -135,6 +202,7 @@ const Orderlist = () => {
                             >
                                 <thead className="table-dark" style={{ fontSize: "12px" }}>
                                     <tr>
+                                         <th>SL</th>  {/* NEW SERIAL COLUMN */}
                                         <th>Customer</th>
                                         <th>Phone</th>
                                         <th>District</th>
@@ -146,13 +214,16 @@ const Orderlist = () => {
                                         <th>Date</th>
                                         <th>Tracking Number</th> {/* NEW COLUMN */}
                                         <th>Confirm</th>
+                                        <th>Invoice</th>
+
                                     </tr>
                                 </thead>
 
                                 <tbody>
                                     {orders.length > 0 ? (
-                                        orders.map((order) => (
+                                        orders.map((order,index) => (
                                             <tr key={order.id}>
+                                                  <td>{index + 1}</td>  
                                                 <td>{order.customer_name}</td>
                                                 <td>{order.phone}</td>
                                                 <td>{order.district}</td>
@@ -182,8 +253,8 @@ const Orderlist = () => {
                                                                         }}
                                                                     />
                                                                     <div className="text-start" style={{ fontSize: "11px" }}>
-                                                                        <strong>{item.product_name}</strong>
-                                                                        <div>Price: {item.price}৳</div>
+                                                                        <strong>{item.name}</strong>
+                                                                        <div>Price: {item.total_price}৳</div>
                                                                         <div>Qty: {item.quantity}</div>
                                                                     </div>
                                                                 </div>
@@ -214,6 +285,17 @@ const Orderlist = () => {
                                                         {paperflyTracking[order.id] ? "Already Sent" : "Send"}
                                                     </button>
                                                 </td>
+
+                                                <td>
+                                                    <button
+                                                        className="btn btn-sm btn-warning"
+                                                        style={{ fontSize: "11px", padding: "2px 6px" }}
+                                                        onClick={() => printInvoice(order)}
+                                                    >
+                                                        Print
+                                                    </button>
+                                                </td>
+
                                             </tr>
                                         ))
                                     ) : (

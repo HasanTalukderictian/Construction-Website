@@ -3,9 +3,11 @@ import Layout from "../components/Layout";
 import DashNav from "./DasNav";
 import Footer from "./Footer";
 import axios from "axios";
+import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 
 const Products = () => {
     const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
 
     // Form States
@@ -17,12 +19,22 @@ const Products = () => {
     const [imageFile, setImageFile] = useState(null);
     const [preview, setPreview] = useState(null);
 
+    // Pagination states
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 8;
+
     // Load Product List
     useEffect(() => {
         fetch("http://127.0.0.1:8000/api/products")
             .then((res) => res.json())
-            .then((data) => setProducts(data))
-            .catch((err) => console.log("Error:", err));
+            .then((data) => {
+                setProducts(data);
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.log("Error:", err);
+                setLoading(false);
+            });
     }, []);
 
     // Handle Image Change and Preview
@@ -33,6 +45,16 @@ const Products = () => {
         setImageFile(file);
         setPreview(URL.createObjectURL(file));
     };
+
+    // Pagination logic
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentProducts = products.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(products.length / itemsPerPage);
+
+    const goToPage = (pageNumber) => setCurrentPage(pageNumber);
+    const nextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+    const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
 
     // Remove preview
     const removePreview = () => {
@@ -74,6 +96,9 @@ const Products = () => {
             removePreview();
             setShowModal(false);
 
+            // Refresh product list
+            setProducts((prev) => [...prev, res.data]);
+
         } catch (err) {
             console.error("Network error:", err.response?.data || err);
             alert("Network error or validation failed!");
@@ -97,6 +122,7 @@ const Products = () => {
                         <table className="table table-bordered table-striped" style={{ tableLayout: "fixed", width: "100%" }}>
                             <thead className="table-dark">
                                 <tr>
+                                    <th>SL</th>
                                     <th>ID</th>
                                     <th>Image</th>
                                     <th>Name</th>
@@ -107,13 +133,18 @@ const Products = () => {
                             </thead>
 
                             <tbody>
-                                {products.length === 0 ? (
+                                {loading ? (
                                     <tr>
-                                        <td colSpan="6" className="text-center">Loading...</td>
+                                        <td colSpan="7" className="text-center">Loading...</td>
+                                    </tr>
+                                ) : products.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="7" className="text-center">No Products Available</td>
                                     </tr>
                                 ) : (
-                                    products.map((item) => (
+                                    currentProducts.map((item, index) => (
                                         <tr key={item.id}>
+                                            <td>{indexOfFirstItem + index + 1}</td>
                                             <td>{item.id}</td>
                                             <td>
                                                 {item.image_url ? (
@@ -124,9 +155,7 @@ const Products = () => {
                                                         style={{ objectFit: "cover", borderRadius: "5px" }}
                                                         alt={item.name}
                                                     />
-                                                ) : (
-                                                    "No Image"
-                                                )}
+                                                ) : "No Image"}
                                             </td>
                                             <td>{item.name}</td>
                                             <td>{item.price}৳</td>
@@ -136,8 +165,32 @@ const Products = () => {
                                     ))
                                 )}
                             </tbody>
-
                         </table>
+
+                        {/* Pagination */}
+                        {totalPages > 1 && (
+                            <nav>
+                                <ul className="pagination justify-content-center">
+                                    <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                                        <button className="page-link" onClick={prevPage}>
+                                            <BsChevronLeft /> Prev
+                                        </button>
+                                    </li>
+                                    {Array.from({ length: totalPages }, (_, i) => (
+                                        <li key={i} className={`page-item ${currentPage === i + 1 ? "active" : ""}`}>
+                                            <button className="page-link" onClick={() => goToPage(i + 1)}>
+                                                {i + 1}
+                                            </button>
+                                        </li>
+                                    ))}
+                                    <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
+                                        <button className="page-link" onClick={nextPage}>
+                                            Next <BsChevronRight />
+                                        </button>
+                                    </li>
+                                </ul>
+                            </nav>
+                        )}
                     </div>
 
                     <Footer />
@@ -155,7 +208,6 @@ const Products = () => {
                             </div>
 
                             <div className="modal-body">
-                                {/* 2 Inputs per row */}
                                 <div className="row">
                                     <div className="col-md-6 mb-3">
                                         <label className="form-label">Product Name</label>
@@ -198,7 +250,6 @@ const Products = () => {
                                     </div>
                                 </div>
 
-                                {/* Description Full Width */}
                                 <div className="mb-3">
                                     <label className="form-label">Description</label>
                                     <textarea
@@ -208,7 +259,6 @@ const Products = () => {
                                     ></textarea>
                                 </div>
 
-                                {/* Image Upload */}
                                 <div className="mb-3">
                                     <label className="form-label">Product Image</label>
                                     <input
@@ -218,7 +268,6 @@ const Products = () => {
                                     />
                                 </div>
 
-                                {/* Preview with X Close */}
                                 {preview && (
                                     <div className="position-relative d-inline-block">
                                         <img

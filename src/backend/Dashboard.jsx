@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useNavigate } from "react-router-dom";
 import { Pie, Bar } from "react-chartjs-2";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from "chart.js";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from "chart.js"
+
 import { Tour } from '@reactour/tour'; 
 import '../../src/assets/css/dashboard.scss';
 
@@ -20,7 +19,6 @@ const steps = [
     { selector: ".card-title-employee", content: "This shows the total number of Employees." },
     { selector: ".pie-chart canvas", content: "This pie chart shows a visual representation of the data." },
     { selector: ".bar-chart canvas", content: "This bar chart shows a comparison of the data." },
-    { selector: ".logout-btn", content: "Click here to logout from the Dashboard." },
 ];
 
 const Dashboard = () => {
@@ -77,33 +75,6 @@ const Dashboard = () => {
         fetchDashboardData();
     }, []);
 
-    const handleLogout = async () => {
-        const token = localStorage.getItem("authToken");
-        console.log("Logging out with token:", token);
-
-        try {
-            const response = await fetch(`${BASE_URL}/api/admin/logout`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            const result = await response.json();
-            console.log("Logout response:", result);
-
-            if (response.ok) {
-                localStorage.removeItem("authToken");
-                localStorage.removeItem("isAdminLoggedIn");
-                navigate("/admin");
-            } else {
-                console.error("Logout failed. Status:", response.status);
-            }
-        } catch (error) {
-            console.error("An error occurred during logout:", error);
-        }
-    };
 
     const pieData = {
         labels: ["Blogs", "Services", "Projects", "Testimonials", "Teams", "Employee"],
@@ -189,13 +160,7 @@ const Dashboard = () => {
 
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h2 className="dashboard-title">Dashboard</h2>
-                <button
-                    className="btn btn-danger rounded-pill px-4 py-2 logout-btn"
-                    onClick={handleLogout}
-                    style={{ fontSize: "1.5rem", marginLeft: '2px' }}
-                >
-                    <FontAwesomeIcon icon={faRightFromBracket} /> Logout
-                </button>
+    
             </div>
 
             <div className="row g-4">

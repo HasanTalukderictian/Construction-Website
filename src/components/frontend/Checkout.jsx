@@ -73,7 +73,7 @@ const Checkout = () => {
 
         const mappedCartItems = cartItems.map(item => ({
             id: item.id,
-            product_name: item.productName,
+            product_name: item.name,
             image_url: item.imageUrl || "",
             price: item.price,
             quantity: item.quantity,
