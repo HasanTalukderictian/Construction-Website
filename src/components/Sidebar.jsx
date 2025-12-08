@@ -1,120 +1,73 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import '../../src/assets/css/Sidebar.scss';
 
 const Sidebar = () => {
-    const [isPageOpen, setIsPageOpen] = useState(true); // Default open the Page menu
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State to manage sidebar visibility on mobile
-
-    const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen); // Toggle sidebar on mobile
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const navigate = useNavigate();
 
-    // Logout function
+    const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+
     const handleLogout = () => {
-        // Remove token or user data from localStorage/sessionStorage
-        localStorage.removeItem("authToken"); // adjust key if different
-        // Redirect to login or homepage
+        localStorage.removeItem("authToken");
         navigate("/admin");
     };
 
     return (
         <>
-            {/* Button to toggle sidebar on mobile */}
+            {/* Toggle button for mobile */}
             <button
-                className="btn btn-dark d-lg-none position-fixed"
-                style={{ top: "20px", left: "20px", zIndex: 1050 }}
+                className="btn btn-dark d-lg-none position-fixed p-2"
+                style={{ top: "20px", left: "20px", zIndex: 1050, fontSize: "1.5rem" }}
                 onClick={toggleSidebar}
             >
                 ☰
             </button>
 
             <div
-                className={`d-flex flex-column p-3 vh-100 border rounded position-fixed mx-2 bg-success text-white bg-opacity-75 ${isSidebarOpen ? "sidebar-open" : "sidebar-closed"
-                    }`}
+                className={`d-flex flex-column p-3 vh-100 position-fixed mx-2 sidebar-bg text-white ${isSidebarOpen ? "sidebar-open" : "sidebar-closed"}`}
                 style={{
                     width: "250px",
                     transition: "all 0.3s ease",
-                    border: "15px solid #ccc", // Increased border width for a bolder line
-                    borderRadius: "10px", // Apply border-radius
+                    borderRadius: "15px",
+                    boxShadow: "2px 2px 15px rgba(0,0,0,0.3)",
                 }}
             >
-                <h2 className="mb-4">
+                <h2 className="mb-4 text-center fw-bold" style={{ fontFamily: "'Gilroy', sans-serif" }}>
                     <span className="text-warning">Gazi</span> Builders
                 </h2>
+
                 <ul className="nav nav-pills flex-column mb-auto">
-                    <li className="nav-item">
-                        <NavLink
-                            to="/admin-home"
-                            className={({ isActive }) =>
-                                `nav-link ${isActive ? "active" : "text-white"}`
-                            }
-                            style={{ fontSize: "1.5rem" }}
-                        >
-                            <i className="bi bi-speedometer2 me-2 bi-xxl"></i> Dashboard
-                        </NavLink>
-                    </li>
+                    {[
+                        { to: "/admin-home", icon: "bi-speedometer2", label: "Dashboard" },
+                        { to: "/admin-orders", icon: "bi-receipt", label: "Orders" },
+                        { to: "/admin-products", icon: "bi-box-seam", label: "Products" },
+                        { to: "/admin-store", icon: "bi-pencil-square", label: "Store Settings" },
+                        { to: "/admin-couirer", icon: "bi-truck", label: "Courier Settings" }
+                    ].map((item, index) => (
+                        <li className="nav-item mb-2" key={index}>
+                            <NavLink
+                                to={item.to}
+                                className={({ isActive }) =>
+                                    `nav-link d-flex align-items-center gap-2 py-2 px-3 rounded ${isActive ? "active-sidebar" : "text-white"}`
+                                }
+                            >
+                                <i className={`bi ${item.icon} fs-5`}></i>
+                                <span className="fw-semibold">{item.label}</span>
+                            </NavLink>
+                        </li>
+                    ))}
 
-
-
-                    <li className="nav-item">
-                        <NavLink
-                            to="/admin-orders"
-                            className={({ isActive }) =>
-                                `nav-link ${isActive ? "active" : "text-white"}`
-                            }
-                            style={{ fontSize: "1.5rem" }}
-                        >
-                            <i className="bi bi-receipt me-2"></i> Orders
-                        </NavLink>
-                    </li>
-
-
-
-
-                    <li className="nav-item">
-                        <NavLink
-                            to="/admin-products"
-                            className={({ isActive }) =>
-                                `nav-link ${isActive ? "active" : "text-white"}`
-                            }
-                            style={{ fontSize: "1.5rem" }}
-                        >
-                            <i className="bi bi-receipt me-2"></i> Products
-                        </NavLink>
-                    </li>
-                    <li className="nav-item">
-                        <NavLink
-                            to="/admin-store"
-                            className={({ isActive }) =>
-                                `nav-link ${isActive ? "active" : "text-white"}`
-                            }
-                            style={{ fontSize: "1.5rem" }}
-                        >
-                            <i className="bi bi-pencil-square me-2"></i> Store Settings
-                        </NavLink>
-                    </li>
-                    <li className="nav-item">
-                        <NavLink
-                            to="/admin-couirer"
-                            className={({ isActive }) =>
-                                `nav-link ${isActive ? "active" : "text-white"}`
-                            }
-                            style={{ fontSize: "1.5rem" }}
-                        >
-                            <i className="bi bi-image me-2"></i> Couirer Settings
-                        </NavLink>
-                    </li>
-
-
-                    {/* Logout button */}
+                    {/* Logout */}
                     <li className="nav-item mt-3">
                         <button
                             onClick={handleLogout}
-                            className="nav-link text-white w-100 text-start"
-                            style={{ fontSize: "1.5rem", background: "none", border: "none" }}
+                            className="nav-link text-white w-100 d-flex align-items-center gap-2 py-2 px-3 rounded logout-btn"
+                            style={{ background: "none", border: "none" }}
                         >
-                            <i className="bi bi-box-arrow-right me-2"></i> Logout
+                            <i className="bi bi-box-arrow-right fs-5"></i>
+                            <span className="fw-semibold">Logout</span>
                         </button>
                     </li>
                 </ul>

@@ -2,12 +2,19 @@ import { useEffect, useState } from "react";
 import DashNav from "./DasNav";
 import Footer from "./Footer";
 import Layout from "../components/Layout";
+import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
+
 
 const Orderlist = () => {
     const [orders, setOrders] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [paperflyTracking, setPaperflyTracking] = useState({});
+    
+
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [lastPage, setLastPage] = useState(1);
 
     // Modal form data
     const [formData, setFormData] = useState({
@@ -23,13 +30,15 @@ const Orderlist = () => {
     });
 
     useEffect(() => {
-        fetch("http://127.0.0.1:8000/api/orders")
+        fetch("http://127.0.0.1:8000/api/orders?page=" + currentPage)
             .then(res => res.json())
             .then(data => {
-                setOrders(data.data);
+                setOrders(data.data.data);
+                setLastPage(data.data.last_page);
             })
             .catch(error => console.error("Error fetching orders:", error));
-    }, []);
+    }, [currentPage]);
+
 
     // ========= OPEN MODAL =========
 
@@ -126,62 +135,130 @@ const Orderlist = () => {
         return;
     }
 
+    // Fetch sender info
+    const storeData = JSON.parse(localStorage.getItem("storeCreationData") || "{}");
+
     const htmlContent = `
-        <html>
-        <head>
-            <title>Invoice #${order.id}</title>
-            <style>
-                body { font-family: Arial; padding: 20px; }
-                h2 { text-align: center; }
-                table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-                table, th, td { border: 1px solid #000; }
-                th, td { padding: 8px; text-align: left; }
-            </style>
-        </head>
-        <body>
-            <h2>Invoice</h2>
-            <p><strong>Customer:</strong> ${order.customer_name}</p>
-            <p><strong>Phone:</strong> ${order.phone}</p>
-            <p><strong>Address:</strong> ${order.address}</p>
+    <html>
+    <head>
+        <title>Invoice #${order.id}</title>
+        <style>
+            body { 
+                font-family: Arial; 
+                padding: 20px; 
+                font-size: 13px;
+            }
+            h2 { text-align: center; margin-bottom: 20px; }
 
-            <h4>Products</h4>
-            <table>
-                <tr>
-                    <th>Product</th>
-                    <th>Qty</th>
-                    <th>Price</th>
-                </tr>
-                ${order.items
-                    .map(
-                        (item) => `
-                        <tr>
-                            <td>${item.product_name}</td>
-                            <td>${item.quantity}</td>
-                            <td>${item.price}৳</td>
-                        </tr>`
-                    )
-                    .join("")}
-            </table>
+            .info-container {
+                display: flex;
+                justify-content: space-between;
+                gap: 15px;
+                margin-bottom: 20px;
+            }
 
-            <h3 style="margin-top:20px">
-                Total: ${order.final_total}৳
-            </h3>
+            .box {
+                flex: 1;
+                border: 1px solid #000;
+                padding: 10px;
+                border-radius: 5px;
+            }
 
-            <p style="margin-top:30px; text-align:center;">Thank you for your purchase!</p>
-        </body>
-        </html>
+            .box-title {
+                font-weight: bold;
+                margin-bottom: 8px;
+                font-size: 14px;
+                border-bottom: 1px solid #000;
+                padding-bottom: 4px;
+            }
+
+            table { 
+                width: 100%; 
+                border-collapse: collapse; 
+                margin-top: 20px; 
+            }
+            table, th, td { border: 1px solid #000; }
+            th, td { padding: 6px; text-align: left; }
+
+            .totals {
+                margin-top: 15px;
+                text-align: right;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+
+        <h2>Invoice</h2>
+
+        <!-- Sender + Customer 2-column box -->
+        <div class="info-container">
+
+            <!-- Sender Box -->
+            <div class="box">
+                <div class="box-title">Sender Information</div>
+                <p><strong>Name:</strong> ${storeData.full_name || ""}</p>
+                <p><strong>Phone:</strong> ${storeData.phone_number || ""}</p>
+                <p><strong>Address:</strong> 
+                    ${storeData.address || ""}, 
+                    ${storeData.thana_name || ""}, 
+                    ${storeData.district_name || ""}
+                </p>
+            </div>
+
+            <!-- Customer Box -->
+            <div class="box">
+                <div class="box-title">Customer Information</div>
+                <p><strong>Name:</strong> ${order.customer_name}</p>
+                <p><strong>Phone:</strong> ${order.phone}</p>
+                <p><strong>Address:</strong> ${order.address}</p>
+            </div>
+
+        </div>
+
+        <!-- Product Table -->
+        <h4>Products</h4>
+        <table>
+            <tr>
+                <th>Product</th>
+                <th>Qty</th>
+                <th>Price</th>
+            </tr>
+            ${order.items
+            .map(
+                (item) => `
+                    <tr>
+                        <td>${item.product_name}</td>
+                        <td>${item.quantity}</td>
+                        <td>${item.price}৳</td>
+                    </tr>`
+            )
+            .join("")}
+        </table>
+
+        <!-- Totals -->
+        <div class="totals">
+            <p>Delivery Charge: ${order.delivery_charge || 0}৳</p>
+            <p>Total: ${order.final_total}৳</p>
+        </div>
+
+        <p style="margin-top:30px; text-align:center;">Thank you for your purchase!</p>
+
+    </body>
+    </html>
     `;
 
     invoiceWindow.document.open();
     invoiceWindow.document.write(htmlContent);
     invoiceWindow.document.close();
 
-    // 🔥 WAIT UNTIL NEW WINDOW LOADS → THEN PRINT
     invoiceWindow.onload = () => {
         invoiceWindow.focus();
         invoiceWindow.print();
     };
 };
+
+
 
 
 
@@ -202,7 +279,7 @@ const Orderlist = () => {
                             >
                                 <thead className="table-dark" style={{ fontSize: "12px" }}>
                                     <tr>
-                                         <th>SL</th>  {/* NEW SERIAL COLUMN */}
+                                        <th>SL</th>  {/* NEW SERIAL COLUMN */}
                                         <th>Customer</th>
                                         <th>Phone</th>
                                         <th>District</th>
@@ -221,9 +298,9 @@ const Orderlist = () => {
 
                                 <tbody>
                                     {orders.length > 0 ? (
-                                        orders.map((order,index) => (
+                                        orders.map((order, index) => (
                                             <tr key={order.id}>
-                                                  <td>{index + 1}</td>  
+                                                <td>{index + 1}</td>
                                                 <td>{order.customer_name}</td>
                                                 <td>{order.phone}</td>
                                                 <td>{order.district}</td>
@@ -309,6 +386,32 @@ const Orderlist = () => {
 
 
                             </table>
+
+                            <div className="d-flex justify-content-center mt-3 gap-2 mb-4">
+
+                                <button
+                                    className="btn btn-sm btn-dark"
+                                    disabled={currentPage === 1}
+                                    onClick={() => setCurrentPage(prev => prev - 1)}
+                                >
+                                    <BsChevronLeft size={18} />
+                                </button>
+
+                                <span className="px-3 py-1 border rounded">
+                                    Page {currentPage} of {lastPage}
+                                </span>
+
+                                <button
+                                    className="btn btn-sm btn-dark"
+                                    disabled={currentPage === lastPage}
+                                    onClick={() => setCurrentPage(prev => prev + 1)}
+                                >
+                                    <BsChevronRight size={18} />
+                                </button>
+
+                            </div>
+
+
                         </div>
                     </div>
 

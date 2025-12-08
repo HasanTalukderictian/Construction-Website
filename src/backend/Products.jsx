@@ -28,6 +28,7 @@ const Products = () => {
         fetch("http://127.0.0.1:8000/api/products")
             .then((res) => res.json())
             .then((data) => {
+                console.log("Products:", data); // check array length
                 setProducts(data);
                 setLoading(false);
             })
@@ -98,7 +99,6 @@ const Products = () => {
 
             // Refresh product list
             setProducts((prev) => [...prev, res.data]);
-
         } catch (err) {
             console.error("Network error:", err.response?.data || err);
             alert("Network error or validation failed!");
@@ -168,29 +168,35 @@ const Products = () => {
                         </table>
 
                         {/* Pagination */}
-                        {totalPages > 1 && (
-                            <nav>
-                                <ul className="pagination justify-content-center">
-                                    <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-                                        <button className="page-link" onClick={prevPage}>
-                                            <BsChevronLeft /> Prev
+                        <nav>
+                            <ul className="pagination justify-content-center">
+                                {/* Previous Button */}
+                                <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                                    <button className="page-link" onClick={prevPage}>
+                                        <BsChevronLeft size={18} /> Prev
+                                    </button>
+                                </li>
+
+                                {/* Page Numbers */}
+                                {Array.from({ length: totalPages }, (_, i) => (
+                                    <li
+                                        key={i}
+                                        className={`page-item ${currentPage === i + 1 ? "active" : ""}`}
+                                    >
+                                        <button className="page-link" onClick={() => goToPage(i + 1)}>
+                                            {i + 1}
                                         </button>
                                     </li>
-                                    {Array.from({ length: totalPages }, (_, i) => (
-                                        <li key={i} className={`page-item ${currentPage === i + 1 ? "active" : ""}`}>
-                                            <button className="page-link" onClick={() => goToPage(i + 1)}>
-                                                {i + 1}
-                                            </button>
-                                        </li>
-                                    ))}
-                                    <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
-                                        <button className="page-link" onClick={nextPage}>
-                                            Next <BsChevronRight />
-                                        </button>
-                                    </li>
-                                </ul>
-                            </nav>
-                        )}
+                                ))}
+
+                                {/* Next Button */}
+                                <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
+                                    <button className="page-link" onClick={nextPage}>
+                                        Next <BsChevronRight size={18} />
+                                    </button>
+                                </li>
+                            </ul>
+                        </nav>
                     </div>
 
                     <Footer />
