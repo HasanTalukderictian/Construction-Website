@@ -16,19 +16,18 @@ const Products = () => {
     const [rating, setRating] = useState("");
     const [quantity, setQuantity] = useState("");
     const [description, setDescription] = useState("");
-    const [imageFile, setImageFile] = useState(null);
-    const [preview, setPreview] = useState(null);
+    const [imageFiles, setImageFiles] = useState([]); // multiple files
+    const [previews, setPreviews] = useState([]);     // previews
 
     // Pagination states
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8;
 
     // Load Product List
-    useEffect(() => {
+    const loadProducts = () => {
         fetch("http://127.0.0.1:8000/api/products")
             .then((res) => res.json())
             .then((data) => {
-                console.log("Products:", data); // check array length
                 setProducts(data);
                 setLoading(false);
             })
@@ -36,15 +35,30 @@ const Products = () => {
                 console.log("Error:", err);
                 setLoading(false);
             });
+    };
+
+    useEffect(() => {
+        loadProducts();
     }, []);
 
-    // Handle Image Change and Preview
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
+    // Handle multiple image change & preview
+    const handleImagesChange = (e) => {
+        const files = Array.from(e.target.files);
+        if (!files.length) return;
 
-        setImageFile(file);
-        setPreview(URL.createObjectURL(file));
+        setImageFiles(files);
+
+        const previewUrls = files.map((file) => URL.createObjectURL(file));
+        setPreviews(previewUrls);
+    };
+
+    const removePreview = (index) => {
+        const newFiles = [...imageFiles];
+        const newPreviews = [...previews];
+        newFiles.splice(index, 1);
+        newPreviews.splice(index, 1);
+        setImageFiles(newFiles);
+        setPreviews(newPreviews);
     };
 
     // Pagination logic
@@ -56,12 +70,6 @@ const Products = () => {
     const goToPage = (pageNumber) => setCurrentPage(pageNumber);
     const nextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
     const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
-
-    // Remove preview
-    const removePreview = () => {
-        setImageFile(null);
-        setPreview(null);
-    };
 
     // Submit Product to Laravel API
     const submitProduct = async () => {
@@ -76,16 +84,18 @@ const Products = () => {
         formData.append("rating", rating || "");
         formData.append("quantity", quantity);
         formData.append("description", description || "");
-        if (imageFile) formData.append("image", imageFile);
+
+        imageFiles.forEach((file) => {
+            formData.append("images[]", file); // multiple images
+        });
 
         try {
-            const res = await axios.post(
+            await axios.post(
                 "http://127.0.0.1:8000/api/products-add",
                 formData,
                 { headers: { "Content-Type": "multipart/form-data" } }
             );
 
-            console.log("Product saved:", res.data);
             alert("Product saved successfully!");
 
             // Reset form
@@ -94,11 +104,12 @@ const Products = () => {
             setRating("");
             setQuantity("");
             setDescription("");
-            removePreview();
+            setImageFiles([]);
+            setPreviews([]);
             setShowModal(false);
+            loadProducts();
+            setCurrentPage(1);
 
-            // Refresh product list
-            setProducts((prev) => [...prev, res.data]);
         } catch (err) {
             console.error("Network error:", err.response?.data || err);
             alert("Network error or validation failed!");
@@ -129,17 +140,18 @@ const Products = () => {
                                     <th>Price</th>
                                     <th>Rating</th>
                                     <th>Quantity</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
 
                             <tbody>
                                 {loading ? (
                                     <tr>
-                                        <td colSpan="7" className="text-center">Loading...</td>
+                                        <td colSpan="8" className="text-center">Loading...</td>
                                     </tr>
                                 ) : products.length === 0 ? (
                                     <tr>
-                                        <td colSpan="7" className="text-center">No Products Available</td>
+                                        <td colSpan="8" className="text-center">No Products Available</td>
                                     </tr>
                                 ) : (
                                     currentProducts.map((item, index) => (
@@ -147,9 +159,9 @@ const Products = () => {
                                             <td>{indexOfFirstItem + index + 1}</td>
                                             <td>{item.id}</td>
                                             <td>
-                                                {item.image_url ? (
+                                                {item.image_urls && item.image_urls.length > 0 ? (
                                                     <img
-                                                        src={item.image_url}
+                                                        src={item.image_urls[0]} // first image only
                                                         width="60"
                                                         height="60"
                                                         style={{ objectFit: "cover", borderRadius: "5px" }}
@@ -161,6 +173,12 @@ const Products = () => {
                                             <td>{item.price}৳</td>
                                             <td>{item.rating}</td>
                                             <td>{item.quantity}</td>
+                                            <td>
+                                                <div style={{ display: "flex", gap: "8px" }}>
+                                                    <button className="btn btn-primary" style={{ width: "40px", height: "40px", padding: 0 }}>✎</button>
+                                                    <button className="btn btn-danger" style={{ width: "40px", height: "40px", padding: 0 }}>🗑</button>
+                                                </div>
+                                            </td>
                                         </tr>
                                     ))
                                 )}
@@ -170,30 +188,16 @@ const Products = () => {
                         {/* Pagination */}
                         <nav>
                             <ul className="pagination justify-content-center">
-                                {/* Previous Button */}
                                 <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-                                    <button className="page-link" onClick={prevPage}>
-                                        <BsChevronLeft size={18} /> Prev
-                                    </button>
+                                    <button className="page-link" onClick={prevPage}><BsChevronLeft /> Prev</button>
                                 </li>
-
-                                {/* Page Numbers */}
                                 {Array.from({ length: totalPages }, (_, i) => (
-                                    <li
-                                        key={i}
-                                        className={`page-item ${currentPage === i + 1 ? "active" : ""}`}
-                                    >
-                                        <button className="page-link" onClick={() => goToPage(i + 1)}>
-                                            {i + 1}
-                                        </button>
+                                    <li key={i} className={`page-item ${currentPage === i + 1 ? "active" : ""}`}>
+                                        <button className="page-link" onClick={() => goToPage(i + 1)}>{i + 1}</button>
                                     </li>
                                 ))}
-
-                                {/* Next Button */}
                                 <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
-                                    <button className="page-link" onClick={nextPage}>
-                                        Next <BsChevronRight size={18} />
-                                    </button>
+                                    <button className="page-link" onClick={nextPage}>Next <BsChevronRight /></button>
                                 </li>
                             </ul>
                         </nav>
@@ -217,106 +221,52 @@ const Products = () => {
                                 <div className="row">
                                     <div className="col-md-6 mb-3">
                                         <label className="form-label">Product Name</label>
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            value={productName}
-                                            onChange={(e) => setProductName(e.target.value)}
-                                        />
+                                        <input type="text" className="form-control" value={productName} onChange={(e) => setProductName(e.target.value)} />
                                     </div>
                                     <div className="col-md-6 mb-3">
                                         <label className="form-label">Price</label>
-                                        <input
-                                            type="number"
-                                            className="form-control"
-                                            value={price}
-                                            onChange={(e) => setPrice(e.target.value)}
-                                        />
+                                        <input type="number" className="form-control" value={price} onChange={(e) => setPrice(e.target.value)} />
                                     </div>
                                 </div>
 
                                 <div className="row">
                                     <div className="col-md-6 mb-3">
                                         <label className="form-label">Rating</label>
-                                        <input
-                                            type="number"
-                                            className="form-control"
-                                            value={rating}
-                                            onChange={(e) => setRating(e.target.value)}
-                                        />
+                                        <input type="number" className="form-control" value={rating} onChange={(e) => setRating(e.target.value)} />
                                     </div>
                                     <div className="col-md-6 mb-3">
                                         <label className="form-label">Quantity</label>
-                                        <input
-                                            type="number"
-                                            className="form-control"
-                                            value={quantity}
-                                            onChange={(e) => setQuantity(e.target.value)}
-                                        />
+                                        <input type="number" className="form-control" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
                                     </div>
                                 </div>
 
                                 <div className="mb-3">
                                     <label className="form-label">Description</label>
-                                    <textarea
-                                        className="form-control"
-                                        value={description}
-                                        onChange={(e) => setDescription(e.target.value)}
-                                    ></textarea>
+                                    <textarea className="form-control" value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
                                 </div>
 
                                 <div className="mb-3">
-                                    <label className="form-label">Product Image</label>
-                                    <input
-                                        type="file"
-                                        className="form-control"
-                                        onChange={handleImageChange}
-                                    />
+                                    <label className="form-label">Product Images</label>
+                                    <input type="file" className="form-control" onChange={handleImagesChange} multiple />
                                 </div>
 
-                                {preview && (
-                                    <div className="position-relative d-inline-block">
-                                        <img
-                                            src={preview}
-                                            width="140"
-                                            height="140"
-                                            style={{
-                                                objectFit: "cover",
-                                                borderRadius: "10px",
-                                                border: "1px solid #ccc"
-                                            }}
-                                        />
-                                        <button
-                                            onClick={removePreview}
-                                            style={{
-                                                position: "absolute",
-                                                top: "-8px",
-                                                right: "-8px",
-                                                background: "red",
-                                                color: "#fff",
-                                                border: "none",
-                                                width: "22px",
-                                                height: "22px",
-                                                borderRadius: "50%",
-                                                cursor: "pointer",
-                                                fontSize: "14px",
-                                                lineHeight: "20px",
-                                                textAlign: "center",
-                                            }}
-                                        >
-                                            ×
-                                        </button>
-                                    </div>
-                                )}
+                                {/* Preview */}
+                                <div className="d-flex flex-wrap gap-2">
+                                    {previews.map((url, index) => (
+                                        <div key={index} className="position-relative">
+                                            <img src={url} width="100" height="100" style={{ objectFit: "cover", borderRadius: "5px" }} />
+                                            <button type="button" onClick={() => removePreview(index)} style={{
+                                                position: "absolute", top: "-5px", right: "-5px", background: "red",
+                                                color: "#fff", border: "none", borderRadius: "50%", width: "20px", height: "20px", cursor: "pointer"
+                                            }}>×</button>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
 
                             <div className="modal-footer">
-                                <button className="btn btn-secondary" onClick={() => setShowModal(false)}>
-                                    Close
-                                </button>
-                                <button className="btn btn-success" onClick={submitProduct}>
-                                    Save Product
-                                </button>
+                                <button className="btn btn-warning" onClick={() => setShowModal(false)}>Close</button>
+                                <button className="btn btn-success" onClick={submitProduct}>Save Product</button>
                             </div>
                         </div>
                     </div>

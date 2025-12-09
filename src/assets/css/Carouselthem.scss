@@ -1,0 +1,30 @@
+/* Carousel Thumbnails */
+.carousel .thumbs-wrapper {
+  display: flex;
+  justify-content: start;
+  overflow-x: auto; /* scroll if too many thumbnails */
+  padding: 5px 0;
+}
+
+.carousel .thumbs-wrapper li {
+  flex: 0 0 auto;
+  height: 60px !important;
+  width: 80px !important;
+  margin: 0 5px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.carousel .thumb img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+/* Main Images */
+.carousel .slide img {
+  height: 400px; /* fixed height for all slides */
+  width: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+}

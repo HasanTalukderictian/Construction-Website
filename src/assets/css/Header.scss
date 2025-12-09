@@ -5,3 +5,16 @@
   background: #fff;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
+
+/* Remove default bootstrap hover background for nav links */
+.navbar .nav-link {
+    background-color: transparent !important;  /* normal */
+    color: #000 !important;                    /* text color */
+    transition: all 0.3s ease;
+}
+
+.navbar .nav-link:hover {
+    background-color: transparent !important;  /* remove white/gray bg */
+    color: #e4032e !important;                 /* change text color on hover */
+}
+
