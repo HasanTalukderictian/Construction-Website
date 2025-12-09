@@ -1,0 +1,36 @@
+/* Hover effect for sidebar links */
+.nav-link {
+    transition: all 0.3s ease; /* Smooth transition */
+  }
+  
+  .nav-link:hover {
+    background-color: #69ad87; /* Primary hover color */
+    color: #fff !important; /* Text color on hover */
+  }
+.sidebar-bg {
+    background: linear-gradient(135deg, #198754, #20c997);
+}
+
+.nav-link {
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.active-sidebar {
+    background-color: rgba(255, 255, 255, 0.3);
+    color: #fff !important;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.logout-btn:hover {
+    background-color: rgba(255, 0, 0, 0.3);
+    color: #fff;
+}
+
+

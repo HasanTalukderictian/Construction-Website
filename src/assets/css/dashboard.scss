@@ -1,0 +1,22 @@
+.custom-tour {
+    /* Customize the tour overlay */
+    background-color: rgba(58, 190, 135, 0.7) !important/* Darken the background */
+  }
+  
+  .custom-tour .reactour__button {
+    /* Customize the buttons in the tour */
+    background-color: #e4032e !important;
+    color: white;
+  }
+  
+  .custom-tour .reactour__step {
+    /* Customize the individual steps */
+    background-color: #f0f0f0;
+    border-radius: 10px !important;
+    padding: 15px;
+    font-size: 16px;
+    color: #333;
+  }
+
+  
+  
