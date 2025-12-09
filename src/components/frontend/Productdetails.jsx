@@ -8,6 +8,7 @@ import Toast from "react-bootstrap/Toast";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import '../../assets/css/product.scss';
+import axios from "axios";
 
 const Productdetails = () => {
     const { id } = useParams();
@@ -16,12 +17,32 @@ const Productdetails = () => {
     const { addToCart } = useContext(CartContext);
     const [showToast, setShowToast] = useState(false);
 
+    // ===== Edit Modal States =====
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [editName, setEditName] = useState("");
+    const [editPrice, setEditPrice] = useState("");
+    const [editRating, setEditRating] = useState("");
+    const [editQuantity, setEditQuantity] = useState("");
+    const [editDescription, setEditDescription] = useState("");
+    const [editImages, setEditImages] = useState([]);
+    const [editPreviews, setEditPreviews] = useState([]);
+
     useEffect(() => {
         fetch("http://127.0.0.1:8000/api/products")
             .then((res) => res.json())
             .then((data) => {
                 const selectedProduct = data.find((item) => item.id === parseInt(id));
                 setProduct(selectedProduct);
+
+                // Prefill edit modal data
+                if (selectedProduct) {
+                    setEditName(selectedProduct.name);
+                    setEditPrice(selectedProduct.price);
+                    setEditRating(selectedProduct.rating);
+                    setEditQuantity(selectedProduct.quantity);
+                    setEditDescription(selectedProduct.description);
+                    setEditPreviews(selectedProduct.image_urls || []);
+                }
 
                 const related = data.filter(
                     (item) => item.id !== parseInt(id) && item.category === selectedProduct?.category
@@ -33,6 +54,7 @@ const Productdetails = () => {
 
     if (!product) return <p>Loading...</p>;
 
+    // ===== Cart Function =====
     const handleAddToCart = () => {
         const productWithImage = {
             ...product,
@@ -41,6 +63,54 @@ const Productdetails = () => {
         addToCart(productWithImage);
         setShowToast(true);
         setTimeout(() => setShowToast(false), 3000);
+    };
+
+    // ===== Handle image change for edit =====
+    const handleEditImagesChange = (e) => {
+        const files = Array.from(e.target.files);
+        if (!files.length) return;
+
+        setEditImages(files);
+        const previewUrls = files.map((file) => URL.createObjectURL(file));
+        setEditPreviews(previewUrls);
+    };
+
+    const removeEditPreview = (index) => {
+        const newFiles = [...editImages];
+        const newPreviews = [...editPreviews];
+        newFiles.splice(index, 1);
+        newPreviews.splice(index, 1);
+        setEditImages(newFiles);
+        setEditPreviews(newPreviews);
+    };
+
+    // ===== Submit Edit =====
+    const submitEdit = async () => {
+        if (!editName || !editPrice || !editQuantity) {
+            alert("Please fill required fields!");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("name", editName);
+        formData.append("price", editPrice);
+        formData.append("rating", editRating || "");
+        formData.append("quantity", editQuantity);
+        formData.append("description", editDescription || "");
+
+        editImages.forEach((file) => formData.append("images[]", file));
+
+        try {
+            await axios.post(`http://127.0.0.1:8000/api/products-edit/${id}`, formData, {
+                headers: { "Content-Type": "multipart/form-data" }
+            });
+            alert("Product updated successfully!");
+            setShowEditModal(false);
+            window.location.reload(); // simple refresh to reload updated product
+        } catch (err) {
+            console.error("Update error:", err.response?.data || err);
+            alert("Failed to update product!");
+        }
     };
 
     return (
@@ -95,13 +165,19 @@ const Productdetails = () => {
                         <p><strong>Quantity:</strong> {product.quantity}</p>
                         <p>{product.description}</p>
 
-                        <div className="mt-4 text-center">
+                        <div className="mt-4 d-flex gap-2">
                             <button
                                 onClick={handleAddToCart}
-                                className="btn highlight-btn w-50"
+                                className="btn highlight-btn flex-fill"
                                 style={{ backgroundColor: "#e4032e", color: "#fff", fontWeight: "bold" }}
                             >
                                 Add to Cart
+                            </button>
+                            <button
+                                onClick={() => setShowEditModal(true)}
+                                className="btn btn-warning flex-fill"
+                            >
+                                Edit Product
                             </button>
                         </div>
                     </div>
@@ -123,7 +199,7 @@ const Productdetails = () => {
                                     <div className="card-body">
                                         <h5 className="card-title" style={{ fontSize: "16px" }}>{item.name}</h5>
                                         <p className="mb-1"><strong>Price:</strong> {item.price}৳</p>
-                                        <Link to={`/product/${item.id}`} className="btn btn-primary btn-sm">View</Link>
+                                        <Link to={`/product/${item.id}`} className="btn btn-success btn-sm">View</Link>
                                     </div>
                                 </div>
                             ))}
@@ -134,6 +210,90 @@ const Productdetails = () => {
             </div>
 
             <Footer />
+
+            {/* ===== Edit Product Modal ===== */}
+            {showEditModal && (
+                <div
+                    className="custom-modal-backdrop"
+                    onClick={() => setShowEditModal(false)} // click outside to close
+                    style={{
+                        position: "fixed",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
+                        background: "rgba(0,0,0,0.5)",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        zIndex: 1050,
+                    }}
+                >
+                    <div
+                        className="modal-dialog modal-lg"
+                        onClick={(e) => e.stopPropagation()} // modal vitore click hole close hobe na
+                        style={{ maxWidth: "800px" }}
+                    >
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Edit Product</h5>
+                                <button className="btn-close" onClick={() => setShowEditModal(false)}></button>
+                            </div>
+                            <div className="modal-body">
+                                <div className="row">
+                                    <div className="col-md-6 mb-3">
+                                        <label className="form-label">Product Name *</label>
+                                        <input type="text" className="form-control" value={editName} onChange={(e) => setEditName(e.target.value)} />
+                                    </div>
+                                    <div className="col-md-6 mb-3">
+                                        <label className="form-label">Price *</label>
+                                        <input type="number" className="form-control" value={editPrice} onChange={(e) => setEditPrice(e.target.value)} />
+                                    </div>
+                                </div>
+
+                                <div className="row">
+                                    <div className="col-md-6 mb-3">
+                                        <label className="form-label">Rating</label>
+                                        <input type="number" className="form-control" value={editRating} onChange={(e) => setEditRating(e.target.value)} />
+                                    </div>
+                                    <div className="col-md-6 mb-3">
+                                        <label className="form-label">Quantity *</label>
+                                        <input type="number" className="form-control" value={editQuantity} onChange={(e) => setEditQuantity(e.target.value)} />
+                                    </div>
+                                </div>
+
+                                <div className="mb-3">
+                                    <label className="form-label">Description</label>
+                                    <textarea className="form-control" value={editDescription} onChange={(e) => setEditDescription(e.target.value)}></textarea>
+                                </div>
+
+                                <div className="mb-3">
+                                    <label className="form-label">Images</label>
+                                    <input type="file" multiple className="form-control" onChange={handleEditImagesChange} />
+                                </div>
+
+                                {editPreviews.length > 0 && (
+                                    <div className="d-flex flex-wrap gap-2">
+                                        {editPreviews.map((url, idx) => (
+                                            <div key={idx} style={{ position: "relative" }}>
+                                                <img src={url} alt={`preview-${idx}`} width="80" height="80" style={{ objectFit: "cover", borderRadius: "5px" }} />
+                                                <button type="button" className="btn btn-sm btn-danger" style={{ position: "absolute", top: 0, right: 0 }} onClick={() => removeEditPreview(idx)}>×</button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+
+                            </div>
+                            <div className="modal-footer d-flex gap-2">
+                                <button className="btn btn-warning flex-fill" onClick={() => setShowEditModal(false)}>Close</button>
+                                <button className="btn btn-success flex-fill" onClick={submitEdit}>Update Product</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+
         </>
     );
 };

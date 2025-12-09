@@ -16,3 +16,10 @@
 .product-image:hover .overlay {
   opacity: 1; /* Show overlay */
 }
+
+/* make sure carousel images don't block modal buttons */
+.product-details,
+.carousel .slide img {
+    z-index: 1;
+    position: relative;
+}

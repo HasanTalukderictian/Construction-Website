@@ -60,14 +60,22 @@ const Cart = () => {
                             >
                                 <div className="d-flex align-items-center">
                                     <img
-                                        src={item.image_url}
-                                        alt={item.productName}
-                                        style={{ width: "100px", height: "100px", objectFit: "cover", borderRadius: "8px", marginRight: "15px" }}
+                                        src={item.image_urls?.length > 0 ? item.image_urls[0] : '/placeholder.png'}
+                                        alt={item.name}
+                                        style={{
+                                            width: "100px",
+                                            height: "100px",
+                                            objectFit: "cover",
+                                            borderRadius: "8px",
+                                            marginRight: "15px",
+                                        }}
                                     />
                                     <div>
                                         <h5>{item.name}</h5>
                                         <p>Price: {item.price}৳</p>
                                     </div>
+
+                                
                                 </div>
 
                                 {/* <div className="d-flex align-items-center">
@@ -122,7 +130,7 @@ const Cart = () => {
                         ))}
 
                         {/* Combined Box for Delivery + Price Calculation */}
-                        <div className="mt-4 p-4 border rounded " style={{ backgroundColor: "#84e1e3" , marginBottom: "5px"}}>
+                        <div className="mt-4 p-4 border rounded " style={{ backgroundColor: "#84e1e3", marginBottom: "5px" }}>
                             <div className="row">
 
                                 {/* LEFT: Delivery Charge */}
