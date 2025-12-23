@@ -168,17 +168,20 @@ const Productdetails = () => {
                         <div className="mt-4 d-flex gap-2">
                             <button
                                 onClick={handleAddToCart}
-                                className="btn highlight-btn flex-fill"
-                                style={{ backgroundColor: "#e4032e", color: "#fff", fontWeight: "bold" }}
+                                className="btn highlight-btn"
+                                style={{
+                                    backgroundColor: "#e4032e",
+                                    color: "#fff",
+                                    fontWeight: "normal",
+                                    padding: "6px 14px",   // text অনুযায়ী size
+                                    width: "auto"
+                                }}
                             >
                                 Add to Cart
                             </button>
-                            <button
-                                onClick={() => setShowEditModal(true)}
-                                className="btn btn-warning flex-fill"
-                            >
-                                Edit Product
-                            </button>
+
+
+
                         </div>
                     </div>
                 </div>

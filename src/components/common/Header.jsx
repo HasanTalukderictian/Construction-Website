@@ -24,7 +24,7 @@ const Header = () => {
                 <Nav className="ms-auto">
                     <Nav.Link href="/" className='nav-link' style={{ fontSize: "18px" }}>Home</Nav.Link>
                     <Nav.Link href="/about" className='nav-link' style={{ fontSize: "18px" }}>About Us</Nav.Link>
-                    <Nav.Link href="/blogs" className='nav-link' style={{ fontSize: "18px" }}>Blogs</Nav.Link>
+                    {/* <Nav.Link href="/blogs" className='nav-link' style={{ fontSize: "18px" }}>Blogs</Nav.Link> */}
 
                     <Nav.Link href="/cart" className="nav-link" style={{ fontSize: "18px", position: "relative" }}>
                         <i className="bi bi-cart-fill me-2" style={{ color: "green", fontSize: "18px" }}></i> Cart

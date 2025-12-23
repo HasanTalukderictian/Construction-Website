@@ -39,6 +39,9 @@ const Checkout = () => {
     const handleConfirmOrder = async () => {
         if (orderSubmitted) return; // ✅ prevent duplicate submission
 
+          console.log("cartItems:", cartItems);
+  console.log("First item:", cartItems[0]);
+
         // Validation
         if (!customerName.trim()) {
             alert("Customer name is required!");
