@@ -10,7 +10,7 @@ const Orderlist = () => {
     const [showModal, setShowModal] = useState(false);
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [paperflyTracking, setPaperflyTracking] = useState({});
-    
+
 
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -33,10 +33,15 @@ const Orderlist = () => {
         fetch("http://127.0.0.1:8000/api/orders?page=" + currentPage)
             .then(res => res.json())
             .then(data => {
-                setOrders(data.data.data);
-                setLastPage(data.data.last_page);
+                console.log("API FULL RESPONSE:", data);
+
+                setOrders(data?.data?.data || data?.data || data || []);
+                setLastPage(data?.data?.last_page || 1);
             })
-            .catch(error => console.error("Error fetching orders:", error));
+            .catch(error => {
+                console.error("Error fetching orders:", error);
+                setOrders([]);
+            });
     }, [currentPage]);
 
 
@@ -128,17 +133,17 @@ const Orderlist = () => {
     };
 
     const printInvoice = (order) => {
-    const invoiceWindow = window.open("", "_blank", "height=800,width=600");
+        const invoiceWindow = window.open("", "_blank", "height=800,width=600");
 
-    if (!invoiceWindow) {
-        alert("Popup blocked! Please allow popup in your browser.");
-        return;
-    }
+        if (!invoiceWindow) {
+            alert("Popup blocked! Please allow popup in your browser.");
+            return;
+        }
 
-    // Fetch sender info
-    const storeData = JSON.parse(localStorage.getItem("storeCreationData") || "{}");
+        // Fetch sender info
+        const storeData = JSON.parse(localStorage.getItem("storeCreationData") || "{}");
 
-    const htmlContent = `
+        const htmlContent = `
     <html>
     <head>
         <title>Invoice #${order.id}</title>
@@ -225,15 +230,15 @@ const Orderlist = () => {
                 <th>Price</th>
             </tr>
             ${order.items
-            .map(
-                (item) => `
+                .map(
+                    (item) => `
                     <tr>
                         <td>${item.product_name}</td>
                         <td>${item.quantity}</td>
                         <td>${item.price}৳</td>
                     </tr>`
-            )
-            .join("")}
+                )
+                .join("")}
         </table>
 
         <!-- Totals -->
@@ -248,15 +253,15 @@ const Orderlist = () => {
     </html>
     `;
 
-    invoiceWindow.document.open();
-    invoiceWindow.document.write(htmlContent);
-    invoiceWindow.document.close();
+        invoiceWindow.document.open();
+        invoiceWindow.document.write(htmlContent);
+        invoiceWindow.document.close();
 
-    invoiceWindow.onload = () => {
-        invoiceWindow.focus();
-        invoiceWindow.print();
+        invoiceWindow.onload = () => {
+            invoiceWindow.focus();
+            invoiceWindow.print();
+        };
     };
-};
 
 
 
