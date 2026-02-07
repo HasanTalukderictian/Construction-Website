@@ -35,7 +35,7 @@ const Header = () => {
                                     top: "-5px",
                                     right: "-10px",
                                     background: "red",
-                                    color: "#fff",
+                                    color: "#29ec43",
                                     borderRadius: "50%",
                                     padding: "2px 6px",
                                     fontSize: "12px",

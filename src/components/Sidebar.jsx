@@ -31,7 +31,7 @@ const Sidebar = () => {
                     width: "250px",
                     transition: "all 0.3s ease",
                     borderRadius: "15px",
-                    boxShadow: "2px 2px 15px rgba(0,0,0,0.3)",
+                    boxShadow: "2px 2px 15px rgba(0, 0, 0, 0.3)",
                 }}
             >
                 <h2 className="mb-4 text-center fw-bold" style={{ fontFamily: "'Gilroy', sans-serif" }}>

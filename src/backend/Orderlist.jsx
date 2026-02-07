@@ -502,15 +502,16 @@ const Orderlist = () => {
                                                 style={{ width: "200px", gap: "8px" }}
                                             >
                                                 <img
-                                                    src={item.image_url}
+                                                    src={
+                                                        item.image_url
+                                                            ? `http://127.0.0.1:8000/storage/${item.image_url}`
+                                                            : "https://via.placeholder.com/50"
+                                                    }
                                                     alt={item.product_name}
-                                                    style={{
-                                                        width: "50px",
-                                                        height: "50px",
-                                                        objectFit: "cover",
-                                                        borderRadius: "4px"
-                                                    }}
                                                 />
+
+
+
 
                                                 <div style={{ fontSize: "12px" }}>
                                                     <strong>{item.product_name}</strong>
