@@ -44,7 +44,8 @@ const Sidebar = () => {
                         { to: "/admin-orders", icon: "bi-receipt", label: "Orders" },
                         { to: "/admin-products", icon: "bi-box-seam", label: "Products" },
                         { to: "/admin-store", icon: "bi-pencil-square", label: "Store Settings" },
-                        { to: "/admin-couirer", icon: "bi-truck", label: "Courier Settings" }
+                        { to: "/admin-couirer", icon: "bi-truck", label: "Courier Settings" },
+                        { to: "/admin-users", icon: "bi-people", label: "User Settings" }
                     ].map((item, index) => (
                         <li className="nav-item mb-2" key={index}>
                             <NavLink

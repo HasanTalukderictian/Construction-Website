@@ -23,7 +23,7 @@ const steps = [
 
 const Dashboard = () => {
 
-    const BASE_URL = import.meta.env.VITE_BASE_URL;
+    // const BASE_URL = import.meta.env.VITE_BASE_URL;
     const navigate = useNavigate();
 
     const [dashboardData, setDashboardData] = useState({
@@ -39,7 +39,7 @@ const Dashboard = () => {
 
     const fetchDashboardData = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/api/admin/admin-all`, {
+            const response = await fetch(`http://127.0.0.1:8000/api/admin-all`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
