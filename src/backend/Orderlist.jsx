@@ -510,9 +510,6 @@ const Orderlist = () => {
                                                     alt={item.product_name}
                                                 />
 
-
-
-
                                                 <div style={{ fontSize: "12px" }}>
                                                     <strong>{item.product_name}</strong>
                                                     <div>Price: {item.price}৳</div>
