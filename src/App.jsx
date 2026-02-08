@@ -18,6 +18,7 @@ import Orderlist from './backend/Orderlist.jsx';
 import CourierSettings from './backend/CourierSettings.jsx';
 import StoreCreation from './backend/StoreCreation.jsx';
 import Products from './backend/Products.jsx';
+import UserSettings from './backend/UserSettings.jsx';
 
 
 
@@ -42,6 +43,7 @@ function App() {
           <Route path="/admin-couirer" element={<CourierSettings />} />
           <Route path="/admin-store" element={<StoreCreation />} />
           <Route path="/admin-products" element={<Products />} />
+          <Route path="/admin-users" element={<UserSettings />} />
         </Routes>
       </BrowserRouter>
     </CartProvider>

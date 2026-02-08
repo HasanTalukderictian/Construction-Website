@@ -31,7 +31,7 @@ const Sidebar = () => {
                     width: "250px",
                     transition: "all 0.3s ease",
                     borderRadius: "15px",
-                    boxShadow: "2px 2px 15px rgba(0,0,0,0.3)",
+                    boxShadow: "2px 2px 15px rgba(0, 0, 0, 0.3)",
                 }}
             >
                 <h2 className="mb-4 text-center fw-bold" style={{ fontFamily: "'Gilroy', sans-serif" }}>
@@ -44,7 +44,8 @@ const Sidebar = () => {
                         { to: "/admin-orders", icon: "bi-receipt", label: "Orders" },
                         { to: "/admin-products", icon: "bi-box-seam", label: "Products" },
                         { to: "/admin-store", icon: "bi-pencil-square", label: "Store Settings" },
-                        { to: "/admin-couirer", icon: "bi-truck", label: "Courier Settings" }
+                        { to: "/admin-couirer", icon: "bi-truck", label: "Courier Settings" },
+                        { to: "/admin-users", icon: "bi-people", label: "User Settings" }
                     ].map((item, index) => (
                         <li className="nav-item mb-2" key={index}>
                             <NavLink

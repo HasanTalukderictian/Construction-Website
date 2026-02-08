@@ -1,34 +1,21 @@
-
 import Footer from '../common/Footer';
 import Header from '../common/Header';
 import Item from './Item';
 
-
-
-
-
-// import About from '../common/About';
-
 const Home = () => {
     return (
-        <>
+        <div className="main-layout">
             <Header />
-            <main>
 
-            <Item/>
+             
 
-
-
-
-
-
+            <main className="content-area">
+            
+                <Item/>
             </main>
 
-
             <Footer />
-
-
-        </>
+        </div>
     )
 }
 

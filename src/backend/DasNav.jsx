@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 
 const DashNav = () => {
@@ -6,39 +5,39 @@ const DashNav = () => {
     const [companyName, setCompanyName] = useState('');
     const [yourName, setYourName] = useState('');
     const [image, setImage] = useState(null);
-    const [userId, setUserId] = useState(null); // store user id
+    const [userId, setUserId] = useState(null);
 
-    const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-    // Local form state
     const [formCompanyName, setFormCompanyName] = useState('');
     const [formYourName, setFormYourName] = useState('');
     const [formImage, setFormImage] = useState(null);
 
     const fetchUserInfo = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/api/get-userInfo`, {
-                headers: {
-                    'Accept': 'application/json',
-                },
+            const response = await fetch(`http://127.0.0.1:8000/api/get-userInfo`, {
+                headers: { 'Accept': 'application/json' },
             });
             const data = await response.json();
 
-            console.log("API response data:", data);
+            console.log("Fetched user info response:", data);
 
             if (response.ok && data.data && data.data.length > 0) {
                 const user = data.data[0];
-                setCompanyName(user.CompanyName || '');
-                setYourName(user.YourName || '');
-                setImage(user.image ? `${BASE_URL}/storage/${user.image}` : null);
-                setUserId(user.id); // set user id for update
-            } else {
-                console.error('Failed to fetch user info:', data);
+                console.log("User object:", user);
+
+                setCompanyName(user.company_name || '');
+                setYourName(user.your_name || '');
+                setImage(user.image ? `http://127.0.0.1:8000/storage/${user.image}` : null);
+                setUserId(user.id);
+                console.log("Set userId:", user.id);
             }
+
+
         } catch (error) {
             console.error('Fetch error:', error);
         }
     };
+
 
     useEffect(() => {
         fetchUserInfo();
@@ -47,25 +46,65 @@ const DashNav = () => {
     const handleOpenModal = () => {
         setFormCompanyName(companyName);
         setFormYourName(yourName);
-        setFormImage(null); // Reset image input
+        setFormImage(null);
         setShowModal(true);
     };
 
     const handleCloseModal = () => setShowModal(false);
 
+    // Image optimization function
+    const optimizeImage = (file, maxWidth = 800, maxHeight = 800, quality = 0.7) => {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (event) => {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = () => {
+                    let { width, height } = img;
+
+                    // Maintain aspect ratio
+                    if (width > height) {
+                        if (width > maxWidth) {
+                            height = (height * maxWidth) / width;
+                            width = maxWidth;
+                        }
+                    } else {
+                        if (height > maxHeight) {
+                            width = (width * maxHeight) / height;
+                            height = maxHeight;
+                        }
+                    }
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    canvas.toBlob((blob) => {
+                        resolve(blob);
+                    }, 'image/jpeg', quality);
+                };
+            };
+        });
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         const formData = new FormData();
         formData.append('CompanyName', formCompanyName);
         formData.append('YourName', formYourName);
+
         if (formImage instanceof File) {
-            formData.append('image', formImage);
+            const optimizedBlob = await optimizeImage(formImage);
+            const optimizedFile = new File([optimizedBlob], formImage.name, { type: 'image/jpeg' });
+            formData.append('image', optimizedFile);
         }
 
         try {
-            const response = await fetch(`${BASE_URL}/api/edit-userInfo/${userId}`, {
-                method: 'POST', // use 'PUT' if your backend expects it
+            const response = await fetch(`http://127.0.0.1:8000/api/edit-userInfo/${userId}`, {
+                method: 'POST',
                 body: formData,
             });
 
@@ -74,22 +113,20 @@ const DashNav = () => {
             if (response.ok) {
                 alert('User info updated successfully!');
                 setShowModal(false);
-
-                await fetchUserInfo(); // Refresh data after update
-
-                // Reset form state
+                fetchUserInfo();
                 setFormCompanyName('');
                 setFormYourName('');
                 setFormImage(null);
             } else {
-                alert('Update failed: ' + (data.message || 'Check console for details.'));
-                console.error(data);
+                console.error('Error response:', data);
+                alert('Update failed: ' + (data.message || 'Check console.'));
             }
         } catch (error) {
             console.error('Fetch error:', error);
             alert('An error occurred while updating the form.');
         }
     };
+
 
     return (
         <>
@@ -112,11 +149,7 @@ const DashNav = () => {
                             style={{ width: "100px", height: "100px", overflow: "hidden" }}
                         >
                             <img
-                                src={
-                                    image
-                                        ? `${image}?${new Date().getTime()}`
-                                        : "https://i.ibb.co.com/rK7RzDJk/MY-pic-02.jpg"
-                                }
+                                src={image ? `${image}?${new Date().getTime()}` : "https://i.ibb.co.com/rK7RzDJk/MY-pic-02.jpg"}
                                 alt="User"
                                 style={{ width: "100px", height: "100px", objectFit: "cover", borderRadius: "50%" }}
                             />
@@ -166,15 +199,53 @@ const DashNav = () => {
                                             required
                                         />
                                     </div>
+
                                     <div className="mb-3">
                                         <label className="form-label">Image</label>
                                         <input
                                             type="file"
                                             className="form-control"
-                                            onChange={(e) => setFormImage(e.target.files[0])}
+                                            onChange={(e) => {
+                                                if (e.target.files && e.target.files[0]) {
+                                                    setFormImage(e.target.files[0]);
+                                                }
+                                            }}
                                             accept="image/*"
                                         />
+
+                                        {/* Image preview */}
+                                        {formImage && (
+                                            <div className="mt-2 position-relative d-inline-block">
+                                                <img
+                                                    src={typeof formImage === "string" ? formImage : URL.createObjectURL(formImage)}
+                                                    alt="Preview"
+                                                    style={{ width: "100px", height: "100px", objectFit: "cover", borderRadius: "5px" }}
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setFormImage(null)}
+                                                    style={{
+                                                        position: "absolute",
+                                                        top: "-5px",
+                                                        right: "-5px",
+                                                        borderRadius: "50%",
+                                                        border: "none",
+                                                        background: "red",
+                                                        color: "white",
+                                                        width: "20px",
+                                                        height: "20px",
+                                                        cursor: "pointer",
+                                                        padding: 0,
+                                                        lineHeight: "18px",
+                                                        fontSize: "14px"
+                                                    }}
+                                                >
+                                                    &times;
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
+
                                     <div className="modal-footer px-0">
                                         <button type="button" className="btn btn-secondary" onClick={handleCloseModal}>Close</button>
                                         <button type="submit" className="btn btn-primary">Save</button>
