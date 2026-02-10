@@ -45,18 +45,22 @@ const Item = () => {
                                         width: "100%",
                                         height: "220px",
                                         objectFit: "cover",
-                                        borderRadius: "6px",
+                                        borderTopLeftRadius: "15px",
+                                        borderTopRightRadius: "15px",
+                                        borderBottomLeftRadius: "0px",
+                                        borderBottomRightRadius: "0px",
                                         padding: "4px",
                                         marginTop: "4px"
                                     }}
                                 />
+
                                 <div className='card-body text-start d-flex flex-column'>
                                     <h5
                                         className=' mb-1'
-                        
+
                                     >
                                         <strong>Product Name:</strong>   {item.name}
-                                     
+
                                     </h5>
 
 

@@ -45,7 +45,7 @@ const Footer = () => {
                         </div>
                         <hr className='text-white' />
                         <p className='text-center text-white pt-4'>
-                            Copyright by Gazi Construction {new Date().getFullYear()} Design and Develop by <a><span >Hasan Talukder</span></a>
+                            Copyright by Gazi Construction {new Date().getFullYear()} Design and Develop by <a href='https://hasan-portfilo.netlify.app/'><span >Hasan Talukder</span></a>
                         </p>
                     </div>
                 </div>
