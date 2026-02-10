@@ -108,4 +108,12 @@ Follow these steps to run the project locally:
 ### 1️⃣ Clone the repository
 
 ```bash
-git clone <your-repository-link>
+git clone https://github.com/HasanTalukderictian/Construction-Website.git
+
+Install all dependencies
+1.npm install
+2.npm install react-router-dom
+3.npm install bootstrap
+4.npm install @fortawesome/fontawesome-free
+5.npm install jspdf jspdf-autotable
+
