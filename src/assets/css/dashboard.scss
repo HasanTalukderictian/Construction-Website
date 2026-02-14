@@ -1,22 +1,80 @@
-.custom-tour {
-    /* Customize the tour overlay */
-    background-color: rgba(58, 190, 135, 0.7) !important/* Darken the background */
-  }
-  
-  .custom-tour .reactour__button {
-    /* Customize the buttons in the tour */
-    background-color: #e4032e !important;
-    color: white;
-  }
-  
-  .custom-tour .reactour__step {
-    /* Customize the individual steps */
-    background-color: #f0f0f0;
-    border-radius: 10px !important;
-    padding: 15px;
-    font-size: 16px;
-    color: #333;
-  }
+/* Dashboard wrapper */
 
-  
-  
+.dashboard-wrapper {
+    padding-left: 15px;
+    padding-right: 15px;
+    margin: 0 auto;
+    /* center content */
+    max-width: 1400px;
+    /* constrain max width on large screens */
+}
+
+
+/* Desktop Sidebar spacing */
+
+@media (min-width: 992px) {
+    .dashboard-wrapper {
+        padding-left: 270px;
+        /* leave sidebar space */
+        padding-right: 30px;
+    }
+}
+
+
+/* Dashboard Title */
+
+.dashboard-title {
+    font-size: 2rem;
+    @media (max-width: 991px) {
+        font-size: 1.5rem;
+        text-align: center;
+        /* center title on mobile */
+    }
+}
+
+
+/* Cards number styling */
+
+.card-text.display-4 {
+    font-size: 3rem;
+    /* desktop big numbers */
+    @media (max-width: 991px) {
+        font-size: 2rem;
+        /* smaller on mobile */
+    }
+}
+
+
+/* Card Titles */
+
+.card-title-orders,
+.card-title-products,
+.card-title-users {
+    font-size: 1.25rem;
+    @media (max-width: 991px) {
+        font-size: 1rem;
+    }
+}
+
+
+/* Charts styling */
+
+.pie-chart,
+.bar-chart {
+    width: 100%;
+    max-width: 100%;
+    height: 300px;
+    @media (max-width: 767px) {
+        height: 250px;
+    }
+}
+
+
+/* Optional: center charts on mobile */
+
+@media (max-width: 991px) {
+    .pie-chart,
+    .bar-chart {
+        margin: 0 auto;
+    }
+}

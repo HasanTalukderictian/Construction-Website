@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import '../assets/css/nav.scss'
 
 const DashNav = () => {
     const [showModal, setShowModal] = useState(false);
@@ -144,16 +145,17 @@ const DashNav = () => {
                     </div>
 
                     <div className="d-flex align-items-center">
-                        <div
-                            className="rounded-circle bg-primary d-flex justify-content-center align-items-center me-2"
-                            style={{ width: "100px", height: "100px", overflow: "hidden" }}
-                        >
+
+                        <div className="profile-image-wrapper me-2">
                             <img
                                 src={image ? `${image}?${new Date().getTime()}` : "https://i.ibb.co.com/rK7RzDJk/MY-pic-02.jpg"}
                                 alt="User"
-                                style={{ width: "100px", height: "100px", objectFit: "cover", borderRadius: "50%" }}
+                                className="profile-image"
                             />
                         </div>
+
+
+
                         <div className="mt-1 mb-1">
                             <span className="d-block text-muted">Hello,</span>
                             <span className="fw-bold" style={{ cursor: "pointer", color: "#0d6efd" }} onClick={handleOpenModal}>

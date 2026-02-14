@@ -1,0 +1,79 @@
+/* ===== MOBILE HORIZONTAL SCROLL FIX ===== */
+
+.table-scroll-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.custom-order-table {
+    min-width: 1200px;
+    /* force horizontal scroll on small screens */
+    border-collapse: collapse;
+}
+
+
+/* Prevent text breaking */
+
+.custom-order-table th,
+.custom-order-table td {
+    white-space: nowrap;
+    padding: 10px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+
+/* Allow product column to wrap */
+
+.custom-order-table td:nth-child(5) {
+    white-space: normal;
+}
+
+
+/* Smaller padding on mobile */
+
+@media (max-width: 768px) {
+    .container {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    .custom-order-table {
+        font-size: 11px;
+    }
+    .custom-order-table th,
+    .custom-order-table td {
+        padding: 6px;
+    }
+}
+
+
+/* Modal styles */
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.modal-dialog {
+    background: #fff;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
+}
+
+.modal-content p {
+    margin-bottom: 1rem;
+}
+
+.d-flex.gap-2 button {
+    min-width: 80px;
+}
