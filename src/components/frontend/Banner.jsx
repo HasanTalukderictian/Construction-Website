@@ -4,7 +4,6 @@ import "../../../src/assets/css/banner.scss"
 import Img1 from "../../assets/images/gamingpc.png";
 import Img2 from "../../assets/images/pc22.png";
 import Img3 from "../../assets/images/pc33.png";
-import { Link } from "react-router-dom";
 
 const slides = [
     {

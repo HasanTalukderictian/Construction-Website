@@ -3,6 +3,7 @@ import Footer from '../common/Footer';
 import Header from '../common/Header';
 import Banner from './Banner';
 import Item from './Item';
+import Review from "./Review";
 
 const Home = () => {
     const itemRef = useRef(null); // ref to Item section
@@ -22,6 +23,10 @@ const Home = () => {
 
                 <div ref={itemRef}>
                     <Item/>
+                </div>
+
+                <div>
+                    <Review/>
                 </div>
             </main>
 
