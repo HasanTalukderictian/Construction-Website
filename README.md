@@ -91,7 +91,7 @@ Both **Frontend and Admin Panel are fully built using React JS.**
 ## 📸 Project Screenshots
 
 ### Landing Page
-![Dashboard](https://i.ibb.co.com/h1m2yByg/scrnli-KL882tn4-Gz-Do-Rt.png)
+![Dashboard](https://i.ibb.co.com/qL22wr4s/new-landing-page.png)
 
 ### Dashboard
 ![Dashboard](https://i.ibb.co.com/Q3dJ9g0q/Dashboard.png)
