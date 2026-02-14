@@ -7,22 +7,37 @@ export const CartProvider = ({ children }) => {
         const savedCart = localStorage.getItem("cart");
         return savedCart ? JSON.parse(savedCart) : [];
     });
-    
+
+    // Normalize product object before adding
+    const normalizeProduct = (product) => ({
+        id: product.id,
+        product_name: product.product_name || product.name || "",
+        image_url: product.imageUrl || product.image_url || "",
+        price: product.price || 0,
+        description: product.description || "",
+    });
 
     const addToCart = (product) => {
         setCartItems((prev) => {
             const existing = prev.find((item) => item.id === product.id);
             let updatedCart;
+
+            const normalizedProduct = normalizeProduct(product);
+
             if (existing) {
                 updatedCart = prev.map((item) =>
-                    item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+                    item.id === product.id
+                        ? { ...item, quantity: item.quantity + 1 }
+                        : item
                 );
             } else {
-                updatedCart = [...prev, { ...product, quantity: 1 }];
+                updatedCart = [...prev, { ...normalizedProduct, quantity: 1 }];
             }
-            localStorage.setItem("cart", JSON.stringify(updatedCart)); // persist
+
+            localStorage.setItem("cart", JSON.stringify(updatedCart));
             return updatedCart;
         });
+
         console.log("Added to cart:", product);
     };
 
@@ -66,7 +81,13 @@ export const CartProvider = ({ children }) => {
 
     return (
         <CartContext.Provider
-            value={{ cartItems, addToCart, increaseQuantity, decreaseQuantity, removeFromCart }}
+            value={{
+                cartItems,
+                addToCart,
+                increaseQuantity,
+                decreaseQuantity,
+                removeFromCart,
+            }}
         >
             {children}
         </CartContext.Provider>
