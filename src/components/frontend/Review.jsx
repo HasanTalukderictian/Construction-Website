@@ -1,26 +1,24 @@
 import { useState, useEffect, useRef } from 'react';
 import '../../../src/assets/css/testo.scss';
 
+import img1 from '../../assets/images/pexels-pixabay-220453.jpg';
+import img2 from '../../assets/images/pexels-sindre-fs-1040880.jpg';
+import img3 from '../../assets/images/author-2.jpg';
+
 const Review = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [slides, setSlides] = useState([]);
-  const intervalRef = useRef(null); // Ref to hold interval
-
+  const intervalRef = useRef(null);
   const BASE_URL = import.meta.env.VITE_BASE_URL;
 
   // Dummy fallback data
   const dummySlides = [
-    { id: 1, name: "John Doe", designation: "Construction Manager", rating: 5, comment: "Amazing service! Highly recommend.", image: "dummy1.jpg" },
-    { id: 2, name: "Jane Smith", designation: "Architect", rating: 4.5, comment: "Very professional and reliable team.", image: "dummy2.jpg" },
-    { id: 3, name: "Mike Johnson", designation: "Engineer", rating: 4, comment: "Great experience from start to finish.", image: "dummy3.jpg" },
-    { id: 4, name: "Alice Brown", designation: "Designer", rating: 4.8, comment: "Excellent and timely work.", image: "dummy4.jpg" },
-     { id: 5, name: "Alice Brown", designation: "Designer", rating: 4.8, comment: "Excellent and timely work.", image: "dummy4.jpg" },
-     { id: 6, name: "Alice Brown", designation: "Designer", rating: 4.8, comment: "Excellent and timely work.", image: "dummy4.jpg" },
-     { id: 7, name: "Alice Brown", designation: "Designer", rating: 4.8, comment: "Excellent and timely work.", image: "dummy4.jpg" },
-     { id: 8, name: "Alice Brown", designation: "Designer", rating: 4.8, comment: "Excellent and timely work.", image: "dummy4.jpg" },
-     { id: 9, name: "Alice Brown", designation: "Designer", rating: 4.8, comment: "Excellent and timely work.", image: "dummy4.jpg" },
-     { id: 10, name: "Alice Brown", designation: "Designer", rating: 4.8, comment: "Excellent and timely work.", image: "dummy4.jpg" },
-     { id: 11, name: "Alice Brown", designation: "Designer", rating: 4.8, comment: "Excellent and timely work.", image: "dummy4.jpg" },
+    { id: 1, name: "John Doe", designation: "Construction Manager", rating: 5, comment: "Amazing service! Highly recommend.", image: img1 },
+    { id: 2, name: "Jane Smith", designation: "Architect", rating: 4.5, comment: "Very professional and reliable team.", image: img2 },
+    { id: 3, name: "Mike Johnson", designation: "Engineer", rating: 4, comment: "Great experience from start to finish.", image: img3 },
+    { id: 4, name: "Alice Brown", designation: "Designer", rating: 4.8, comment: "Excellent and timely work.", image: img1 },
+    { id: 5, name: "Bob Martin", designation: "Engineer", rating: 4.2, comment: "Reliable and skilled team.", image: img2 },
+    { id: 6, name: "Carol Lee", designation: "Architect", rating: 4.5, comment: "Professional and timely.", image: img3 },
   ];
 
   // Fetch slides from API
@@ -29,13 +27,22 @@ const Review = () => {
       try {
         const response = await fetch(`${BASE_URL}/api/get-testominal`);
         const data = await response.json();
-        if (data.data && data.data.length > 0) setSlides(data.data);
-        else setSlides(dummySlides);
+
+        if (data.data && data.data.length > 0) {
+          const apiSlides = data.data.map(slide => ({
+            ...slide,
+            image: slide.image.startsWith('http') ? slide.image : `${BASE_URL}/storage/${slide.image}`
+          }));
+          setSlides(apiSlides);
+        } else {
+          setSlides(dummySlides);
+        }
       } catch (error) {
         console.error("Error fetching slides:", error);
         setSlides(dummySlides);
       }
     };
+
     fetchSlides();
   }, []);
 
@@ -44,30 +51,28 @@ const Review = () => {
     if (slides.length === 0) return;
 
     intervalRef.current = setInterval(() => {
-      setActiveIndex((prevIndex) => (prevIndex + 1) % slides.length);
-    }, 5000); // Change to 5s
+      nextSlide();
+    }, 5000);
 
-    return () => clearInterval(intervalRef.current); // Cleanup
+    return () => clearInterval(intervalRef.current);
   }, [slides]);
 
-  // Manual next slide
+  // Slide 4 items at a time
+  const slidesToShow = 4;
+
   const nextSlide = () => {
-    setActiveIndex((prevIndex) => (prevIndex + 1) % slides.length);
+    setActiveIndex((prevIndex) => (prevIndex + slidesToShow) % slides.length);
     resetInterval();
   };
 
-  // Manual prev slide
   const prevSlide = () => {
-    setActiveIndex((prevIndex) => (prevIndex - 1 + slides.length) % slides.length);
+    setActiveIndex((prevIndex) => (prevIndex - slidesToShow + slides.length) % slides.length);
     resetInterval();
   };
 
-  // Reset interval when user clicks prev/next
   const resetInterval = () => {
     clearInterval(intervalRef.current);
-    intervalRef.current = setInterval(() => {
-      setActiveIndex((prevIndex) => (prevIndex + 1) % slides.length);
-    }, 5000);
+    intervalRef.current = setInterval(() => nextSlide(), 5000);
   };
 
   return (
@@ -75,23 +80,21 @@ const Review = () => {
       <div className="section-header text-center mb-4">
         <span>Testimonial</span>
         <h2>Customer Reviews</h2>
-        {/* <p>
-          We specialize in a wide range of construction services, including residential and industrial projects.
-        </p> */}
       </div>
 
       <div
         className="swiper-wrapper"
         style={{
-          transform: `translateX(-${activeIndex * 100}%)`,
-          transition: 'transform 0.5s ease-in-out',
+          transform: `translateX(-${(activeIndex / slidesToShow) * 100}%)`,
+          transition: 'transform 0.7s ease-in-out',
+          display: 'flex',
         }}
       >
         {slides.map((slide) => (
           <div key={slide.id} className="swiper-slide">
             <div className="testimonial-card">
               <img
-                src={slide.image.startsWith("http") ? slide.image : `${BASE_URL}/storage/${slide.image}`}
+                src={slide.image}
                 alt={slide.name}
                 className="testimonial-image"
               />
@@ -107,12 +110,8 @@ const Review = () => {
         ))}
       </div>
 
-      <button onClick={prevSlide} className="swiper-button prev-button">
-        ◀
-      </button>
-      <button onClick={nextSlide} className="swiper-button next-button">
-        ▶
-      </button>
+      <button onClick={prevSlide} className="swiper-button prev-button">◀</button>
+      <button onClick={nextSlide} className="swiper-button next-button">▶</button>
     </div>
   );
 };
