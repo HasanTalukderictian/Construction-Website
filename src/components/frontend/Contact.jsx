@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Common from "../common/Common";
 import Footer from "../common/Footer";
 import Header from "../common/Header";
+import '../../assets/css/map.scss';
 
 const Contact = () => {
     const [form, setForm] = useState({
@@ -154,10 +155,13 @@ const Contact = () => {
                         </div>
                     </div>
                 </section>
+
+                {/* Google map section */}
+
                 <section className="py-5">
-                    <div className="container-fuild">
+                    <div className="container"> {/* change from container-fuild to container */}
                         <h3 className="text-center mb-4">Our Location</h3>
-                        <div className="map-responsive">
+                        <div className="map-responsive rounded-4 shadow-sm overflow-hidden">
                             <iframe
                                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.6329379236195!2d90.37009277410068!3d23.76046548839214!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755bf5506eb5c45%3A0x6d13d2265f074f5f!2sAsad%20Gate%20Bus%20Stand!5e0!3m2!1sen!2sbd!4v1730318755072!5m2!1sen!2sbd"
                                 width="100%"
@@ -170,6 +174,7 @@ const Contact = () => {
                         </div>
                     </div>
                 </section>
+
             </main>
             <Footer />
         </>
