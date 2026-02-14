@@ -26,7 +26,7 @@ const Item = () => {
         setTimeout(() => setShowToast(false), 3000); // auto hide after 3s
     };
     return (
-        <section className="section-8 py-5">
+        <section className="section-8 py-0">
             <div className="container mt-5">
                 <div className='section-header text-center'>
                     <h2>New available</h2>

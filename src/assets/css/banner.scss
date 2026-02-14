@@ -1,0 +1,158 @@
+.hero-section {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+    position: relative;
+    transition: 0.6s ease;
+    padding: 20px;
+}
+
+.hero-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    /* allow wrapping on small screens */
+}
+
+.hero-left {
+    width: 50%;
+}
+
+.offer {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.hero-left h1 {
+    font-size: 60px;
+    font-weight: 800;
+    margin: 20px 0;
+}
+
+.price {
+    color: #00ff66;
+    font-weight: bold;
+}
+
+.shop-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 35px;
+    background: white;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+}
+
+.hero-right {
+    width: 50%;
+    position: relative;
+    text-align: right;
+}
+
+.product-img {
+    width: 500px;
+    /* fixed width for all devices */
+    max-width: 100%;
+    transition: 0.5s ease;
+}
+
+.discount-badge {
+    position: absolute;
+    top: 20px;
+    right: 60px;
+    background: #00aaff;
+    padding: 10px 15px;
+    font-weight: bold;
+    transform: rotate(-10deg);
+}
+
+.pagination {
+    position: relative;
+    /* removed absolute so it flows below content */
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.pagination span {
+    cursor: pointer;
+    font-size: 18px;
+    opacity: 0.5;
+    transition: 0.3s;
+}
+
+.pagination span:hover {
+    opacity: 1;
+}
+
+.pagination .active-dot {
+    opacity: 1;
+    font-weight: bold;
+    border-bottom: 2px solid white;
+}
+
+.arrow-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 22px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.arrow-btn:hover {
+    transform: scale(1.2);
+}
+
+
+/* -------- Responsive -------- */
+
+@media (max-width: 992px) {
+    .hero-left,
+    .hero-right {
+        width: 100%;
+        text-align: center;
+    }
+    .hero-left h1 {
+        font-size: 40px;
+    }
+    .product-img {
+        width: 350px;
+        /* smaller fixed width */
+        margin: 0 auto;
+    }
+    .discount-badge {
+        right: 20px;
+        top: 10px;
+    }
+    .shop-btn {
+        margin-top: 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-left h1 {
+        font-size: 28px;
+    }
+    .price {
+        font-size: 16px;
+    }
+    .product-img {
+        width: 250px;
+        /* fixed for very small devices */
+    }
+    .pagination {
+        flex-direction: row;
+        /* keep buttons horizontal */
+        gap: 10px;
+        margin-top: 15px;
+    }
+}
