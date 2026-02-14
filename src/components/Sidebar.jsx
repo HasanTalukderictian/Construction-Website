@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import '../../src/assets/css/Sidebar.scss';
+import { NavLink, useNavigate } from "react-router-dom";
+import "../../src/assets/css/Sidebar.scss";
 
 const Sidebar = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -16,29 +15,29 @@ const Sidebar = () => {
 
     return (
         <>
-            {/* Toggle button for mobile */}
+            {/* Mobile Toggle Button */}
             <button
-                className="btn btn-dark d-lg-none position-fixed p-2"
-                style={{ top: "20px", left: "20px", zIndex: 1050, fontSize: "1.5rem" }}
+                className="menu-btn d-lg-none"
                 onClick={toggleSidebar}
             >
                 ☰
             </button>
 
-            <div
-                className={`d-flex flex-column p-3 vh-100 position-fixed mx-2 sidebar-bg text-white ${isSidebarOpen ? "sidebar-open" : "sidebar-closed"}`}
-                style={{
-                    width: "250px",
-                    transition: "all 0.3s ease",
-                    borderRadius: "15px",
-                    boxShadow: "2px 2px 15px rgba(0, 0, 0, 0.3)",
-                }}
-            >
-                <h2 className="mb-4 text-center fw-bold" style={{ fontFamily: "'Gilroy', sans-serif" }}>
-                    <span className="text-warning">Gazi</span> Builders
-                </h2>
+            {/* Overlay */}
+            {isSidebarOpen && (
+                <div
+                    className="sidebar-overlay d-lg-none"
+                    onClick={toggleSidebar}
+                ></div>
+            )}
 
-                <ul className="nav nav-pills flex-column mb-auto">
+            {/* Sidebar */}
+            <div className={`sidebar-container ${isSidebarOpen ? "open" : ""}`}>
+                <h4 className="brand-title">
+                    <span>Gazi</span> Builders
+                </h4>
+
+                <ul className="nav flex-column">
                     {[
                         { to: "/admin-home", icon: "bi-speedometer2", label: "Dashboard" },
                         { to: "/admin-orders", icon: "bi-receipt", label: "Orders" },
@@ -47,28 +46,24 @@ const Sidebar = () => {
                         { to: "/admin-couirer", icon: "bi-truck", label: "Courier Settings" },
                         { to: "/admin-users", icon: "bi-people", label: "User Settings" }
                     ].map((item, index) => (
-                        <li className="nav-item mb-2" key={index}>
+                        <li key={index} className="nav-item">
                             <NavLink
                                 to={item.to}
+                                onClick={() => setIsSidebarOpen(false)}
                                 className={({ isActive }) =>
-                                    `nav-link d-flex align-items-center gap-2 py-2 px-3 rounded ${isActive ? "active-sidebar" : "text-white"}`
+                                    `nav-link ${isActive ? "active-sidebar" : ""}`
                                 }
                             >
-                                <i className={`bi ${item.icon} fs-5`}></i>
-                                <span className="fw-semibold">{item.label}</span>
+                                <i className={`bi ${item.icon}`}></i>
+                                {item.label}
                             </NavLink>
                         </li>
                     ))}
 
-                    {/* Logout */}
                     <li className="nav-item mt-3">
-                        <button
-                            onClick={handleLogout}
-                            className="nav-link text-white w-100 d-flex align-items-center gap-2 py-2 px-3 rounded logout-btn"
-                            style={{ background: "none", border: "none" }}
-                        >
-                            <i className="bi bi-box-arrow-right fs-5"></i>
-                            <span className="fw-semibold">Logout</span>
+                        <button onClick={handleLogout} className="nav-link logout-btn">
+                            <i className="bi bi-box-arrow-right"></i>
+                            Logout
                         </button>
                     </li>
                 </ul>

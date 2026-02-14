@@ -4,6 +4,7 @@ import DashNav from "./DasNav";
 import Footer from "./Footer";
 import axios from "axios";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
+import '../assets/css/Price.scss'
 
 const Products = () => {
     const [products, setProducts] = useState([]);
@@ -119,7 +120,7 @@ const Products = () => {
                             </button>
                         </div>
 
-                        <table className="table table-bordered table-striped" style={{ tableLayout: "fixed", width: "100%" }}>
+                        <table className="table table-bordered table-striped custom-product-table" style={{ tableLayout: "fixed", width: "100%" }}>
                             <thead className="table-dark">
                                 <tr>
                                     <th>SL</th>

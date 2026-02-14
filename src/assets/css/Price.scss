@@ -1,0 +1,67 @@
+/* ===== TABLE HORIZONTAL SCROLL ===== */
+
+.table-scroll-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    /* smooth scroll on iOS */
+}
+
+
+/* Force minimum width to enable scroll on mobile */
+
+.custom-product-table {
+    min-width: 900px;
+    /* adjust depending on number of columns */
+}
+
+
+/* Prevent breaking of text */
+
+.custom-product-table th,
+.custom-product-table td {
+    white-space: nowrap;
+    padding: 10px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+
+/* Smaller padding and font on mobile */
+
+
+/* Modal responsiveness */
+
+@media (max-width: 768px) {
+    .modal-dialog {
+        max-width: 95%;
+        /* allow modal to nearly fill screen */
+        margin: 1rem auto;
+        /* small vertical margin */
+    }
+    .modal-content {
+        max-height: 90vh;
+        /* prevent modal from being taller than viewport */
+        overflow-y: auto;
+        /* enable scrolling if content exceeds height */
+        padding: 10px;
+    }
+    .modal-body {
+        padding: 10px;
+    }
+    .modal-footer {
+        flex-direction: column;
+        gap: 8px;
+        align-items: stretch;
+    }
+    .modal-footer button {
+        width: 100%;
+        /* buttons full width on mobile */
+    }
+    /* Reduce input padding and font size on mobile */
+    .modal-body input,
+    .modal-body textarea {
+        font-size: 14px;
+        padding: 6px;
+    }
+}

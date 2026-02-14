@@ -1,36 +1,108 @@
-/* Hover effect for sidebar links */
-.nav-link {
-    transition: all 0.3s ease; /* Smooth transition */
-  }
-  
-  .nav-link:hover {
-    background-color: #69ad87; /* Primary hover color */
-    color: #fff !important; /* Text color on hover */
-  }
-.sidebar-bg {
-    background: linear-gradient(135deg, #198754, #20c997);
+/* ===== MENU BUTTON ===== */
+
+.menu-btn {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1200;
+    background: #111;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    font-size: 22px;
+    border-radius: 6px;
 }
 
+
+/* ===== SIDEBAR BASE ===== */
+
+.sidebar-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 250px;
+    background: linear-gradient(135deg, #198754, #20c997);
+    padding: 20px;
+    transition: transform 0.3s ease;
+    z-index: 1100;
+}
+
+
+/* Desktop */
+
+@media (min-width: 992px) {
+    .sidebar-container {
+        transform: translateX(0);
+        border-radius: 15px;
+        margin: 10px;
+    }
+}
+
+
+/* Mobile Hidden */
+
+@media (max-width: 991px) {
+    .sidebar-container {
+        width: 260px;
+        transform: translateX(-100%);
+        border-radius: 0;
+        /* 🔥 important */
+        margin: 0;
+    }
+    .sidebar-container.open {
+        transform: translateX(0);
+    }
+}
+
+
+/* ===== OVERLAY ===== */
+
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1050;
+}
+
+
+/* ===== BRAND ===== */
+
+.brand-title {
+    color: white;
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+
+.brand-title span {
+    color: #ffc107;
+}
+
+
+/* ===== LINKS ===== */
+
 .nav-link {
-    transition: all 0.3s ease;
-    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: 0.3s;
 }
 
 .nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    color: #fff;
+    background: rgba(255, 255, 255, 0.2);
 }
 
 .active-sidebar {
-    background-color: rgba(255, 255, 255, 0.3);
-    color: #fff !important;
-    font-weight: bold;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    background: #0d6efd;
 }
 
-.logout-btn:hover {
-    background-color: rgba(255, 0, 0, 0.3);
-    color: #fff;
+.logout-btn {
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
 }
-
-
