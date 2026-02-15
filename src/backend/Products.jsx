@@ -10,6 +10,7 @@ const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(""); // <-- search term state
 
   // Form States
   const [productName, setProductName] = useState("");
@@ -58,14 +59,33 @@ const Products = () => {
   // ===============================
   // Pagination logic
   // ===============================
+  const filteredProducts = products.filter((item) =>
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentProducts = products.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(products.length / itemsPerPage);
+  const currentProducts = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 
   const goToPage = (pageNumber) => setCurrentPage(pageNumber);
   const nextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+    
+const handleDelete = async (id) => {
+  if (!window.confirm("Are you sure you want to delete this product?")) return;
+
+  try {
+    await axios.delete(`http://127.0.0.1:8000/api/products-del/${id}`);
+    setProducts((prev) => prev.filter((item) => item.id !== id)); // Remove from state
+    alert("Product deleted successfully!");
+  } catch (err) {
+    console.error(err);
+    alert("Failed to delete product!");
+  }
+};
+
+
 
   // ===============================
   // Submit Product to Laravel API
@@ -114,24 +134,63 @@ const Products = () => {
         <div className="flex-grow-1">
           <DashNav />
           <div className="container mt-4">
-            <div className="d-flex justify-content-between align-items-center mb-3">
+
+            {/* Header with Upload + Search */}
+            <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap">
               <h2>Product List</h2>
-              <button className="btn btn-primary" onClick={() => setShowModal(true)}>
-                Upload Product
-              </button>
+
+              <div className="d-flex align-items-center flex-wrap">
+                {/* Search Input with Icon */}
+                <div style={{ position: "relative", width: "250px", marginRight: "15px" }}>
+                  <input
+                    type="text"
+                    placeholder="Search products..."
+                    className="form-control"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    style={{ paddingRight: "35px" }} // space for icon
+                  />
+                  <i
+                    className="bi bi-search"
+                    style={{
+                      position: "absolute",
+                      right: "10px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      cursor: "pointer",
+                      color: "#555",
+                      fontSize: "1.1rem",
+                    }}
+                    onClick={() => {
+                      // trigger search explicitly if needed
+                      setCurrentPage(1); // reset pagination to page 1
+                    }}
+                  ></i>
+                </div>
+
+                {/* Upload Button */}
+                <button
+                  className="btn btn-primary mb-2"
+                  onClick={() => setShowModal(true)}
+                  style={{ height: "35px", padding: "0 12px" }} // height কমানো এবং horizontal padding ঠিক করা
+                >
+                  Upload Product
+                </button>
+              </div>
             </div>
+
 
             {/* Product Table */}
             <table className="table table-bordered table-striped custom-product-table" style={{ tableLayout: "fixed", width: "100%" }}>
               <thead className="table-dark">
                 <tr>
                   <th>SL</th>
-                  <th>ID</th>
                   <th>Image</th>
                   <th>Name</th>
                   <th>Price</th>
                   <th>Rating</th>
                   <th>Quantity</th>
+                  <th>ACTION</th> {/* New Action Column */}
                 </tr>
               </thead>
               <tbody>
@@ -139,29 +198,45 @@ const Products = () => {
                   <tr>
                     <td colSpan="7" className="text-center">Loading...</td>
                   </tr>
-                ) : products.length === 0 ? (
+                ) : filteredProducts.length === 0 ? (
                   <tr>
-                    <td colSpan="7" className="text-center">No Products Available</td>
+                    <td colSpan="7" className="text-center text-danger">No Products Found</td>
                   </tr>
                 ) : (
                   currentProducts.map((item, index) => (
                     <tr key={item.id}>
                       <td>{indexOfFirstItem + index + 1}</td>
-                      <td>{item.id}</td>
                       <td>
                         {item.image_url ? (
-                          <img src={item.image_url} width="60" height="60" style={{ objectFit: "cover", borderRadius: "5px" }} alt={item.name} />
+                          <img
+                            src={item.image_url}
+                            width="60"
+                            height="60"
+                            style={{ objectFit: "cover", borderRadius: "5px" }}
+                            alt={item.name}
+                          />
                         ) : "No Image"}
                       </td>
                       <td>{item.name}</td>
                       <td>{item.price}৳</td>
                       <td>{item.rating}</td>
                       <td>{item.quantity}</td>
+                      <td className="text-center">
+                        <button
+                          onClick={() => handleDelete(item.id)}
+                          className="btn btn-danger btn-sm"
+                          title="Delete Product"
+                          style={{ padding: "4px 8px" }}
+                        >
+                          <i className="bi bi-trash"></i> {/* Bootstrap Icons Trash */}
+                        </button>
+                      </td>
                     </tr>
                   ))
                 )}
               </tbody>
             </table>
+
 
             {/* Pagination */}
             <nav>
