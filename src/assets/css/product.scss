@@ -1,18 +1,41 @@
 .highlight-btn {
-  border: none;
-  transition: all 0.3s ease;
+    border: none;
+    transition: all 0.3s ease;
 }
 
 .highlight-btn:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
-
 .product-image:hover img.zoom-image {
-  transform: scale(1.2); /* Zoom in */
+    transform: scale(1.2);
+    /* Zoom in */
 }
 
 .product-image:hover .overlay {
-  opacity: 1; /* Show overlay */
+    opacity: 1;
+    /* Show overlay */
+}
+
+.search-box {
+    position: relative;
+    width: 220px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 8px 35px 8px 12px;
+    border-radius: 25px;
+    border: 1px solid #ccc;
+}
+
+.search-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: green;
+    /* MUST */
 }

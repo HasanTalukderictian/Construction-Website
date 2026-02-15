@@ -28,10 +28,24 @@ const Item = () => {
     return (
         <section className="section-8 py-0">
             <div className="container mt-5">
-                <div className='section-header text-center'>
-                    <h2>New available</h2>
-                    <p>We offer a diverse array of construction services...</p>
+                <div className="section-header d-flex justify-content-between align-items-center flex-wrap">
+
+                    <div>
+                        <h2>New available</h2>
+                        <p>We offer a diverse array of construction services...</p>
+                    </div>
+
+                    <div className="search-box">
+                        <input
+                            type="text"
+                            placeholder="Search products..."
+                            className="search-input"
+                        />
+                        <i className="bi bi-search search-icon"></i>
+                    </div>
+
                 </div>
+
 
                 <div className='row pt-3'>
                     {team.map((item) => (
