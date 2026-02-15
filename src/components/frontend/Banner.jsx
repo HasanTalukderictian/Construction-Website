@@ -1,5 +1,5 @@
-import { useState } from "react";
-import "../../../src/assets/css/banner.scss"
+import { useState, useEffect } from "react";
+import "../../../src/assets/css/banner.scss";
 
 import Img1 from "../../assets/images/gamingpc.png";
 import Img2 from "../../assets/images/pc22.png";
@@ -32,6 +32,17 @@ const slides = [
 const Banner = ({ scrollToItem }) => {
     const [active, setActive] = useState(0);
 
+    // ✅ Auto Slide Every 3 Seconds
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setActive((prev) =>
+                prev === slides.length - 1 ? 0 : prev + 1
+            );
+        }, 3000); // 3 seconds
+
+        return () => clearInterval(interval); // cleanup
+    }, []);
+
     return (
         <section
             className="hero-section"
@@ -44,9 +55,16 @@ const Banner = ({ scrollToItem }) => {
                     <h1>{slides[active].title}</h1>
                     <h4 className="price">{slides[active].price}</h4>
 
-                    {/* Use onClick instead of Link */}
-                    <button className="shop-btn w-80 ms-2" onClick={scrollToItem}
-                    style={{ backgroundColor: "#e4032e", color: "#fff", fontWeight: "bold",  borderRadius: "12px"}}>
+                    <button
+                        className="shop-btn w-80 ms-2"
+                        onClick={scrollToItem}
+                        style={{
+                            backgroundColor: "#e4032e",
+                            color: "#fff",
+                            fontWeight: "bold",
+                            borderRadius: "12px"
+                        }}
+                    >
                         SHOP NOW
                     </button>
                 </div>
@@ -57,7 +75,9 @@ const Banner = ({ scrollToItem }) => {
                         alt="product"
                         className="product-img"
                     />
-                    <div className="discount-badge">UP TO 50% OFF</div>
+                    <div className="discount-badge">
+                        UP TO 50% OFF
+                    </div>
                 </div>
             </div>
 
@@ -65,7 +85,11 @@ const Banner = ({ scrollToItem }) => {
                 <button
                     className="arrow-btn"
                     onClick={() =>
-                        setActive(active === 0 ? slides.length - 1 : active - 1)
+                        setActive(
+                            active === 0
+                                ? slides.length - 1
+                                : active - 1
+                        )
                     }
                 >
                     &#8592;
@@ -84,7 +108,11 @@ const Banner = ({ scrollToItem }) => {
                 <button
                     className="arrow-btn"
                     onClick={() =>
-                        setActive(active === slides.length - 1 ? 0 : active + 1)
+                        setActive(
+                            active === slides.length - 1
+                                ? 0
+                                : active + 1
+                        )
                     }
                 >
                     &#8594;
@@ -93,6 +121,5 @@ const Banner = ({ scrollToItem }) => {
         </section>
     );
 };
-
 
 export default Banner;

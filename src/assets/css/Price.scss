@@ -4,61 +4,69 @@
     width: 100%;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    /* smooth scroll on iOS */
 }
 
 
 /* Force minimum width to enable scroll on mobile */
 
 .custom-product-table {
-    min-width: 900px;
-    /* adjust depending on number of columns */
+    min-width: 950px;
 }
 
 
-/* Prevent breaking of text */
+/* Prevent text breaking */
 
 .custom-product-table th,
 .custom-product-table td {
     white-space: nowrap;
     padding: 10px;
-    text-align: left;
     vertical-align: middle;
 }
 
 
-/* Smaller padding and font on mobile */
-
-
-/* Modal responsiveness */
+/* ===== MOBILE OPTIMIZATION ===== */
 
 @media (max-width: 768px) {
+    /* Reduce container padding */
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+    /* Smaller heading */
+    h2 {
+        font-size: 20px;
+    }
+    /* Upload button full width */
+    .btn-primary {
+        font-size: 14px;
+        padding: 6px 10px;
+    }
+    /* Pagination smaller */
+    .pagination {
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+    .pagination .page-link {
+        padding: 6px 8px;
+        font-size: 14px;
+    }
+    /* Modal responsive */
     .modal-dialog {
         max-width: 95%;
-        /* allow modal to nearly fill screen */
         margin: 1rem auto;
-        /* small vertical margin */
     }
     .modal-content {
         max-height: 90vh;
-        /* prevent modal from being taller than viewport */
         overflow-y: auto;
-        /* enable scrolling if content exceeds height */
-        padding: 10px;
-    }
-    .modal-body {
         padding: 10px;
     }
     .modal-footer {
         flex-direction: column;
         gap: 8px;
-        align-items: stretch;
     }
     .modal-footer button {
         width: 100%;
-        /* buttons full width on mobile */
     }
-    /* Reduce input padding and font size on mobile */
     .modal-body input,
     .modal-body textarea {
         font-size: 14px;
