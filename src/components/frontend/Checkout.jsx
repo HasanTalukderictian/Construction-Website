@@ -99,25 +99,65 @@ const Checkout = () => {
         <>
             <Header />
             <div className="container my-5">
-                <h2>Checkout</h2>
-                <div className="row mt-4">
-                    <div className="col-md-6 mx-auto">
-                        <input type="text" className="form-control mb-3" style={{ height: "55px" }} placeholder="Customer Name" value={customerName} onChange={e => setCustomerName(e.target.value)} />
-                        <input type="text" className="form-control mb-3" style={{ height: "55px" }} placeholder="Phone Number" value={phone} onChange={e => { const val = e.target.value; if (/^\d*$/.test(val)) setPhone(val); }} />
-                        <textarea className="form-control mb-3" placeholder="Full Address" value={address} onChange={e => setAddress(e.target.value)}></textarea>
+                <h2 className="text-center mb-4" style={{ color: "#2D5B78", fontWeight: "700" }}>Checkout</h2>
 
-                        <select className="form-select mb-3" value={selectedDistrict} style={{ height: "55px" }} onChange={e => setSelectedDistrict(e.target.value)}>
-                            <option value="">Select District</option>
-                            {districts.map((d, index) => <option key={index} value={d.district}>{d.district}</option>)}
-                        </select>
-                        <select className="form-select mb-4" value={selectedThana} style={{ height: "55px" }} onChange={e => setSelectedThana(e.target.value)} disabled={!selectedDistrict}>
-                            <option value="">Select Thana</option>
-                            {thanas.map((t, index) => <option key={index} value={t}>{t}</option>)}
-                        </select>
+                <div className="row justify-content-center gap-4">
+                    {/* Customer Form */}
+                    <div className="col-md-6">
+                        <div className="p-4 shadow-lg rounded-4" style={{ background: "#f9f9f9" }}>
+                            <h5 className="mb-4 text-primary fw-bold">Your Information</h5>
 
-                        <button className="btn btn-success w-100" onClick={handleConfirmOrder} disabled={orderSubmitted}>
-                            {orderSubmitted ? "Order Submitted" : "Confirm Order"}
-                        </button>
+                            <input type="text" className="form-control mb-3 rounded-3" style={{ height: "55px", boxShadow: "0 2px 10px rgba(0,0,0,0.05)" }} placeholder="Customer Name" value={customerName} onChange={e => setCustomerName(e.target.value)} />
+
+                            <input type="text" className="form-control mb-3 rounded-3" style={{ height: "55px", boxShadow: "0 2px 10px rgba(0,0,0,0.05)" }} placeholder="Phone Number" value={phone} onChange={e => { const val = e.target.value; if (/^\d*$/.test(val)) setPhone(val); }} />
+
+                            <textarea className="form-control mb-3 rounded-3" placeholder="Full Address" value={address} onChange={e => setAddress(e.target.value)} style={{ height: "100px", boxShadow: "0 2px 10px rgba(0,0,0,0.05)" }}></textarea>
+
+                            <select className="form-select mb-3 rounded-3" value={selectedDistrict} style={{ height: "55px", boxShadow: "0 2px 10px rgba(0,0,0,0.05)" }} onChange={e => setSelectedDistrict(e.target.value)}>
+                                <option value="">Select District</option>
+                                {districts.map((d, index) => <option key={index} value={d.district}>{d.district}</option>)}
+                            </select>
+
+                            <select className="form-select mb-4 rounded-3" value={selectedThana} style={{ height: "55px", boxShadow: "0 2px 10px rgba(0,0,0,0.05)" }} onChange={e => setSelectedThana(e.target.value)} disabled={!selectedDistrict}>
+                                <option value="">Select Thana</option>
+                                {thanas.map((t, index) => <option key={index} value={t}>{t}</option>)}
+                            </select>
+
+                            <button className={`btn w-100 text-white fw-bold ${orderSubmitted ? "btn-secondary" : "btn-success"}`} style={{ height: "50px", fontSize: "16px" }} onClick={handleConfirmOrder} disabled={orderSubmitted}>
+                                {orderSubmitted ? "Order Submitted" : "Confirm Order"}
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Order Summary */}
+                    <div className="col-md-5">
+                        <div className="p-4 shadow-lg rounded-4" style={{ background: "#fff7e6" }}>
+                            <h5 className="mb-4 text-warning fw-bold">Order Summary</h5>
+                            {cartItems?.map((item, idx) => (
+                                <div key={idx} className="d-flex align-items-center mb-3 p-2 rounded-3" style={{ background: "#ffffff", boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}>
+                                    <img src={item.image_url} alt={item.product_name} style={{ width: "60px", height: "60px", objectFit: "cover", borderRadius: "8px" }} />
+                                    <div className="ms-3 flex-grow-1">
+                                        <p className="mb-1 fw-bold" style={{ fontSize: "14px" }}>{item.product_name}</p>
+                                        <p className="mb-0 text-muted" style={{ fontSize: "13px" }}>Qty: {item.quantity}</p>
+                                    </div>
+                                    <p className="fw-bold mb-0">{item.price * item.quantity} ৳</p>
+                                </div>
+                            ))}
+
+                            <hr />
+                            <div className="d-flex justify-content-between fw-bold mb-2">
+                                <span>Subtotal</span>
+                                <span>{totalPrice} ৳</span>
+                            </div>
+                            <div className="d-flex justify-content-between fw-bold mb-2">
+                                <span>Delivery Charge</span>
+                                <span>{deliveryCharge} ৳</span>
+                            </div>
+                            <div className="d-flex justify-content-between fw-bold fs-5 text-success">
+                                <span>Total</span>
+                                <span>{finalTotal} ৳</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
