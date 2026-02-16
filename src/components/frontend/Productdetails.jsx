@@ -94,7 +94,7 @@ const Productdetails = () => {
                         <p><strong>Price:</strong> {product.price}৳</p>
                         <p><strong>Rating:</strong> ⭐ {product.rating}</p>
                         <p><strong>Quantity:</strong> {product.quantity}</p>
-                        <p>{product.description}</p>
+                         <div dangerouslySetInnerHTML={{ __html: product.description }} />
 
                         <div className="mt-4 text-center">
                             <button

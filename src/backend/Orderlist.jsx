@@ -523,7 +523,7 @@ const Orderlist = () => {
                             </div>
 
                             <div className="modal-footer">
-                                <button className="btn btn-success" onClick={() => setShowModal(false)}>
+                                <button className="btn btn-success"  style={{ backgroundColor: '#ebb434', borderColor: '#ebb434' }}  onClick={() => setShowModal(false)}>
                                     Close
                                 </button>
 
