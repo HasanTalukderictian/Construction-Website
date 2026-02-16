@@ -36,7 +36,7 @@ const Cart = () => {
         <>
             <Header />
             <div className="container mt-5">
-                <h2>My Cart</h2>
+                <h2>Your Cart</h2>
 
                 {cartItems.length === 0 ? (
                     <p>Your cart is empty</p>
