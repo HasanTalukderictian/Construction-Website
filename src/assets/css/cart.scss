@@ -1,0 +1,11 @@
+.form-check-input[type="radio"] {
+    width: 18px;
+    height: 18px;
+}
+
+@media (max-width: 767px) {
+    .form-check-input[type="radio"] {
+        width: 22px;
+        height: 22px;
+    }
+}

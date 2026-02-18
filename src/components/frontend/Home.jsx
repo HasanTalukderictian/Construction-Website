@@ -1,4 +1,5 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import Footer from '../common/Footer';
 import Header from '../common/Header';
 import Banner from './Banner';
@@ -7,12 +8,22 @@ import Review from "./Review";
 import '../../assets/css/Global.scss';
 
 const Home = () => {
-    const itemRef = useRef(null); // ref to Item section
+
+    const itemRef = useRef(null);
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (location.state?.scrollTo === "items") {
+            itemRef.current?.scrollIntoView({ behavior: "smooth" });
+
+            // ✅ scroll করার পর state clear করে দিচ্ছি
+            navigate("/", { replace: true });
+        }
+    }, [location, navigate]);
 
     const scrollToItem = () => {
-        if (itemRef.current) {
-            itemRef.current.scrollIntoView({ behavior: "smooth" });
-        }
+        itemRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
     return (
@@ -26,12 +37,9 @@ const Home = () => {
                     <Item />
                 </div>
 
-                <div>
-                    <Review />
-                </div>
+                <Review />
             </main>
 
-            {/* ✅ WhatsApp Floating Button */}
             <a
                 href="https://wa.me/8801768712230?text=Hello%20I%20want%20to%20know%20about%20your%20products"
                 target="_blank"
