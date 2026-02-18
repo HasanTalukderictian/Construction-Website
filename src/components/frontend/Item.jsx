@@ -68,7 +68,7 @@ const Item = () => {
             <div className="text-center text-danger w-100">No products found</div>
           ) : (
             filteredTeam.map((item) => (
-              <div className='col-md-6 col-lg-3 mb-4' key={item.id}>
+              <div className='col-6 col-md-6 col-lg-3 mb-4' key={item.id}>
                 <div className='card h-100 shadow border-0 p-2 d-flex flex-column'>
 
                   <img

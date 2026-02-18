@@ -41,3 +41,33 @@
         box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
     }
 }
+
+
+/* Desktop default থাকবে আগের মতো */
+
+.related-products .card {
+    width: 200px;
+}
+
+
+/* 📱 Mobile view */
+
+@media (max-width: 768px) {
+    .related-products .d-flex {
+        gap: 10px !important;
+    }
+    .related-products .card {
+        width: 48% !important;
+        /* 2টা parallel */
+    }
+    .related-products .card img {
+        height: 130px !important;
+        /* একটু ছোট করলে সুন্দর দেখাবে */
+    }
+    .related-products .card-body {
+        padding: 10px;
+    }
+    .related-products .card-title {
+        font-size: 14px !important;
+    }
+}

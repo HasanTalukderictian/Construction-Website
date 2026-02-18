@@ -130,35 +130,39 @@ const Checkout = () => {
                     </div>
 
                     {/* Order Summary */}
-                    <div className="col-md-5">
-                        <div className="p-4 shadow-lg rounded-4" style={{ background: "#fff7e6" }}>
-                            <h5 className="mb-4 text-warning fw-bold">Order Summary</h5>
-                            {cartItems?.map((item, idx) => (
-                                <div key={idx} className="d-flex align-items-center mb-3 p-2 rounded-3" style={{ background: "#ffffff", boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}>
-                                    <img src={item.image_url} alt={item.product_name} style={{ width: "60px", height: "60px", objectFit: "cover", borderRadius: "8px" }} />
-                                    <div className="ms-3 flex-grow-1">
-                                        <p className="mb-1 fw-bold" style={{ fontSize: "14px" }}>{item.product_name}</p>
-                                        <p className="mb-0 text-muted" style={{ fontSize: "13px" }}>Qty: {item.quantity}</p>
+                    {!orderSubmitted && (
+                        <div className="col-md-5">
+                            <div className="p-4 shadow-lg rounded-4" style={{ background: "#fff7e6" }}>
+                                <h5 className="mb-4 text-warning fw-bold">Order Summary</h5>
+                                {cartItems?.map((item, idx) => (
+                                    <div key={idx} className="d-flex align-items-center mb-3 p-2 rounded-3" style={{ background: "#ffffff", boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}>
+                                        <img src={item.image_url} alt={item.product_name} style={{ width: "60px", height: "60px", objectFit: "cover", borderRadius: "8px" }} />
+                                        <div className="ms-3 flex-grow-1">
+                                            <p className="mb-1 fw-bold" style={{ fontSize: "14px" }}>{item.product_name}</p>
+                                            <p className="mb-0 text-muted" style={{ fontSize: "13px" }}>Qty: {item.quantity}</p>
+                                        </div>
+                                        <p className="fw-bold mb-0">{item.price * item.quantity} ৳</p>
                                     </div>
-                                    <p className="fw-bold mb-0">{item.price * item.quantity} ৳</p>
-                                </div>
-                            ))}
+                                ))}
 
-                            <hr />
-                            <div className="d-flex justify-content-between fw-bold mb-2">
-                                <span>Subtotal</span>
-                                <span>{totalPrice} ৳</span>
-                            </div>
-                            <div className="d-flex justify-content-between fw-bold mb-2">
-                                <span>Delivery Charge</span>
-                                <span>{deliveryCharge} ৳</span>
-                            </div>
-                            <div className="d-flex justify-content-between fw-bold fs-5 text-success">
-                                <span>Total</span>
-                                <span>{finalTotal} ৳</span>
+                                <hr />
+                                <div className="d-flex justify-content-between fw-bold mb-2">
+                                    <span>Subtotal</span>
+                                    <span>{totalPrice} ৳</span>
+                                </div>
+                                <div className="d-flex justify-content-between fw-bold mb-2">
+                                    <span>Delivery Charge</span>
+                                    <span>{deliveryCharge} ৳</span>
+                                </div>
+                                <div className="d-flex justify-content-between fw-bold fs-5 text-success">
+                                    <span>Total</span>
+                                    <span>{finalTotal} ৳</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    )}
+
+
                 </div>
 
                 <div style={{ position: "fixed", top: 20, right: 20, zIndex: 9999 }}>

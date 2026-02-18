@@ -55,3 +55,48 @@
     font-size: 18px;
     pointer-events: none;
 }
+
+
+/* 📱 Mobile Optimization Only */
+
+@media (max-width: 768px) {
+    /* Card padding kom + curve kom */
+    .section-8 .card {
+        padding: 8px !important;
+        border-radius: 8px !important;
+    }
+    /* Image height + curve */
+    .section-8 .card img {
+        height: 150px !important;
+        border-top-left-radius: 8px !important;
+        border-top-right-radius: 8px !important;
+    }
+    /* Text size kom */
+    .section-8 .card h5 {
+        font-size: 14px !important;
+    }
+    .section-8 .card p {
+        font-size: 12px !important;
+        margin-bottom: 4px !important;
+    }
+    /* 🔥 Card content left aligned */
+    .section-8 .card .card-body {
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+        text-align: left !important;
+    }
+    /* Button container flex & left start */
+    .section-8 .card .text-center {
+        display: flex !important;
+        justify-content: flex-start !important;
+        gap: 6px;
+        text-align: left !important;
+    }
+    /* Buttons parallel, fit width */
+    .section-8 .card .btn {
+        width: 48% !important;
+        margin: 0 !important;
+        padding: 3px 1px !important;
+        font-size: 12px !important;
+    }
+}
