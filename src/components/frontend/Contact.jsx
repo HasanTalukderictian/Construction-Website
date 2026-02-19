@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Common from "../common/Common";
+import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
 import Footer from "../common/Footer";
 import Header from "../common/Header";
 import '../../assets/css/map.scss';
@@ -51,16 +51,23 @@ const Contact = () => {
     return (
         <>
             <Header />
+            <div className="about-section">
+                <div className="container text-center">
+                    <div className="py-5">
+                        <h2 className="text-white m-0">Contact Us</h2>
+                        <p className="text-white m-2">
+                            Quality is our promise, and client satisfaction is our top priority.
+                        </p>
+                    </div>
+                </div>
+            </div>
             <main>
-                <Common
-                    preHeading="Quality, Integrity, Value"
-                    heading="Contact Us"
-                    text="We excel at transforming visions into reality through outstanding precision."
-                />
-                <section className="section-9 py-5">
+
+
+                <section className="section-9 py-0">
                     <div className="container">
                         <div className="section-header text-center">
-                            <h2>Contact Us</h2>
+                            <h2>Get in Touch with Us</h2>
                             <p>Our dedicated experts are here to help you. Fill out the form below, and we’ll be in touch shortly.</p>
                         </div>
                         <div className="row">
@@ -68,9 +75,9 @@ const Contact = () => {
                                 <div className="card rounded-5 shadow border-0">
                                     <div className="card-body p-4">
                                         <h3>Call Us</h3>
-                                        <div><a href="tel:000123678" style={{ textDecoration: 'none' }}>(000-123-678)</a></div>
+                                        <div><a href="tel:000123678" style={{ textDecoration: 'none' }}>(01768712230)</a></div>
                                         <h3 className="mt-4">Email Us</h3>
-                                        <div><a href="mailto:example@gmail.com" style={{ textDecoration: 'none' }}>example@gmail.com</a></div>
+                                        <div><a href="mailto:example@gmail.com" style={{ textDecoration: 'none' }}>hasantalukdercou@gmail.com</a></div>
                                         <h3 className="mt-4">Address</h3>
                                         <div>Mohampur 12/A/234</div>
                                         <div>Luckdown, Uttar, Paron</div>
@@ -157,23 +164,52 @@ const Contact = () => {
                 </section>
 
                 {/* Google map section */}
-
                 <section className="py-5">
-                    <div className="container"> {/* change from container-fuild to container */}
-                        <h3 className="text-center mb-4">Our Location</h3>
-                        <div className="map-responsive rounded-4 shadow-sm overflow-hidden">
-                            <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.6329379236195!2d90.37009277410068!3d23.76046548839214!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755bf5506eb5c45%3A0x6d13d2265f074f5f!2sAsad%20Gate%20Bus%20Stand!5e0!3m2!1sen!2sbd!4v1730318755072!5m2!1sen!2sbd"
-                                width="100%"
-                                height="550"
-                                style={{ border: 0 }}
-                                allowFullScreen
-                                loading="lazy"
-                                referrerPolicy="no-referrer-when-downgrade"
-                            ></iframe>
+                    <div className="container">
+                        <div className="row">
+
+                            {/* Left Bag: Contact Info */}
+                            <div className="col-md-6 mb-4 mb-md-0 d-flex align-items-stretch">
+                                <div className="contact-info p-4 rounded-3 w-100">
+                                    <h3 className="mb-3 mt-0">Our Location</h3>
+                                    <p className="mt-0 d-flex align-items-center">
+                                        <FaMapMarkerAlt className="me-2" />
+                                        Mohampur, Luckdown, Uttar, Paron
+                                    </p>
+                                    <p className="mt-0 d-flex align-items-center">
+                                        <FaPhoneAlt className="me-2" />
+                                        01768712230
+                                    </p>
+                                    <p className="mt-0 d-flex align-items-center">
+                                        <FaEnvelope className="me-2" />
+                                        hasantalukdercou@gmail.com
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Right Bag: Map */}
+                            <div className="col-md-6 d-flex align-items-stretch">
+                                <div
+                                    className="map-responsive rounded-4 shadow-sm overflow-hidden w-100"
+                                    style={{ minHeight: '250px', maxHeight: '350px' }}
+                                >
+                                    <iframe
+                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.6329379236195!2d90.37009277410068!3d23.76046548839214!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755bf5506eb5c45%3A0x6d13d2265f074f5f!2sAsad%20Gate%20Bus%20Stand!5e0!3m2!1sen!2sbd!4v1730318755072!5m2!1sen!2sbd"
+                                        width="100%"
+                                        height="100%"
+                                        style={{ border: 0 }}
+                                        allowFullScreen
+                                        loading="lazy"
+                                        referrerPolicy="no-referrer-when-downgrade"
+                                    ></iframe>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </section>
+
+
 
             </main>
             <Footer />

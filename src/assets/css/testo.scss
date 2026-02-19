@@ -1,6 +1,6 @@
 .swiper-container {
     position: relative;
-    width: 100%;
+    width: 80%;
     padding: auto;
     margin: 0 auto;
     margin-top: 10px;
@@ -12,18 +12,18 @@
     display: flex;
     height: 400px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    /* Subtle shadow */
     border-radius: 10px;
-    /* Optional: adds rounded corners */
     background-color: #fff;
-    /* Optional: adds a background to the container */
     transition: transform 0.5s ease;
+    gap: 10px;
+    /* 🔥 Reduce gap between slides */
 }
 
 .swiper-slide {
     min-width: 100%;
     box-sizing: border-box;
-    padding: 20px;
+    padding: 10px;
+    /* 🔥 Reduce slide padding to make cards closer */
 }
 
 .testimonial-card {
@@ -45,19 +45,19 @@
     object-fit: cover;
 }
 
-.prev-button {
+.prev-button,
+.next-button {
     position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.prev-button {
     left: 10px;
-    top: 55%;
-    transform: translateY(100%) !important;
 }
 
 .next-button {
-    position: absolute;
     right: 10px;
-    top: 55%;
-    transform: translateY(100%) !important;
-    ;
 }
 
 h3 {
@@ -80,7 +80,6 @@ p {
     color: #faf7f7;
     border: none;
     padding: 15px 20px;
-    /* Increase padding to make buttons bigger */
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -89,55 +88,36 @@ p {
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease;
     font-size: 1.5rem;
-    /* Increase font size for larger arrow icons */
-}
-
-.prev-button {
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.next-button {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.swiper-button i {
-    font-size: 4 rem;
-    /* Size of the arrow icon */
 }
 
 .swiper-button:hover {
     background: #0056b3;
-    /* Darker background on hover */
+}
+
+.swiper-button i {
+    font-size: 4rem;
 }
 
 
-/* Media queries to adjust the swiper slide visibility */
+/* Media queries */
 
 @media (min-width: 1200px) {
-    /* For large screens, show 4 items */
     .swiper-slide {
         min-width: 25%;
-        /* 100% / 4 slides */
+        /* 4 items */
     }
 }
 
 @media (min-width: 768px) and (max-width: 1199px) {
-    /* For medium screens, show 3 items */
     .swiper-slide {
         min-width: 33.33%;
-        /* 100% / 3 slides */
+        /* 3 items */
     }
 }
 
 @media (max-width: 767px) {
-    /* For small screens, show 1 item */
     .swiper-slide {
         min-width: 100%;
+        /* 1 item */
     }
 }
