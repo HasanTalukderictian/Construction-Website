@@ -49,24 +49,27 @@ const Review = () => {
   // Auto-slide every 5 seconds
   useEffect(() => {
     if (slides.length === 0) return;
-
-    intervalRef.current = setInterval(() => {
-      nextSlide();
-    }, 5000);
-
+    intervalRef.current = setInterval(() => nextSlide(), 5000);
     return () => clearInterval(intervalRef.current);
   }, [slides]);
 
-  // Slide 4 items at a time
   const slidesToShow = 4;
 
+  // Circular next slide
   const nextSlide = () => {
-    setActiveIndex((prevIndex) => (prevIndex + slidesToShow) % slides.length);
+    setActiveIndex(prevIndex => {
+      const newIndex = prevIndex + slidesToShow;
+      return newIndex >= slides.length ? 0 : newIndex; // wrap to start
+    });
     resetInterval();
   };
 
+  // Circular prev slide
   const prevSlide = () => {
-    setActiveIndex((prevIndex) => (prevIndex - slidesToShow + slides.length) % slides.length);
+    setActiveIndex(prevIndex => {
+      const newIndex = prevIndex - slidesToShow;
+      return newIndex < 0 ? slides.length - (slides.length % slidesToShow || slidesToShow) : newIndex; // wrap to end
+    });
     resetInterval();
   };
 
@@ -74,6 +77,9 @@ const Review = () => {
     clearInterval(intervalRef.current);
     intervalRef.current = setInterval(() => nextSlide(), 5000);
   };
+
+  // Duplicate slides for smooth circular effect
+  const displaySlides = [...slides, ...slides];
 
   return (
     <div className="swiper-container mt-5 mb-5">
@@ -88,16 +94,13 @@ const Review = () => {
           transform: `translateX(-${(activeIndex / slidesToShow) * 100}%)`,
           transition: 'transform 0.7s ease-in-out',
           display: 'flex',
+          gap: '10px',
         }}
       >
-        {slides.map((slide) => (
-          <div key={slide.id} className="swiper-slide">
+        {displaySlides.map((slide, idx) => (
+          <div key={idx} className="swiper-slide">
             <div className="testimonial-card">
-              <img
-                src={slide.image}
-                alt={slide.name}
-                className="testimonial-image"
-              />
+              <img src={slide.image} alt={slide.name} className="testimonial-image" />
               <h3>{slide.name}</h3>
               <p>{slide.designation}</p>
               <div className="rating">

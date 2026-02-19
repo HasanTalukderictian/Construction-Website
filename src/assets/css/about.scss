@@ -1,0 +1,101 @@
+/* Team Section */
+
+.section-8 .card {
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    text-align: center;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.section-8 .card-img-top img {
+    width: 100%;
+    height: auto;
+    /* maintain aspect ratio */
+    object-fit: cover;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.section-8 .card-title {
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-top: 10px;
+}
+
+.section-8 .card-sub-title {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.section-8 .card-icon a {
+    display: inline-block;
+    margin: 0 5px;
+    color: #0077b5;
+    transition: transform 0.3s;
+}
+
+.section-8 .card-icon a:hover {
+    transform: scale(1.2);
+}
+
+
+/* Responsive adjustments */
+
+
+/* Team Section - Mobile Fix */
+
+@media (max-width: 767px) {
+    .section-8 .card-img-top {
+        width: 100%;
+        height: 180px;
+        /* set a fixed height for uniform cards */
+        overflow: hidden;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+    .section-8 .card-img-top img {
+        width: 100%;
+        height: 100%;
+        /* fill the container height */
+        object-fit: cover;
+        /* crop image to fit perfectly */
+        display: block;
+    }
+    .section-8 .card-title {
+        font-size: 1rem;
+    }
+    .section-8 .card-sub-title {
+        font-size: 0.9rem;
+    }
+}
+
+.about-section {
+    background-color: #3a5164;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.contact-info {
+    background-color: #f8f9fa;
+    /* light background initially */
+    transition: all 0.3s ease;
+}
+
+.contact-info:hover {
+    background-color: #198754;
+    /* green background on hover */
+    color: #f1f1f1;
+    /* text becomes deep white */
+}
+
+.contact-info:hover .icon {
+    color: #f1f1f1;
+    /* icons color change on hover */
+}

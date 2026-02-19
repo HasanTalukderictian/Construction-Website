@@ -94,21 +94,28 @@ const Productdetails = () => {
                         <p><strong>Price:</strong> {product.price}৳</p>
                         <p><strong>Rating:</strong> ⭐ {product.rating}</p>
                         <p><strong>Quantity:</strong> {product.quantity}</p>
-                         <div dangerouslySetInnerHTML={{ __html: product.description }} />
+                        <div dangerouslySetInnerHTML={{ __html: product.description }} />
 
-                        <div className="mt-4 text-center">
+                        <div className="mt-4">
                             <button
                                 onClick={handleAddToCart}
-                                className="btn highlight-btn w-50"
-                                style={{ backgroundColor: "#e4032e", color: "#fff", fontWeight: "bold" }}
+                                className="btn highlight-btn"
+                                style={{
+                                    backgroundColor: "#1c8b41",
+                                    color: "#fff",
+                                    fontWeight: "bold"
+                                }}
                             >
                                 Add to Cart
                             </button>
                         </div>
+
+
                     </div>
                 </div>
 
                 {/* Related Products */}
+                
                 {relatedProducts.length > 0 && (
                     <div className="related-products mt-5">
                         <h3>Related Products</h3>
@@ -128,6 +135,12 @@ const Productdetails = () => {
                         </div>
                     </div>
                 )}
+
+
+                
+
+
+
             </div>
             <Footer />
         </>
