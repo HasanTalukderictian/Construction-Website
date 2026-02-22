@@ -19,6 +19,7 @@ import CourierSettings from './backend/CourierSettings.jsx';
 import StoreCreation from './backend/StoreCreation.jsx';
 import Products from './backend/Products.jsx';
 import UserSettings from './backend/UserSettings.jsx';
+import Nullpage from './components/common/Nullpage.jsx';
 
 
 
@@ -31,6 +32,8 @@ function App() {
           <Route path='/about' element={<About />} />
           <Route path='/service' element={<Services />} />
           <Route path='/projects' element={<Projects />} />
+          <Route path='/null' element={<Nullpage />} />
+
           {/* <Route path='/blogs' element={<Blogs />} /> */}
           <Route path='/contact' element={<Contact />} />
           <Route path='/items' element={<Item />} />
