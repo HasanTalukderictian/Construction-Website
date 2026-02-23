@@ -11,6 +11,7 @@ const Orderlist = () => {
     const [paperflyTracking, setPaperflyTracking] = useState({});
     const [currentPage, setCurrentPage] = useState(1);
     const [lastPage, setLastPage] = useState(1);
+    const [toast, setToast] = useState({ show: false, message: "" });
 
     const [formData, setFormData] = useState({
         full_name: "",
@@ -400,7 +401,6 @@ const Orderlist = () => {
             const data = await response.json();
 
             if (data.status) {
-
                 setOrders(prev => prev.filter(o => o.id !== orderId));
 
                 // Remove tracking from state + localStorage
@@ -411,7 +411,12 @@ const Orderlist = () => {
                     return updated;
                 });
 
-                alert(data.message);
+                // ✅ Show toast instead of alert
+                setToast({ show: true, message: data.message });
+
+                // Auto-hide after 3 seconds
+                setTimeout(() => setToast({ show: false, message: "" }), 3000);
+
             } else {
                 alert(data.message || "Failed to delete order");
             }
@@ -591,7 +596,29 @@ const Orderlist = () => {
                     </div>
                 </div>
             )}
+            {/* Toast Notification */}
+<div
+    className={`toast align-items-center text-white bg-success border-0 position-fixed top-0 end-0 m-3 ${toast.show ? "show" : ""}`}
+    role="alert"
+    aria-live="assertive"
+    aria-atomic="true"
+    style={{ zIndex: 9999 }}
+>
+    <div className="d-flex">
+        <div className="toast-body">
+            {toast.message}
+        </div>
+        <button
+            type="button"
+            className="btn-close btn-close-white me-2 m-auto"
+            data-bs-dismiss="toast"
+            aria-label="Close"
+            onClick={() => setToast({ show: false, message: "" })}
+        ></button>
+    </div>
+</div>
         </Layout>
+        
     );
 };
 
