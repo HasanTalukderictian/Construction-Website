@@ -41,11 +41,12 @@ const Sidebar = () => {
                     {[
                         { to: "/admin-home", icon: "bi-speedometer2", label: "Dashboard" },
                         { to: "/admin-orders", icon: "bi-receipt", label: "Orders" },
+                                    { to: "/admin-category", icon: "bi-tags", label: "Category" },
                         { to: "/admin-products", icon: "bi-box-seam", label: "Products" },
                         { to: "/admin-store", icon: "bi-pencil-square", label: "Store Settings" },
                         { to: "/admin-couirer", icon: "bi-truck", label: "Courier Settings" },
-                        { to: "/admin-users", icon: "bi-people", label: "User Settings" },
-                        { to: "/admin-category", icon: "bi-people", label: "Category" }
+                        { to: "/admin-users", icon: "bi-people", label: "User Settings" }
+            
                     ].map((item, index) => (
                         <li key={index} className="nav-item">
                             <NavLink

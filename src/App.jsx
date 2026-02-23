@@ -21,6 +21,8 @@ import Products from './backend/Products.jsx';
 import UserSettings from './backend/UserSettings.jsx';
 import Nullpage from './components/common/Nullpage.jsx';
 import Category from './backend/Category.jsx';
+import ProductPage from './components/frontend/ProductPage.jsx';
+
 
 
 
@@ -34,6 +36,7 @@ function App() {
           <Route path='/service' element={<Services />} />
           <Route path='/projects' element={<Projects />} />
           <Route path='/null' element={<Nullpage />} />
+          <Route path="/products/:parent/:subcategory" element={<ProductPage />} />
 
           {/* <Route path='/blogs' element={<Blogs />} /> */}
           <Route path='/contact' element={<Contact />} />

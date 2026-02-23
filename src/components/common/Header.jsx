@@ -19,30 +19,33 @@ const Header = () => {
   // ===============================
   // Fetch categories from API
   // ===============================
-  useEffect(() => {
-    axios
-      .get("http://127.0.0.1:8000/api/all-category")
-      .then((res) => {
-        if (res.data.success) {
-          const catData = {};
-          res.data.data.forEach((parent) => {
-            // Convert parent name to uppercase for tab
-            const key = parent.name.toUpperCase();
-            catData[key] = {
-              left1Title: parent.name, // parent category name
-              left1: parent.sub_categories.map((sub) => [
-                sub.name,
-                `/products/${parent.name.toLowerCase()}/${sub.name.toLowerCase().replace(/\s+/g, "-")}`,
-              ]),
-              left2Title: "", // optional
-              left2: [], // optional
-            };
-          });
-          setCategories(catData);
-        }
-      })
-      .catch((err) => console.log("API Error: ", err));
-  }, []);
+useEffect(() => {
+  axios
+    .get("http://127.0.0.1:8000/api/all-category")
+    .then((res) => {
+      if (res.data.success) {
+        const catData = {};
+        res.data.data.forEach((parent) => {
+          const key = parent.name.toUpperCase();
+          catData[key] = {
+            left1Title: parent.name,
+            left1: parent.sub_categories.map((sub) => [
+              sub.name,
+              `/products/${parent.name.toLowerCase()}/${sub.name.toLowerCase().replace(/\s+/g, "-")}`,
+            ]),
+            left2Title: "",
+            left2: [],
+          };
+        });
+        setCategories(catData);
+
+        // Set the first tab dynamically
+        const firstTab = Object.keys(catData)[0];
+        if (firstTab) setActiveTab(firstTab);
+      }
+    })
+    .catch((err) => console.log("API Error: ", err));
+}, []);
 
   // Tabs list from API keys
   const tabs = Object.keys(categories).length > 0 ? Object.keys(categories) : ["MEN","WOMEN","TEENS","KIDS","SPORTS"];
