@@ -4,6 +4,7 @@ import axios from 'axios';
 import Header from '../common/Header';
 import Footer from '../common/Footer';
 import { CartContext } from './CartContext';
+import '../../assets/css/ProductDetails.scss';
 
 const ProductPage = () => {
   const { parent, subcategory } = useParams();
@@ -98,7 +99,7 @@ const ProductPage = () => {
                     <img
                       src={product.image_url}
                       alt={product.name}
-                      className="card-img-top"
+                      className="product-img"
                       style={{
                         height: "200px",
                         objectFit: "cover",

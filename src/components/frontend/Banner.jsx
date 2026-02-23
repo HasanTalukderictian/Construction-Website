@@ -73,7 +73,7 @@ const Banner = ({ scrollToItem }) => {
                     <img
                         src={slides[active].image}
                         alt="product"
-                        className="product-img"
+                        className="products-img"
                     />
                     <div className="discount-badge">
                         UP TO 50% OFF

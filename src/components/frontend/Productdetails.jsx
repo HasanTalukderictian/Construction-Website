@@ -4,6 +4,7 @@ import Header from "../common/Header";
 import Footer from "../common/Footer";
 import { CartContext } from "./CartContext";
 import Toast from "react-bootstrap/Toast";
+import "../../assets/css/product.scss";
 
 const Productdetails = () => {
     const { id } = useParams();
@@ -122,7 +123,7 @@ const Productdetails = () => {
                         <div className="d-flex flex-wrap mt-3" style={{ gap: "20px" }}>
                             {relatedProducts.map((item) => (
                                 <div key={item.id} className="card" style={{ width: "200px", borderRadius: "8px" }}>
-                                    <img src={item.image_url} className="card-img-top" alt={item.name} style={{ height: "150px", objectFit: "cover" }} />
+                                    <img src={item.image_url} className="product-img" alt={item.name} style={{ height: "150px", objectFit: "cover" }} />
                                     <div className="card-body">
                                         <h5 className="card-title" style={{ fontSize: "16px" }}>{item.name}</h5>
                                         <p className="mb-1"><strong>Price:</strong> {item.price}৳</p>

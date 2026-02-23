@@ -5,7 +5,7 @@ import Footer from "./Footer";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import { BsPencil, BsTrash } from "react-icons/bs";
+import {  BsTrash } from "react-icons/bs";
 
 const Category = () => {
   const [categories, setCategories] = useState([]);
@@ -18,7 +18,7 @@ const Category = () => {
   // ===============================
   const fetchCategories = () => {
     axios
-      .get("http://127.0.0.1:8000/api/all-category")
+      .get(`http://127.0.0.1:8000/api/all-category`)
       .then((res) => {
         if (res.data.success) {
           setCategories(res.data.data);
@@ -37,7 +37,7 @@ const Category = () => {
   const handleCategorySubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://127.0.0.1:8000/api/parent-category/store", { name: categoryName })
+      .post(`http://127.0.0.1:8000/api/parent-category/store`, { name: categoryName })
       .then((res) => {
         toast.success(res.data.message || "Parent Category created!");
         setCategoryName("");
@@ -56,7 +56,7 @@ const Category = () => {
       return;
     }
     axios
-      .post("http://127.0.0.1:8000/api/sub-category/store", {
+      .post(`http://127.0.0.1:8000/api/sub-category/store`, {
         name: subCategoryName,
         parent_category_id: parentCategoryId,
       })
