@@ -71,6 +71,11 @@ export const CartProvider = ({ children }) => {
         });
     };
 
+    const clearCart = () => {
+    setCartItems([]);
+    localStorage.removeItem("cart");
+};
+
     // Sync cartItems from localStorage on mount
     useEffect(() => {
         const savedCart = localStorage.getItem("cart");
@@ -84,6 +89,7 @@ export const CartProvider = ({ children }) => {
             value={{
                 cartItems,
                 addToCart,
+                clearCart,
                 increaseQuantity,
                 decreaseQuantity,
                 removeFromCart,
