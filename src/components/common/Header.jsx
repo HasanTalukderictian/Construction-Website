@@ -21,7 +21,7 @@ const Header = () => {
   // ===============================
 useEffect(() => {
   axios
-    .get("http://127.0.0.1:8000/api/all-category")
+    .get(`http://127.0.0.1:8000/api/all-category`)
     .then((res) => {
       if (res.data.success) {
         const catData = {};

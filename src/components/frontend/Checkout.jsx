@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Header from "../common/Header";
 import Footer from "../common/Footer";
 import Toast from "react-bootstrap/Toast";
 import { useLocation } from "react-router-dom";
+import { CartContext } from "./CartContext";
 
 const Checkout = () => {
     const location = useLocation();
@@ -17,6 +18,7 @@ const Checkout = () => {
     const [address, setAddress] = useState("");
     const [showToast, setShowToast] = useState(false);
     const [orderSubmitted, setOrderSubmitted] = useState(false);
+    const { clearCart } = useContext(CartContext);
 
     const finalTotal = totalPrice + deliveryCharge;
 
@@ -78,7 +80,8 @@ const Checkout = () => {
             if (data.status) {
                 const trackingNumber = data.tracking_number;
                 localStorage.setItem("trackingNumber", trackingNumber);
-                localStorage.removeItem("cart");
+                // localStorage.removeItem("cart");
+                clearCart();
                 setShowToast(true);
                 setOrderSubmitted(true);
 

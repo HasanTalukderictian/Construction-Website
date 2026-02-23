@@ -205,7 +205,7 @@ const UserSettings = () => {
                         {Array.from({ length: totalPages }, (_, i) => (
                             <button
                                 key={i}
-                                className={`btn btn-sm mx-1 ${currentPage === i + 1 ? "btn-primary" : "btn-primary"}`}
+                                className={`btn btn-sm mx-1 ${currentPage === i + 1 ? " btn-success" : " btn-success"}`}
                                 onClick={() => setCurrentPage(i + 1)}
                             >
                                 {i + 1}
@@ -268,9 +268,11 @@ const UserSettings = () => {
                                                     <option value="user">User</option>
                                                 </select>
                                             </div>
-                                            <button type="submit" className="btn btn-primary w-100">
-                                                Add User
-                                            </button>
+                                            <div className="d-flex justify-content-center">
+                                                <button type="submit" className="btn btn-success">
+                                                    Add User
+                                                </button>
+                                            </div>
                                         </form>
                                     </div>
                                 </div>

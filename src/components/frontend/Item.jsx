@@ -14,7 +14,7 @@ const Item = () => {
   const { addToCart } = useContext(CartContext);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/products")
+    fetch(`http://127.0.0.1:8000/api/products`)
       .then(res => res.json())
       .then(data => setTeam(data))
       .catch(err => console.log("Error Loading JSON", err));
@@ -74,6 +74,7 @@ const Item = () => {
                   <img
                     src={item.image_url || '/placeholder.png'}
                     alt={item.name}
+                    className="product-img"
                     style={{
                       width: "100%",
                       height: "220px",

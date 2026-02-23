@@ -3,6 +3,20 @@
     transition: all 0.3s ease;
 }
 
+.product-img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 15px 15px 0 0;
+    padding: 4px;
+    margin-top: 4px;
+    transition: transform 0.4s ease-in-out;
+}
+
+.card:hover .product-img {
+    transform: scale(1.08);
+}
+
 .highlight-btn:hover {
     transform: scale(1.1);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);

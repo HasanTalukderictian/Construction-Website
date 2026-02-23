@@ -5,7 +5,6 @@ import About from './components/frontend/About';
 import './assets/css/style.scss';
 import Services from './components/frontend/Services';
 import Projects from './components/frontend/Projects';
-import Blogs from './components/frontend/Blogs';
 import Contact from './components/frontend/Contact';
 import Item from './components/frontend/Item';
 import Productdetails from './components/frontend/Productdetails';
@@ -35,10 +34,7 @@ function App() {
           <Route path='/about' element={<About />} />
           <Route path='/service' element={<Services />} />
           <Route path='/projects' element={<Projects />} />
-          <Route path='/null' element={<Nullpage />} />
           <Route path="/products/:parent/:subcategory" element={<ProductPage />} />
-
-          {/* <Route path='/blogs' element={<Blogs />} /> */}
           <Route path='/contact' element={<Contact />} />
           <Route path='/items' element={<Item />} />
           <Route path='/product/:id' element={<Productdetails />} />
@@ -50,8 +46,11 @@ function App() {
           <Route path="/admin-couirer" element={<CourierSettings />} />
           <Route path="/admin-store" element={<StoreCreation />} />
           <Route path="/admin-products" element={<Products />} />
-            <Route path="/admin-users" element={<UserSettings />} />
+          <Route path="/admin-users" element={<UserSettings />} />
           <Route path="/admin-category" element={<Category />} />
+
+          {/* Catch-all route */}
+          <Route path="*" element={<Nullpage />} />
         </Routes>
       </BrowserRouter>
     </CartProvider>

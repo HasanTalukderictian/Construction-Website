@@ -55,9 +55,8 @@
     text-align: right;
 }
 
-.product-img {
-    width: 500px;
-    /* fixed width for all devices */
+.products-img {
+    width: 500px !important;
     max-width: 100%;
     transition: 0.5s ease;
 }
