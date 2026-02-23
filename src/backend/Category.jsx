@@ -179,9 +179,7 @@ const Category = () => {
                           <td>{idx + 1}</td>
                           <td>{cat.name}</td>
                           <td>
-                            <button className="btn btn-sm btn-success me-2" title="Edit">
-                              <BsPencil />
-                            </button>
+                            
                             <button className="btn btn-sm btn-danger" title="Delete" onClick={() => handleDeleteCategory(cat.id)}>
                               <BsTrash />
                             </button>
@@ -218,9 +216,7 @@ const Category = () => {
                                 <td>{sub.name}</td>
                                 <td>{cat.name}</td>
                                 <td>
-                                  <button className="btn btn-sm btn-success me-2" title="Edit">
-                                    <BsPencil />
-                                  </button>
+                                
                                   <button className="btn btn-sm btn-danger" title="Delete" onClick={() => handleDeleteSubCategory(sub.id)}>
                                     <BsTrash />
                                   </button>
