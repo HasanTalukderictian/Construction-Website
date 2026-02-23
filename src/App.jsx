@@ -20,6 +20,7 @@ import StoreCreation from './backend/StoreCreation.jsx';
 import Products from './backend/Products.jsx';
 import UserSettings from './backend/UserSettings.jsx';
 import Nullpage from './components/common/Nullpage.jsx';
+import Category from './backend/Category.jsx';
 
 
 
@@ -46,7 +47,8 @@ function App() {
           <Route path="/admin-couirer" element={<CourierSettings />} />
           <Route path="/admin-store" element={<StoreCreation />} />
           <Route path="/admin-products" element={<Products />} />
-          <Route path="/admin-users" element={<UserSettings />} />
+            <Route path="/admin-users" element={<UserSettings />} />
+          <Route path="/admin-category" element={<Category />} />
         </Routes>
       </BrowserRouter>
     </CartProvider>
