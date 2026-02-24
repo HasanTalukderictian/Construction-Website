@@ -21,6 +21,7 @@ import UserSettings from './backend/UserSettings.jsx';
 import Nullpage from './components/common/Nullpage.jsx';
 import Category from './backend/Category.jsx';
 import ProductPage from './components/frontend/ProductPage.jsx';
+import Testominal from './backend/Testominal.jsx';
 
 
 
@@ -47,7 +48,8 @@ function App() {
           <Route path="/admin-store" element={<StoreCreation />} />
           <Route path="/admin-products" element={<Products />} />
           <Route path="/admin-users" element={<UserSettings />} />
-          <Route path="/admin-category" element={<Category />} />
+           <Route path="/admin-category" element={<Category />} />
+          <Route path="/admin-testo" element={<Testominal />} />
 
           {/* Catch-all route */}
           <Route path="*" element={<Nullpage />} />
