@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Pie, Bar } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from "chart.js"
 
-import { Tour } from '@reactour/tour'; 
+import { Tour } from '@reactour/tour';
 import '../../src/assets/css/dashboard.scss';
 
 ChartJS.register(ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
@@ -25,7 +25,8 @@ const Dashboard = () => {
     const [dashboardData, setDashboardData] = useState({
         orders: 0,
         products: 0,
-        users: 0
+        users: 0,
+        review: 0
     });
 
     const [isTourOpen, setIsTourOpen] = useState(false);
@@ -46,7 +47,8 @@ const Dashboard = () => {
                 setDashboardData({
                     orders: data.orders.length,
                     products: data.products.length,
-                    users: data.users.length
+                    users: data.users.length,
+                     review: data.review ? data.review.length : 0, 
                 });
 
                 setIsTourOpen(true);
@@ -69,36 +71,40 @@ const Dashboard = () => {
     }, []);
 
     const pieData = {
-        labels: ["Orders", "Products", "Users"],
+        labels: ["Orders", "Products", "Users", "review"],
         datasets: [{
             label: "Dashboard Data",
             data: [
                 dashboardData.orders,
                 dashboardData.products,
-                dashboardData.users
+                dashboardData.users,
+                dashboardData.review
             ],
-            backgroundColor: [
-                "rgba(255, 99, 132, 0.6)",
-                "rgba(54, 162, 235, 0.6)",
-                "rgba(255, 206, 86, 0.6)"
-            ],
-            borderColor: [
-                "rgba(255, 99, 132, 1)",
-                "rgba(54, 162, 235, 1)",
-                "rgba(255, 206, 86, 1)"
-            ],
+           backgroundColor: [
+    "rgba(255, 99, 132, 0.6)",  // Orders
+    "rgba(54, 162, 235, 0.6)",  // Products
+    "rgba(255, 206, 86, 0.6)",  // Users
+    "rgba(155, 89, 182, 0.6)"   // Reviews (purple)
+],
+borderColor: [
+    "rgba(255, 99, 132, 1)",
+    "rgba(54, 162, 235, 1)",
+    "rgba(255, 206, 86, 1)",
+    "rgba(155, 89, 182, 1)"
+],
             borderWidth: 1,
         }]
     };
 
     const barData = {
-        labels: ["Orders", "Products", "Users"],
+        labels: ["Orders", "Products", "Users", "review"],
         datasets: [{
             label: "Dashboard Data",
             data: [
                 dashboardData.orders,
                 dashboardData.products,
-                dashboardData.users
+                dashboardData.users,
+                dashboardData.review
             ],
             backgroundColor: [
                 "rgba(255, 99, 132, 0.6)",
@@ -135,6 +141,13 @@ const Dashboard = () => {
             className: "card-title-users",
             color: "bg-warning text-dark",
             url: "/admin-users"
+        },
+        {
+            title: "Total Review",
+            value: dashboardData.review || 0,  // use review count
+            className: "card-title-review",
+            style: { backgroundColor: "#bd34eb", color: "white" }, // custom purple
+            url: "/admin-testo"
         }
     ];
 
@@ -156,7 +169,7 @@ const Dashboard = () => {
                     <div className="col-lg-4 col-md-6" key={index}>
                         <div
                             className={`card text-center ${card.color} text-white`}
-                            style={{ cursor: "pointer" }}
+                            style={card.style ? card.style : { cursor: "pointer" }}
                             onClick={() => navigate(card.url)}
                         >
                             <div className="card-body">

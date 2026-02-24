@@ -22,6 +22,7 @@ import Nullpage from './components/common/Nullpage.jsx';
 import Category from './backend/Category.jsx';
 import ProductPage from './components/frontend/ProductPage.jsx';
 import Testominal from './backend/Testominal.jsx';
+import Banner from './backend/Banner.jsx';
 
 
 
@@ -50,6 +51,7 @@ function App() {
           <Route path="/admin-users" element={<UserSettings />} />
            <Route path="/admin-category" element={<Category />} />
           <Route path="/admin-testo" element={<Testominal />} />
+           <Route path="/admin-banner" element={<Banner />} />
 
           {/* Catch-all route */}
           <Route path="*" element={<Nullpage />} />
