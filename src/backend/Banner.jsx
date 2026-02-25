@@ -40,8 +40,13 @@ const Banner = () => {
   const removePreview = () => {
     setImage(null);
     setPreview(null);
-  };
 
+    // file input reset করার জন্য
+    const fileInput = document.getElementById("bannerImageInput");
+    if (fileInput) {
+      fileInput.value = "";
+    }
+  };
   const resetForm = () => {
     setTitle("");
     setPrice("");
@@ -215,15 +220,46 @@ const Banner = () => {
                     onChange={handleImageChange}
                   />
                 </div>
+                <td>
+                  {preview && (
+                    <div className="position-relative mt-3 d-inline-block">
+                      <img
+                        src={preview}
+                        width="120"
+                        height="120"
+                        style={{
+                          objectFit: "cover",
+                          borderRadius: "8px",
+                          border: "1px solid #ddd",
+                        }}
+                        alt="Preview"
+                      />
 
-                {preview && (
-                  <img
-                    src={preview}
-                    width="120"
-                    style={{ objectFit: "cover", borderRadius: "8px" }}
-                    alt=""
-                  />
-                )}
+                      <button
+                        type="button"
+                        onClick={removePreview}
+                        style={{
+                          position: "absolute",
+                          top: "-8px",
+                          right: "-8px",
+                          background: "red",
+                          color: "#fff",
+                          border: "none",
+                          width: "22px",
+                          height: "22px",
+                          borderRadius: "50%",
+                          cursor: "pointer",
+                          fontSize: "14px",
+                        }}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  )}
+
+                </td>
+
+                
               </div>
 
               <div className="modal-footer">

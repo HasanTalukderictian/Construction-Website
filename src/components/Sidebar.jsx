@@ -47,7 +47,8 @@ const Sidebar = () => {
                         { to: "/admin-couirer", icon: "bi-truck", label: "Courier Settings" },
                         { to: "/admin-users", icon: "bi-people", label: "User Settings" },
                         { to: "/admin-testo", icon: "bi-star-fill", label: "Testimonial" },
-                        { to: "/admin-banner", icon: "bi-megaphone-fill", label: "Banner" }
+                        { to: "/admin-banner", icon: "bi-megaphone-fill", label: "Banner" },
+                        { to: "/admin-contact", icon: "bi-megaphone-fill", label: "Contact" }
             
                     ].map((item, index) => (
                         <li key={index} className="nav-item">

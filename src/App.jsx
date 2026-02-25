@@ -23,6 +23,7 @@ import Category from './backend/Category.jsx';
 import ProductPage from './components/frontend/ProductPage.jsx';
 import Testominal from './backend/Testominal.jsx';
 import Banner from './backend/Banner.jsx';
+import ContactUs from './backend/ContactUs.jsx';
 
 
 
@@ -52,6 +53,7 @@ function App() {
           <Route path="/admin-category" element={<Category />} />
           <Route path="/admin-testo" element={<Testominal />} />
           <Route path="/admin-banner" element={<Banner />} />
+          <Route path="/admin-contact" element={<ContactUs />} />
 
           {/* Catch-all route */}
           <Route path="*" element={<Nullpage />} />
