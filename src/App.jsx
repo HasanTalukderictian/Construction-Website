@@ -49,9 +49,9 @@ function App() {
           <Route path="/admin-store" element={<StoreCreation />} />
           <Route path="/admin-products" element={<Products />} />
           <Route path="/admin-users" element={<UserSettings />} />
-           <Route path="/admin-category" element={<Category />} />
+          <Route path="/admin-category" element={<Category />} />
           <Route path="/admin-testo" element={<Testominal />} />
-           <Route path="/admin-banner" element={<Banner />} />
+          <Route path="/admin-banner" element={<Banner />} />
 
           {/* Catch-all route */}
           <Route path="*" element={<Nullpage />} />
