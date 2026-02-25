@@ -1,47 +1,55 @@
+
 import { useState, useEffect } from "react";
+import axios from "axios";
 import "../../../src/assets/css/banner.scss";
 
-import Img1 from "../../assets/images/gamingpc.png";
-import Img2 from "../../assets/images/pc22.png";
-import Img3 from "../../assets/images/pc33.png";
-
-const slides = [
-    {
-        id: 1,
-        title: "ALIENWARE GAMING DESKTOPS",
-        price: "Starting at $1,999",
-        image: Img1,
-        bg: "linear-gradient(90deg,#24006b,#0f0060)"
-    },
-    {
-        id: 2,
-        title: "NEXT GEN SMART WATCH",
-        price: "Starting at $299",
-        image: Img2,
-        bg: "linear-gradient(90deg,#001f4d,#000814)"
-    },
-    {
-        id: 3,
-        title: "PRO GAMING WATCH",
-        price: "Starting at $1,499",
-        image: Img3,
-        bg: "linear-gradient(90deg,#3a0072,#140028)"
-    }
-];
-
 const Banner = ({ scrollToItem }) => {
+    const [slides, setSlides] = useState([]);
     const [active, setActive] = useState(0);
+
+    // 🎯 Random background (design same rakhar jonno)
+    const backgrounds = [
+        "linear-gradient(90deg,#24006b,#0f0060)",
+        "linear-gradient(90deg,#001f4d,#000814)",
+        "linear-gradient(90deg,#3a0072,#140028)"
+    ];
+
+    // ✅ Fetch Banner Data from API
+    useEffect(() => {
+        axios
+            .get("http://127.0.0.1:8000/api/get-banner")
+            .then((res) => {
+                if (res.data.status) {
+                    const apiData = res.data.data.map((item, index) => ({
+                        id: item.id,
+                        title: item.title,
+                        price: `Starting at ৳ ${item.price}`,
+                        image: item.image,
+                        bg: backgrounds[index % backgrounds.length]
+                    }));
+
+                    setSlides(apiData);
+                }
+            })
+            .catch((err) => {
+                console.error("Banner fetch error:", err);
+            });
+    }, []);
 
     // ✅ Auto Slide Every 3 Seconds
     useEffect(() => {
+        if (slides.length === 0) return;
+
         const interval = setInterval(() => {
             setActive((prev) =>
                 prev === slides.length - 1 ? 0 : prev + 1
             );
-        }, 3000); // 3 seconds
+        }, 3000);
 
-        return () => clearInterval(interval); // cleanup
-    }, []);
+        return () => clearInterval(interval);
+    }, [slides]);
+
+    if (slides.length === 0) return null;
 
     return (
         <section
@@ -74,7 +82,6 @@ const Banner = ({ scrollToItem }) => {
                         src={slides[active].image}
                         alt="product"
                         className="products-img"
-                        
                     />
                     <div className="discount-badge">
                         UP TO 50% OFF
