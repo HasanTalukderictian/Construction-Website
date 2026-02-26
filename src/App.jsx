@@ -25,6 +25,7 @@ import Testominal from './backend/Testominal.jsx';
 import Banner from './backend/Banner.jsx';
 import ContactUs from './backend/ContactUs.jsx';
 import Team from './backend/Team.jsx';
+import Headersetting from './backend/Headersetting.jsx';
 
 
 
@@ -56,6 +57,7 @@ function App() {
           <Route path="/admin-banner" element={<Banner />} />
           <Route path="/admin-contact" element={<ContactUs />} />
           <Route path="/admin-team" element={<Team />} />
+          <Route path="/admin-header" element={<Headersetting />} />
 
           {/* Catch-all route */}
           <Route path="*" element={<Nullpage />} />

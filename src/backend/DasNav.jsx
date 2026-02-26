@@ -3,16 +3,36 @@ import '../assets/css/nav.scss'
 
 const DashNav = () => {
     const [showModal, setShowModal] = useState(false);
-    const [companyName, setCompanyName] = useState('');
+    const [companyName, setCompanyName] = useState('Gazi Builders'); // fallback name
+    const [logo, setLogo] = useState('https://i.ibb.co.com/kgghmZfy/Flying-Bird-logo-design-template.png'); // fallback logo
     const [yourName, setYourName] = useState('');
     const [image, setImage] = useState(null);
     const [userId, setUserId] = useState(null);
-
 
     const [formCompanyName, setFormCompanyName] = useState('');
     const [formYourName, setFormYourName] = useState('');
     const [formImage, setFormImage] = useState(null);
 
+    // ================================
+    // Fetch company info from API
+    // ================================
+    const fetchCompanyInfo = async () => {
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/get-header');
+            const data = await response.json();
+            if (response.ok && data.status && data.data.length > 0) {
+                const header = data.data[0];
+                setCompanyName(header.Companyname || 'Gazi Builders');
+                setLogo(header.image || 'https://i.ibb.co.com/kgghmZfy/Flying-Bird-logo-design-template.png');
+            }
+        } catch (err) {
+            console.error("Failed to fetch company info:", err);
+        }
+    };
+
+    // ================================
+    // Fetch user info (existing)
+    // ================================
     const fetchUserInfo = async () => {
         try {
             const response = await fetch(`http://127.0.0.1:8000/api/get-userInfo`, {
@@ -20,27 +40,20 @@ const DashNav = () => {
             });
             const data = await response.json();
 
-            console.log("Fetched user info response:", data);
-
             if (response.ok && data.data && data.data.length > 0) {
                 const user = data.data[0];
-                console.log("User object:", user);
-
-                setCompanyName(user.company_name || '');
+                setCompanyName(prev => prev); // keep API company name unchanged
                 setYourName(user.your_name || '');
                 setImage(user.image ? `http://127.0.0.1:8000/storage/${user.image}` : null);
                 setUserId(user.id);
-                console.log("Set userId:", user.id);
             }
-
-
         } catch (error) {
             console.error('Fetch error:', error);
         }
     };
 
-
     useEffect(() => {
+        fetchCompanyInfo();
         fetchUserInfo();
     }, []);
 
@@ -64,7 +77,6 @@ const DashNav = () => {
                 img.onload = () => {
                     let { width, height } = img;
 
-                    // Maintain aspect ratio
                     if (width > height) {
                         if (width > maxWidth) {
                             height = (height * maxWidth) / width;
@@ -128,24 +140,22 @@ const DashNav = () => {
         }
     };
 
-
     return (
         <>
             <div className="d-flex container justify-content-center">
                 <nav className="navbar bg-white shadow-sm py-2 px-4 d-flex justify-content-between align-items-center" style={{ maxWidth: "1500px", width: "100%" }}>
                     <div className="d-flex align-items-center">
                         <img
-                            src="https://i.ibb.co.com/kgghmZfy/Flying-Bird-logo-design-template.png"
-                            alt="Paperfly Logo"
+                            src={logo}
+                            alt="Company Logo"
                             className="me-2"
                             style={{ height: "40px" }}
                         />
-                        <h4 className="fw-bold text-primary">{companyName || 'Gazi Builders'}</h4>
-                        <span className="text-muted small ms-1">Make your House more Happiness</span>
+                        <h4 className="fw-bold text-primary">{companyName}</h4>
+                        <span className="text-muted small ms-1">Make your Shopping more Happiness</span>
                     </div>
 
                     <div className="d-flex align-items-center">
-
                         <div className="profile-image-wrapper me-2">
                             <img
                                 src={image ? `${image}?${new Date().getTime()}` : "https://i.ibb.co.com/rK7RzDJk/MY-pic-02.jpg"}
@@ -153,8 +163,6 @@ const DashNav = () => {
                                 className="profile-image"
                             />
                         </div>
-
-
 
                         <div className="mt-1 mb-1">
                             <span className="d-block text-muted">Hello,</span>
@@ -214,8 +222,6 @@ const DashNav = () => {
                                             }}
                                             accept="image/*"
                                         />
-
-                                        {/* Image preview */}
                                         {formImage && (
                                             <div className="mt-2 position-relative d-inline-block">
                                                 <img
