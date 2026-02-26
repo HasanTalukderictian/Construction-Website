@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
 import Footer from "../common/Footer";
 import Header from "../common/Header";
+import axios from 'axios';
 import '../../assets/css/map.scss';
 
 const Contact = () => {
@@ -14,6 +15,27 @@ const Contact = () => {
     });
 
     const [errors, setErrors] = useState({});
+    const [contactData, setContactData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    // Fetch contact info from API
+    const fetchContact = async () => {
+        try {
+            const res = await axios.get('http://127.0.0.1:8000/api/get-contact');
+            if (res.data.status && res.data.data) {
+                setContactData(res.data.data);
+            }
+        } catch (err) {
+            console.error("Failed to fetch contact info:", err);
+            setContactData(null);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchContact();
+    }, []);
 
     const validateForm = () => {
         const newErrors = {};
@@ -26,7 +48,7 @@ const Contact = () => {
         if (!form.phone) {
             newErrors.phone = 'Phone number is required';
         } else if (!/^\d{11}$/.test(form.phone)) {
-            newErrors.phone = 'Phone number must be 10 digits';
+            newErrors.phone = 'Phone number must be 11 digits';
         }
         if (!form.subject) newErrors.subject = 'Subject is required';
         if (!form.message) newErrors.message = 'Message is required';
@@ -62,28 +84,46 @@ const Contact = () => {
                 </div>
             </div>
             <main>
-
-
                 <section className="section-9 py-0">
                     <div className="container">
                         <div className="section-header text-center">
                             <h2>Get in Touch with Us</h2>
-                            <p>Our dedicated experts are here to help you. Fill out the form below, and we’ll be in touch shortly.</p>
+                            <p>We deliver modern IT gadgets, smart devices, and reliable technology solutions for everyday and professional needs.</p>
                         </div>
                         <div className="row">
+                            {/* Call Us / Contact Info */}
                             <div className="col-md-3 mb-3">
                                 <div className="card rounded-5 shadow border-0">
                                     <div className="card-body p-4">
                                         <h3>Call Us</h3>
-                                        <div><a href="tel:000123678" style={{ textDecoration: 'none' }}>(01768712230)</a></div>
+                                        <div>
+                                            <a
+                                                href={contactData ? `tel:${contactData.phone}` : '#'}
+                                                style={{ textDecoration: 'none' }}
+                                            >
+                                                {contactData ? contactData.phone : 'Loading...'}
+                                            </a>
+                                        </div>
+
                                         <h3 className="mt-4">Email Us</h3>
-                                        <div><a href="mailto:example@gmail.com" style={{ textDecoration: 'none' }}>hasantalukdercou@gmail.com</a></div>
+                                        <div>
+                                            <a
+                                                href={contactData ? `mailto:${contactData.email}` : '#'}
+                                                style={{ textDecoration: 'none' }}
+                                            >
+                                                {contactData ? contactData.email : 'Loading...'}
+                                            </a>
+                                        </div>
+
                                         <h3 className="mt-4">Address</h3>
-                                        <div>Mohampur 12/A/234</div>
-                                        <div>Luckdown, Uttar, Paron</div>
+                                        <div>
+                                            {contactData ? contactData.address : 'Loading...'}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
+                            {/* Contact Form */}
                             <div className="col-md-9">
                                 <div className="card rounded-5 shadow border-0">
                                     <div className="card-body p-5">
@@ -114,6 +154,7 @@ const Contact = () => {
                                                     {errors.email && <small className="text-danger">{errors.email}</small>}
                                                 </div>
                                             </div>
+
                                             <div className="row">
                                                 <div className="col-md-6 mb-4">
                                                     <label className="form-label">Phone</label>
@@ -140,6 +181,7 @@ const Contact = () => {
                                                     {errors.subject && <small className="text-danger">{errors.subject}</small>}
                                                 </div>
                                             </div>
+
                                             <div>
                                                 <label className="form-label">Message</label>
                                                 <textarea
@@ -152,6 +194,7 @@ const Contact = () => {
                                                 />
                                                 {errors.message && <small className="text-danger">{errors.message}</small>}
                                             </div>
+
                                             <button className="btn btn-primary rounded-4 mt-4" type="submit">
                                                 Submit
                                             </button>
@@ -167,27 +210,24 @@ const Contact = () => {
                 <section className="py-5">
                     <div className="container">
                         <div className="row">
-
-                            {/* Left Bag: Contact Info */}
                             <div className="col-md-6 mb-4 mb-md-0 d-flex align-items-stretch">
                                 <div className="contact-info p-4 rounded-3 w-100">
                                     <h3 className="mb-3 mt-0">Our Location</h3>
                                     <p className="mt-0 d-flex align-items-center">
                                         <FaMapMarkerAlt className="me-2" />
-                                        Mohampur, Luckdown, Uttar, Paron
+                                        {loading ? 'Loading...' : contactData?.address}
                                     </p>
                                     <p className="mt-0 d-flex align-items-center">
                                         <FaPhoneAlt className="me-2" />
-                                        01768712230
+                                        {loading ? 'Loading...' : contactData?.phone}
                                     </p>
                                     <p className="mt-0 d-flex align-items-center">
                                         <FaEnvelope className="me-2" />
-                                        hasantalukdercou@gmail.com
+                                        {loading ? 'Loading...' : contactData?.email}
                                     </p>
                                 </div>
                             </div>
 
-                            {/* Right Bag: Map */}
                             <div className="col-md-6 d-flex align-items-stretch">
                                 <div
                                     className="map-responsive rounded-4 shadow-sm overflow-hidden w-100"
@@ -204,13 +244,9 @@ const Contact = () => {
                                     ></iframe>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </section>
-
-
-
             </main>
             <Footer />
         </>

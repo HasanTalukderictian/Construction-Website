@@ -24,6 +24,7 @@ import ProductPage from './components/frontend/ProductPage.jsx';
 import Testominal from './backend/Testominal.jsx';
 import Banner from './backend/Banner.jsx';
 import ContactUs from './backend/ContactUs.jsx';
+import Team from './backend/Team.jsx';
 
 
 
@@ -54,6 +55,7 @@ function App() {
           <Route path="/admin-testo" element={<Testominal />} />
           <Route path="/admin-banner" element={<Banner />} />
           <Route path="/admin-contact" element={<ContactUs />} />
+          <Route path="/admin-team" element={<Team />} />
 
           {/* Catch-all route */}
           <Route path="*" element={<Nullpage />} />
