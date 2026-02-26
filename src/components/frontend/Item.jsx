@@ -40,7 +40,7 @@ const Item = () => {
 
           <div>
             <h2>New available</h2>
-            <p>We offer a diverse array of construction services...</p>
+            <p>We offer a diverse array of IT services...</p>
           </div>
 
           {/* SEARCH BOX */}
