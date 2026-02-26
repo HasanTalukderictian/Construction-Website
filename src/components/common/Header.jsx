@@ -7,7 +7,7 @@ import axios from "axios";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { CartContext } from "../frontend/CartContext";
 import "../../assets/css/header.scss";
-import Logo from "../../assets/images/BDStall logo.png";
+import Logo from "../../assets/images/BDStall logo.png"; // fallback logo
 
 const Header = () => {
   const { cartItems } = useContext(CartContext);
@@ -15,37 +15,52 @@ const Header = () => {
   const [showModal, setShowModal] = useState(false);
   const [activeTab, setActiveTab] = useState("MEN");
   const [categories, setCategories] = useState({}); // dynamic data
+  const [dynamicLogo, setDynamicLogo] = useState(null); // For dynamic logo
 
   // ===============================
   // Fetch categories from API
   // ===============================
-useEffect(() => {
-  axios
-    .get(`http://127.0.0.1:8000/api/all-category`)
-    .then((res) => {
-      if (res.data.success) {
-        const catData = {};
-        res.data.data.forEach((parent) => {
-          const key = parent.name.toUpperCase();
-          catData[key] = {
-            left1Title: parent.name,
-            left1: parent.sub_categories.map((sub) => [
-              sub.name,
-              `/products/${parent.name.toLowerCase()}/${sub.name.toLowerCase().replace(/\s+/g, "-")}`,
-            ]),
-            left2Title: "",
-            left2: [],
-          };
-        });
-        setCategories(catData);
+  useEffect(() => {
+    axios
+      .get(`http://127.0.0.1:8000/api/all-category`)
+      .then((res) => {
+        if (res.data.success) {
+          const catData = {};
+          res.data.data.forEach((parent) => {
+            const key = parent.name.toUpperCase();
+            catData[key] = {
+              left1Title: parent.name,
+              left1: parent.sub_categories.map((sub) => [
+                sub.name,
+                `/products/${parent.name.toLowerCase()}/${sub.name.toLowerCase().replace(/\s+/g, "-")}`,
+              ]),
+              left2Title: "",
+              left2: [],
+            };
+          });
+          setCategories(catData);
 
-        // Set the first tab dynamically
-        const firstTab = Object.keys(catData)[0];
-        if (firstTab) setActiveTab(firstTab);
-      }
-    })
-    .catch((err) => console.log("API Error: ", err));
-}, []);
+          // Set the first tab dynamically
+          const firstTab = Object.keys(catData)[0];
+          if (firstTab) setActiveTab(firstTab);
+        }
+      })
+      .catch((err) => console.log("API Error: ", err));
+  }, []);
+
+  // ===============================
+  // Fetch dynamic logo from API
+  // ===============================
+  useEffect(() => {
+    axios
+      .get("http://127.0.0.1:8000/api/get-header")
+      .then((res) => {
+        if (res.data.status && res.data.data.length > 0) {
+          setDynamicLogo(res.data.data[0].image);
+        }
+      })
+      .catch((err) => console.log("Header API Error:", err));
+  }, []);
 
   // Tabs list from API keys
   const tabs = Object.keys(categories).length > 0 ? Object.keys(categories) : ["MEN","WOMEN","TEENS","KIDS","SPORTS"];
@@ -56,7 +71,11 @@ useEffect(() => {
         <div className="container py-3">
           <Navbar expand="lg">
             <Navbar.Brand onClick={() => navigate("/")} style={{ cursor: "pointer" }}>
-              <img src={Logo} alt="BDStall Logo" style={{ maxHeight: "60px", width: "auto" }} />
+              <img
+                src={dynamicLogo || Logo} // dynamic logo with fallback
+                alt="BDStall Logo"
+                style={{ maxHeight: "60px", width: "auto" }}
+              />
             </Navbar.Brand>
 
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
