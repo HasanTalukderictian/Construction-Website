@@ -597,28 +597,28 @@ const Orderlist = () => {
                 </div>
             )}
             {/* Toast Notification */}
-<div
-    className={`toast align-items-center text-white bg-success border-0 position-fixed top-0 end-0 m-3 ${toast.show ? "show" : ""}`}
-    role="alert"
-    aria-live="assertive"
-    aria-atomic="true"
-    style={{ zIndex: 9999 }}
->
-    <div className="d-flex">
-        <div className="toast-body">
-            {toast.message}
-        </div>
-        <button
-            type="button"
-            className="btn-close btn-close-white me-2 m-auto"
-            data-bs-dismiss="toast"
-            aria-label="Close"
-            onClick={() => setToast({ show: false, message: "" })}
-        ></button>
-    </div>
-</div>
+            <div
+                className={`toast align-items-center text-white bg-success border-0 position-fixed top-0 end-0 m-3 ${toast.show ? "show" : ""}`}
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+                style={{ zIndex: 9999 }}
+            >
+                <div className="d-flex">
+                    <div className="toast-body">
+                        {toast.message}
+                    </div>
+                    <button
+                        type="button"
+                        className="btn-close btn-close-white me-2 m-auto"
+                        data-bs-dismiss="toast"
+                        aria-label="Close"
+                        onClick={() => setToast({ show: false, message: "" })}
+                    ></button>
+                </div>
+            </div>
         </Layout>
-        
+
     );
 };
 
