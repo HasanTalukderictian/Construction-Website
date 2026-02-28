@@ -198,141 +198,60 @@ const sendToPaperfly = async (order) => {
     // printInvoice and deleteOrder remain unchanged
 
 
-    const printInvoice = (order) => {
-        const invoiceWindow = window.open("", "_blank", "height=900,width=700");
-
-        if (!invoiceWindow) {
-            alert("Popup blocked!");
-            return;
+    // Print Invoice
+const printInvoice = async (order) => {
+    // Fetch sender/store info from API
+    let storeData = {};
+    try {
+        const res = await fetch("http://127.0.0.1:8000/api/stores");
+        const data = await res.json();
+        if (res.ok && data.status && Array.isArray(data.data) && data.data.length > 0) {
+            storeData = data.data[0];
+        } else {
+            console.warn("No store data found in API.");
         }
+    } catch (error) {
+        console.error("Error fetching store info:", error);
+    }
 
-        const storeData = JSON.parse(localStorage.getItem("storeCreationData") || "{}");
+    const deliveryCharge = order.delivery_charge || 0;
+    const totalAmount = order.final_total || 0;
+    const logoUrl = storeData.logo || ""; // optional if you store logo in API
 
-        const deliveryCharge = order.delivery_charge || 0;
-        const totalAmount = order.final_total || 0;
-        const logoUrl = storeData.logo || "YOUR_LOGO_URL_HERE";
+    // Use tracking_number from database
+    const trackingNumber = order.tracking_number || "N/A";
 
-        // ✅ ONLY FIX: database tracking_number used (design unchanged)
-        const trackingNumber = order.tracking_number || "N/A";
+    const invoiceWindow = window.open("", "_blank", "height=900,width=700");
 
-        const htmlContent = `
+    if (!invoiceWindow) {
+        alert("Popup blocked!");
+        return;
+    }
+
+    const htmlContent = `
 <html>
 <head>
 <title>Invoice #${order.id}</title>
 <style>
-body {
-font-family: Arial, sans-serif;
-margin: 0;
-padding: 0;
-background: linear-gradient(135deg, #57C785, #EDDD53);
--webkit-print-color-adjust: exact !important;
-print-color-adjust: exact !important;
-}
-.invoice-wrapper {
-padding: 30px;
-}
-.invoice-container {
-position: relative;
-background: #ffffff;
-padding: 30px;
-border-radius: 12px;
-box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-overflow: hidden;
-}
-.watermark {
-position: absolute;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-opacity: 0.05;
-width: 300px;
-z-index: 0;
-}
-.content {
-position: relative;
-z-index: 2;
-}
-.header {
-background: linear-gradient(90deg, #57C785, #EDDD53);
-padding: 15px;
-border-radius: 8px;
-color: #fff;
-text-align: center;
-margin-bottom: 20px;
-}
-.header h2 {
-margin: 0;
-font-size: 22px;
-letter-spacing: 1px;
-}
-.info-container {
-display: flex;
-justify-content: space-between;
-gap: 15px;
-margin-bottom: 20px;
-}
-.box {
-flex: 1;
-border: 1px solid #ddd;
-padding: 12px;
-border-radius: 8px;
-background: #f9f9f9;
-}
-.box-title {
-font-weight: bold;
-margin-bottom: 8px;
-font-size: 14px;
-color: #57C785;
-}
-table {
-width: 100%;
-border-collapse: collapse;
-margin-top: 20px;
-table-layout: fixed;
-}
-th, td {
-padding: 10px;
-border: 1px solid #ddd;
-word-wrap: break-word;
-}
-th {
-background: #57C785;
-color: white;
-text-align: center;
-}
-th:nth-child(1), td:nth-child(1) {
-width: 60%;
-text-align: left;
-}
-th:nth-child(2), td:nth-child(2) {
-width: 15%;
-text-align: center;
-}
-th:nth-child(3), td:nth-child(3) {
-width: 25%;
-text-align: right;
-}
-.totals {
-margin-top: 20px;
-text-align: right;
-font-weight: bold;
-font-size: 14px;
-}
-.footer {
-margin-top: 30px;
-padding: 12px;
-text-align: center;
-background: linear-gradient(90deg, #EDDD53, #57C785);
-border-radius: 8px;
-color: #333;
-font-weight: bold;
-}
-@media print {
-body {
--webkit-print-color-adjust: exact !important;
-print-color-adjust: exact !important;
-}
-}
+body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: linear-gradient(135deg, #57C785, #EDDD53); -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+.invoice-wrapper { padding: 30px; }
+.invoice-container { position: relative; background: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); overflow: hidden; }
+.watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.05; width: 300px; z-index: 0; }
+.content { position: relative; z-index: 2; }
+.header { background: linear-gradient(90deg, #57C785, #EDDD53); padding: 15px; border-radius: 8px; color: #fff; text-align: center; margin-bottom: 20px; }
+.header h2 { margin: 0; font-size: 22px; letter-spacing: 1px; }
+.info-container { display: flex; justify-content: space-between; gap: 15px; margin-bottom: 20px; }
+.box { flex: 1; border: 1px solid #ddd; padding: 12px; border-radius: 8px; background: #f9f9f9; }
+.box-title { font-weight: bold; margin-bottom: 8px; font-size: 14px; color: #57C785; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; table-layout: fixed; }
+th, td { padding: 10px; border: 1px solid #ddd; word-wrap: break-word; }
+th { background: #57C785; color: white; text-align: center; }
+th:nth-child(1), td:nth-child(1) { width: 60%; text-align: left; }
+th:nth-child(2), td:nth-child(2) { width: 15%; text-align: center; }
+th:nth-child(3), td:nth-child(3) { width: 25%; text-align: right; }
+.totals { margin-top: 20px; text-align: right; font-weight: bold; font-size: 14px; }
+.footer { margin-top: 30px; padding: 12px; text-align: center; background: linear-gradient(90deg, #EDDD53, #57C785); border-radius: 8px; color: #333; font-weight: bold; }
+@media print { body { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; } }
 </style>
 </head>
 <body>
@@ -340,7 +259,7 @@ print-color-adjust: exact !important;
 <div class="invoice-wrapper">
 <div class="invoice-container">
 
-<img src="${logoUrl}" class="watermark"/>
+${logoUrl ? `<img src="${logoUrl}" class="watermark"/>` : ""}
 
 <div class="content">
 
@@ -408,15 +327,15 @@ Thank you for your Purchase!
 </html>
 `;
 
-        invoiceWindow.document.open();
-        invoiceWindow.document.write(htmlContent);
-        invoiceWindow.document.close();
+    invoiceWindow.document.open();
+    invoiceWindow.document.write(htmlContent);
+    invoiceWindow.document.close();
 
-        invoiceWindow.onload = () => {
-            invoiceWindow.focus();
-            invoiceWindow.print();
-        };
+    invoiceWindow.onload = () => {
+        invoiceWindow.focus();
+        invoiceWindow.print();
     };
+};
 
 
     // DELETE function
