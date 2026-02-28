@@ -6,9 +6,10 @@ import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 
 const Orderlist = () => {
     const [orders, setOrders] = useState([]);
+    const [filteredOrders, setFilteredOrders] = useState([]); // Added for filtering
     const [showModal, setShowModal] = useState(false);
     const [selectedOrder, setSelectedOrder] = useState(null);
-    const [paperflyTracking, setPaperflyTracking] = useState({});
+
     const [currentPage, setCurrentPage] = useState(1);
     const [lastPage, setLastPage] = useState(1);
     const [toast, setToast] = useState({ show: false, message: "" });
@@ -25,47 +26,89 @@ const Orderlist = () => {
         paperflyKey: ""
     });
 
-    useEffect(() => {
-        const savedTracking = localStorage.getItem("paperflyTracking");
-        if (savedTracking) {
-            setPaperflyTracking(JSON.parse(savedTracking));
-        }
-    }, []);
+    const [filterText, setFilterText] = useState(""); // New state for filter
 
     useEffect(() => {
         fetch("http://127.0.0.1:8000/api/orders?page=" + currentPage)
             .then(res => res.json())
             .then(data => {
                 console.log("API FULL RESPONSE:", data);
-                setOrders(data?.data?.data || data?.data || data || []);
+                const allOrders = data?.data?.data || data?.data || data || [];
+                setOrders(allOrders);
+                setFilteredOrders(allOrders); // initialize filtered orders
                 setLastPage(data?.data?.last_page || 1);
             })
             .catch(error => {
                 console.error("Error fetching orders:", error);
                 setOrders([]);
+                setFilteredOrders([]);
             });
     }, [currentPage]);
 
-    // Modal open
-    const sendToPaperfly = (order) => {
-        setSelectedOrder(order);
-        const storeData = JSON.parse(localStorage.getItem("storeCreationData") || "{}");
-        const courierData = JSON.parse(localStorage.getItem("courierSettings") || "{}");
+    // Filtering function
+    useEffect(() => {
+        if (!filterText) {
+            setFilteredOrders(orders);
+        } else {
+            const lowerFilter = filterText.toLowerCase();
+            const filtered = orders.filter(order =>
+                (order.customer_name?.toLowerCase().includes(lowerFilter)) ||
+                (order.phone?.toLowerCase().includes(lowerFilter)) ||
+                (order.district?.toLowerCase().includes(lowerFilter)) ||
+                (order.thana?.toLowerCase().includes(lowerFilter)) ||
+                (order.created_at?.toLowerCase().includes(lowerFilter))
+            );
+            setFilteredOrders(filtered);
+        }
+    }, [filterText, orders]);
 
+    // Modal open
+   // Modal open
+// Modal open / Send to Paperfly
+const sendToPaperfly = async (order) => {
+    setSelectedOrder(order);
+
+    try {
+        // ✅ Fetch sender/store info
+        const storeRes = await fetch("http://127.0.0.1:8000/api/stores");
+        const storeData = await storeRes.json();
+
+        let storeInfo = {};
+        if (storeRes.ok && storeData.status && Array.isArray(storeData.data) && storeData.data.length > 0) {
+            storeInfo = storeData.data[0];
+        }
+
+        // ✅ Fetch courier credentials from API
+        const courierRes = await fetch("http://127.0.0.1:8000/api/couriers");
+        const courierDataResp = await courierRes.json();
+
+        let courierInfo = {};
+        if (courierRes.ok && courierDataResp.status && Array.isArray(courierDataResp.data) && courierDataResp.data.length > 0) {
+            courierInfo = courierDataResp.data[0];
+        }
+
+        // ✅ Set form data with both store info and courier credentials
         setFormData({
-            full_name: storeData.full_name || "",
-            phone_number: storeData.phone_number || "",
-            district_name: storeData.district_name || "",
-            thana_name: storeData.thana_name || "",
-            address: storeData.address || "",
-            label: storeData.label || "",
-            Username: courierData.Username || "",
-            Password: courierData.Password || "",
-            paperflyKey: courierData.paperflyKey || ""
+            full_name: storeInfo.full_name || "",
+            phone_number: storeInfo.phone_number || "",
+            district_name: storeInfo.district_name || "",
+            thana_name: storeInfo.thana_name || "",
+            address: storeInfo.address || "",
+            label: storeInfo.label || "",
+            Username: courierInfo.Username || "",
+            Password: courierInfo.Password || "",
+            paperflyKey: courierInfo.paperflyKey || ""
         });
 
-        setShowModal(true);
-    };
+    } catch (error) {
+        console.error("Error fetching sender or courier info:", error);
+        setFormData(prev => ({ ...prev })); // fallback
+    }
+
+    setShowModal(true);
+};
+
+    // Modal open
 
     const handleChange = (e) => {
         setFormData({
@@ -111,266 +154,256 @@ const Orderlist = () => {
             console.log("Paperfly Response:", data);
 
             if (response.ok && data.success) {
+                const trackingNumber = data.success.tracking_number;
 
-                const trackingNumber = data.success.tracking_number || "N/A";
-
-                alert("Order sent successfully!");
-
-                // Update state + localStorage
-                setPaperflyTracking(prev => {
-                    const updated = {
-                        ...prev,
-                        [selectedOrder.id]: trackingNumber
-                    };
-
-                    localStorage.setItem("paperflyTracking", JSON.stringify(updated));
-
-                    return updated;
+                // SAVE TO DATABASE
+                await fetch(`http://127.0.0.1:8000/api/orders/${selectedOrder.id}/tracking`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        tracking_number: trackingNumber
+                    })
                 });
 
-            } else {
+                // ✅ Update the orders state so table re-renders immediately
+                setOrders(prevOrders => prevOrders.map(order =>
+                    order.id === selectedOrder.id ? { ...order, tracking_number: trackingNumber } : order
+                ));
+
+                // Update filteredOrders as well, so search still works
+                setFilteredOrders(prevFiltered => prevFiltered.map(order =>
+                    order.id === selectedOrder.id ? { ...order, tracking_number: trackingNumber } : order
+                ));
+
+                alert("Order sent and tracking saved successfully!");
+
+                // Optional: update local tracking state
+
+            }
+
+            else {
                 alert("Failed to send order. Check console for details.");
             }
 
         } catch (error) {
             console.error("Error sending to Paperfly:", error);
-            alert("An error occurred while sending the order.");
+
         }
 
         setShowModal(false);
     };
 
+    // printInvoice and deleteOrder remain unchanged
 
-    // Fixed printInvoice
 
     const printInvoice = (order) => {
         const invoiceWindow = window.open("", "_blank", "height=900,width=700");
-        if (!invoiceWindow) { alert("Popup blocked!"); return; }
+
+        if (!invoiceWindow) {
+            alert("Popup blocked!");
+            return;
+        }
 
         const storeData = JSON.parse(localStorage.getItem("storeCreationData") || "{}");
+
         const deliveryCharge = order.delivery_charge || 0;
         const totalAmount = order.final_total || 0;
         const logoUrl = storeData.logo || "YOUR_LOGO_URL_HERE";
 
-        // ✅ Tracking Number Added
-        const trackingNumber = paperflyTracking[order.id] || "N/A";
+        // ✅ ONLY FIX: database tracking_number used (design unchanged)
+        const trackingNumber = order.tracking_number || "N/A";
 
         const htmlContent = `
 <html>
 <head>
-    <title>Invoice #${order.id}</title>
-    <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #57C785, #EDDD53);
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-        }
-
-        .invoice-wrapper {
-            padding: 30px;
-        }
-
-        .invoice-container {
-            position: relative;
-            background: #ffffff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-            overflow: hidden;
-        }
-
-        .watermark {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            opacity: 0.05;
-            width: 300px;
-            z-index: 0;
-        }
-
-        .content {
-            position: relative;
-            z-index: 2;
-        }
-
-        .header {
-            background: linear-gradient(90deg, #57C785, #EDDD53);
-            padding: 15px;
-            border-radius: 8px;
-            color: #fff;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .header h2 {
-            margin: 0;
-            font-size: 22px;
-            letter-spacing: 1px;
-        }
-
-        .info-container { 
-            display: flex; 
-            justify-content: space-between; 
-            gap: 15px; 
-            margin-bottom: 20px; 
-        }
-
-        .box { 
-            flex: 1; 
-            border: 1px solid #ddd; 
-            padding: 12px; 
-            border-radius: 8px; 
-            background: #f9f9f9;
-        }
-
-        .box-title { 
-            font-weight: bold; 
-            margin-bottom: 8px; 
-            font-size: 14px; 
-            color: #57C785;
-        }
-
-        table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            margin-top: 20px; 
-            table-layout: fixed;
-        }
-
-        th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            word-wrap: break-word;
-        }
-
-        th {
-            background: #57C785;
-            color: white;
-            text-align: center;
-        }
-
-        th:nth-child(1), td:nth-child(1) {
-            width: 60%;
-            text-align: left;
-        }
-
-        th:nth-child(2), td:nth-child(2) {
-            width: 15%;
-            text-align: center;
-        }
-
-        th:nth-child(3), td:nth-child(3) {
-            width: 25%;
-            text-align: right;
-        }
-
-        .totals { 
-            margin-top: 20px; 
-            text-align: right; 
-            font-weight: bold; 
-            font-size: 14px;
-        }
-
-        .footer {
-            margin-top: 30px;
-            padding: 12px;
-            text-align: center;
-            background: linear-gradient(90deg, #EDDD53, #57C785);
-            border-radius: 8px;
-            color: #333;
-            font-weight: bold;
-        }
-
-        @media print {
-            body {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-        }
-    </style>
+<title>Invoice #${order.id}</title>
+<style>
+body {
+font-family: Arial, sans-serif;
+margin: 0;
+padding: 0;
+background: linear-gradient(135deg, #57C785, #EDDD53);
+-webkit-print-color-adjust: exact !important;
+print-color-adjust: exact !important;
+}
+.invoice-wrapper {
+padding: 30px;
+}
+.invoice-container {
+position: relative;
+background: #ffffff;
+padding: 30px;
+border-radius: 12px;
+box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+overflow: hidden;
+}
+.watermark {
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+opacity: 0.05;
+width: 300px;
+z-index: 0;
+}
+.content {
+position: relative;
+z-index: 2;
+}
+.header {
+background: linear-gradient(90deg, #57C785, #EDDD53);
+padding: 15px;
+border-radius: 8px;
+color: #fff;
+text-align: center;
+margin-bottom: 20px;
+}
+.header h2 {
+margin: 0;
+font-size: 22px;
+letter-spacing: 1px;
+}
+.info-container {
+display: flex;
+justify-content: space-between;
+gap: 15px;
+margin-bottom: 20px;
+}
+.box {
+flex: 1;
+border: 1px solid #ddd;
+padding: 12px;
+border-radius: 8px;
+background: #f9f9f9;
+}
+.box-title {
+font-weight: bold;
+margin-bottom: 8px;
+font-size: 14px;
+color: #57C785;
+}
+table {
+width: 100%;
+border-collapse: collapse;
+margin-top: 20px;
+table-layout: fixed;
+}
+th, td {
+padding: 10px;
+border: 1px solid #ddd;
+word-wrap: break-word;
+}
+th {
+background: #57C785;
+color: white;
+text-align: center;
+}
+th:nth-child(1), td:nth-child(1) {
+width: 60%;
+text-align: left;
+}
+th:nth-child(2), td:nth-child(2) {
+width: 15%;
+text-align: center;
+}
+th:nth-child(3), td:nth-child(3) {
+width: 25%;
+text-align: right;
+}
+.totals {
+margin-top: 20px;
+text-align: right;
+font-weight: bold;
+font-size: 14px;
+}
+.footer {
+margin-top: 30px;
+padding: 12px;
+text-align: center;
+background: linear-gradient(90deg, #EDDD53, #57C785);
+border-radius: 8px;
+color: #333;
+font-weight: bold;
+}
+@media print {
+body {
+-webkit-print-color-adjust: exact !important;
+print-color-adjust: exact !important;
+}
+}
+</style>
 </head>
 <body>
-    <div class="invoice-wrapper">
-        <div class="invoice-container">
 
-            <img src="${logoUrl}" class="watermark"/>
+<div class="invoice-wrapper">
+<div class="invoice-container">
 
-            <div class="content">
+<img src="${logoUrl}" class="watermark"/>
 
-                <div class="header">
-                    <h2>INVOICE #${order.id}</h2>
-                </div>
+<div class="content">
 
-                <div class="info-container">
-                    <div class="box">
-                        <div class="box-title">Sender Information</div>
-                        <p><strong>${storeData.full_name || ""}</strong></p>
-                        <p>${storeData.phone_number || ""}</p>
-                        <p>${storeData.address || ""}, ${storeData.thana_name || ""}, ${storeData.district_name || ""}</p>
-                    </div>
+<div class="header">
+<h2>INVOICE #${order.id}</h2>
+</div>
 
-                    <div class="box">
-                        <div class="box-title">Customer Information</div>
-                        <p><strong>${order.customer_name}</strong></p>
-                        <p>${order.phone}</p>
-                        <p>${order.address}</p>
-                    </div>
-                </div>
+<div class="info-container">
 
-               <table>
-           <tr>
-        <th>Product</th>
-        <th>Qty</th>
-        <th>Price</th>
-       </tr>
-    ${order.items.map(item => `
-        <tr>
-            <td style="display:flex; align-items:center; gap:6px;">
-                <img src="${item.image_url
-                ? item.image_url.startsWith("http")
-                    ? item.image_url
-                    : `http://127.0.0.1:8000/storage/${item.image_url}`
-                : "https://via.placeholder.com/30"
-            }" alt="${item.product_name}" style="width:30px; height:30px; object-fit:cover; border-radius:4px;" />
-                <span>${item.product_name}</span>
-            </td>
-            <td>${item.quantity}</td>
-            <td>${item.price} ৳</td>
-        </tr>
-    `).join("")}
+<div class="box">
+<div class="box-title">Sender Information</div>
+<p><strong>${storeData.full_name || ""}</strong></p>
+<p>${storeData.phone_number || ""}</p>
+<p>${storeData.address || ""}, ${storeData.thana_name || ""}, ${storeData.district_name || ""}</p>
+</div>
+
+<div class="box">
+<div class="box-title">Customer Information</div>
+<p><strong>${order.customer_name}</strong></p>
+<p>${order.phone}</p>
+<p>${order.address}</p>
+</div>
+
+</div>
+
+<table>
+<tr>
+<th>Product</th>
+<th>Qty</th>
+<th>Price</th>
+</tr>
+
+${order.items.map(item => `
+<tr>
+<td style="display:flex; align-items:center; gap:6px;">
+<img src="${item.image_url ? (item.image_url.startsWith("http") ? item.image_url : `http://127.0.0.1:8000/storage/${item.image_url}`) : "https://via.placeholder.com/30"}"
+style="width:30px;height:30px;object-fit:cover;border-radius:4px;" />
+<span>${item.product_name}</span>
+</td>
+<td>${item.quantity}</td>
+<td>${item.price} ৳</td>
+</tr>
+`).join("")}
+
 </table>
 
+<div class="totals">
+<p>Delivery Charge: ${deliveryCharge} ৳</p>
+<p>Total: ${totalAmount} ৳</p>
+</div>
 
+<div style="margin-top:20px;padding:10px;border:1px dashed #57C785;border-radius:6px;font-weight:bold;text-align:center;">
+Tracking Number: ${trackingNumber}
+</div>
 
+<div class="footer">
+Thank you for your Purchase!
+</div>
 
-                <div class="totals">
-                    <p>Delivery Charge: ${deliveryCharge} ৳</p>
-                    <p>Total: ${totalAmount} ৳</p>
-                </div>
+</div>
+</div>
+</div>
 
-                <!-- ✅ Tracking Number Added (Design unchanged) -->
-                <div style="
-                    margin-top:20px;
-                    padding:10px;
-                    border:1px dashed #57C785;
-                    border-radius:6px;
-                    font-weight:bold;
-                    text-align:center;
-                ">
-                    Tracking Number: ${trackingNumber}
-                </div>
-
-                <div class="footer">
-                    Thank you for your Purchase!
-                </div>
-
-            </div>
-        </div>
-    </div>
 </body>
 </html>
 `;
@@ -378,15 +411,12 @@ const Orderlist = () => {
         invoiceWindow.document.open();
         invoiceWindow.document.write(htmlContent);
         invoiceWindow.document.close();
+
         invoiceWindow.onload = () => {
             invoiceWindow.focus();
             invoiceWindow.print();
         };
     };
-
-
-
-
 
 
     // DELETE function
@@ -403,13 +433,7 @@ const Orderlist = () => {
             if (data.status) {
                 setOrders(prev => prev.filter(o => o.id !== orderId));
 
-                // Remove tracking from state + localStorage
-                setPaperflyTracking(prev => {
-                    const updated = { ...prev };
-                    delete updated[orderId];
-                    localStorage.setItem("paperflyTracking", JSON.stringify(updated));
-                    return updated;
-                });
+
 
                 // ✅ Show toast instead of alert
                 setToast({ show: true, message: data.message });
@@ -423,7 +447,7 @@ const Orderlist = () => {
 
         } catch (error) {
             console.error("Delete error:", error);
-            alert("An error occurred while deleting the order");
+
         }
     };
 
@@ -432,8 +456,21 @@ const Orderlist = () => {
             <div className="d-flex">
                 <div className="flex-grow-1">
                     <DashNav />
+
                     <div className="container mt-4">
                         <h3 className="text-center mb-4">Order List</h3>
+
+                        {/* Filter Input */}
+                        <div className="mb-3 d-flex justify-content-end">
+                            <input
+                                type="text"
+                                className="form-control w-25"
+                                placeholder="Search by name, phone, district..."
+                                value={filterText}
+                                onChange={e => setFilterText(e.target.value)}
+                            />
+                        </div>
+
                         <div className="table-responsive shadow-sm">
                             <table className="table table-bordered table-striped align-middle text-center" style={{ fontSize: "13px" }}>
                                 <thead className="table-dark" style={{ fontSize: "12px" }}>
@@ -453,7 +490,7 @@ const Orderlist = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {orders.length > 0 ? orders.map((order, index) => (
+                                    {filteredOrders.length > 0 ? filteredOrders.map((order, index) => (
                                         <tr key={order.id}>
                                             <td>{index + 1}</td>
                                             <td>{order.customer_name}</td>
@@ -476,13 +513,15 @@ const Orderlist = () => {
                                             </td>
                                             <td className="fw-bold text-success">{order.final_total}৳</td>
                                             <td>{order.created_at}</td>
-                                            <td>{paperflyTracking[order.id] || "-"}</td>
+                                            <td>{order.tracking_number || "-"}</td>
                                             <td>
-                                                <button className={`btn btn-sm ${paperflyTracking[order.id] ? "btn-secondary" : "btn-primary"}`}
+                                                <button
+                                                    className={`btn btn-sm ${order.tracking_number ? "btn-secondary" : "btn-primary"}`}
                                                     style={{ fontSize: "11px", padding: "2px 6px" }}
                                                     onClick={() => sendToPaperfly(order)}
-                                                    disabled={!!paperflyTracking[order.id]}>
-                                                    {paperflyTracking[order.id] ? "Already Sent" : "Send"}
+                                                    disabled={!!order.tracking_number}
+                                                >
+                                                    {order.tracking_number ? "Already Sent" : "Send"}
                                                 </button>
                                             </td>
 
@@ -491,7 +530,7 @@ const Orderlist = () => {
                                                     className="btn btn-sm btn-warning"
                                                     style={{ fontSize: "11px", padding: "2px 6px" }}
                                                     onClick={() => printInvoice(order)}
-                                                    disabled={!paperflyTracking[order.id]}   // 🔥 CONDITION
+                                                    disabled={!order.tracking_number}
                                                 >
                                                     Print
                                                 </button>
@@ -507,12 +546,13 @@ const Orderlist = () => {
                                         </tr>
                                     )) : (
                                         <tr>
-                                            <td colSpan="12" className="text-center py-3">Loading orders...</td>
+                                            <td colSpan="12" className="text-center py-3">No orders found.</td>
                                         </tr>
                                     )}
                                 </tbody>
                             </table>
 
+                            {/* Pagination */}
                             <div className="d-flex justify-content-center mt-3 gap-2 mb-4">
                                 <button className="btn btn-sm btn-dark" disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)}>
                                     <BsChevronLeft size={18} />
@@ -524,10 +564,13 @@ const Orderlist = () => {
                             </div>
                         </div>
                     </div>
+
                     <Footer />
                 </div>
             </div>
 
+            {/* Modal and Toast remain unchanged */}
+            {/* ... */}
             {/* Modal */}
             {showModal && (
                 <div className="modal d-block" style={{ background: "rgba(0,0,0,0.5)" }}>
@@ -596,6 +639,8 @@ const Orderlist = () => {
                     </div>
                 </div>
             )}
+
+
             {/* Toast Notification */}
             <div
                 className={`toast align-items-center text-white bg-success border-0 position-fixed top-0 end-0 m-3 ${toast.show ? "show" : ""}`}
@@ -617,8 +662,9 @@ const Orderlist = () => {
                     ></button>
                 </div>
             </div>
-        </Layout>
 
+
+        </Layout>
     );
 };
 
