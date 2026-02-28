@@ -63,25 +63,52 @@ const Orderlist = () => {
     }, [filterText, orders]);
 
     // Modal open
-    const sendToPaperfly = (order) => {
-        setSelectedOrder(order);
-        const storeData = JSON.parse(localStorage.getItem("storeCreationData") || "{}");
-        const courierData = JSON.parse(localStorage.getItem("courierSettings") || "{}");
+   // Modal open
+// Modal open / Send to Paperfly
+const sendToPaperfly = async (order) => {
+    setSelectedOrder(order);
 
+    try {
+        // ✅ Fetch sender/store info
+        const storeRes = await fetch("http://127.0.0.1:8000/api/stores");
+        const storeData = await storeRes.json();
+
+        let storeInfo = {};
+        if (storeRes.ok && storeData.status && Array.isArray(storeData.data) && storeData.data.length > 0) {
+            storeInfo = storeData.data[0];
+        }
+
+        // ✅ Fetch courier credentials from API
+        const courierRes = await fetch("http://127.0.0.1:8000/api/couriers");
+        const courierDataResp = await courierRes.json();
+
+        let courierInfo = {};
+        if (courierRes.ok && courierDataResp.status && Array.isArray(courierDataResp.data) && courierDataResp.data.length > 0) {
+            courierInfo = courierDataResp.data[0];
+        }
+
+        // ✅ Set form data with both store info and courier credentials
         setFormData({
-            full_name: storeData.full_name || "",
-            phone_number: storeData.phone_number || "",
-            district_name: storeData.district_name || "",
-            thana_name: storeData.thana_name || "",
-            address: storeData.address || "",
-            label: storeData.label || "",
-            Username: courierData.Username || "",
-            Password: courierData.Password || "",
-            paperflyKey: courierData.paperflyKey || ""
+            full_name: storeInfo.full_name || "",
+            phone_number: storeInfo.phone_number || "",
+            district_name: storeInfo.district_name || "",
+            thana_name: storeInfo.thana_name || "",
+            address: storeInfo.address || "",
+            label: storeInfo.label || "",
+            Username: courierInfo.Username || "",
+            Password: courierInfo.Password || "",
+            paperflyKey: courierInfo.paperflyKey || ""
         });
 
-        setShowModal(true);
-    };
+    } catch (error) {
+        console.error("Error fetching sender or courier info:", error);
+        setFormData(prev => ({ ...prev })); // fallback
+    }
+
+    setShowModal(true);
+};
+
+    // Modal open
 
     const handleChange = (e) => {
         setFormData({
