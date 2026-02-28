@@ -304,7 +304,11 @@ const Products = () => {
                   </div>
                 </div>
 
-                <div className="mb-3">
+               
+
+                <div className="row">
+
+                    <div className="col-md-6 mb-3">
                   <label className="form-label">Category</label>
                   <select className="form-select" value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
                     <option value="">Select Category</option>
@@ -312,12 +316,14 @@ const Products = () => {
                   </select>
                 </div>
 
-                <div className="mb-3">
+                <div className="col-md-6 mb-3">
                   <label className="form-label">SubCategory</label>
                   <select className="form-select" value={subCategoryId} onChange={(e) => setSubCategoryId(e.target.value)}>
                     <option value="">Select SubCategory</option>
                     {subCategories.map(sc => <option key={sc.id} value={sc.id}>{sc.name}</option>)}
                   </select>
+                </div>
+
                 </div>
 
                 <div className="mb-3">
