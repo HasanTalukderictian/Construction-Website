@@ -14,7 +14,7 @@ const Item = () => {
   const { addToCart } = useContext(CartContext);
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:8000/api/products`)
+    fetch(`http://127.0.0.1:8000/api/get-products`)
       .then(res => res.json())
       .then(data => setTeam(data))
       .catch(err => console.log("Error Loading JSON", err));
@@ -54,11 +54,10 @@ const Item = () => {
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   e.preventDefault();
-                  // optional: can trigger any action on Enter
                 }
               }}
             />
-            <i className="bi bi-search search-icon" onClick={() => { /* optional: can trigger search */ }}></i>
+            <i className="bi bi-search search-icon" onClick={() => {}}></i>
           </div>
 
         </div>
@@ -71,8 +70,9 @@ const Item = () => {
               <div className='col-6 col-md-6 col-lg-3 mb-4' key={item.id}>
                 <div className='card h-100 shadow border-0 p-2 d-flex flex-column'>
 
+                  {/* Display only the first image from the images array */}
                   <img
-                    src={item.image_url || '/placeholder.png'}
+                    src={item.images && item.images.length > 0 ? item.images[0] : '/placeholder.png'}
                     alt={item.name}
                     className="product-img"
                     style={{
