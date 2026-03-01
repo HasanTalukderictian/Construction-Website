@@ -30,17 +30,22 @@ const Cart = () => {
         }));
 
         navigate("/checkout", {
-            state: { cartItems: mappedCartItems, deliveryCharge, totalPrice },
+            state: {
+                cartItems: mappedCartItems,
+                deliveryCharge,
+                totalPrice,
+                selectedDelivery   // ✅ add this line
+            },
         });
     };
 
     return (
         <>
             <Header />
-            <div 
+            <div
                 className="container mt-4 p-3 p-md-4 rounded shadow-lg mb-5"
-                style={{ 
-                    background: "linear-gradient(135deg, #f3f5f7, #fcfcfc)", 
+                style={{
+                    background: "linear-gradient(135deg, #f3f5f7, #fcfcfc)",
                     borderRadius: "20px"
                 }}
             >
@@ -51,10 +56,10 @@ const Cart = () => {
                 ) : (
                     <>
                         {cartItems.map(item => (
-                            <div 
-                                key={item.id} 
+                            <div
+                                key={item.id}
                                 className="d-flex flex-column flex-md-row align-items-center justify-content-between mb-3 p-3 rounded shadow-sm cart-item"
-                                style={{ 
+                                style={{
                                     backgroundColor: "#ffffffcc",
                                     transition: "transform 0.2s, box-shadow 0.2s",
                                     cursor: "pointer"
@@ -69,9 +74,9 @@ const Cart = () => {
                                 }}
                             >
                                 <div className="d-flex align-items-center mb-2 mb-md-0 w-100">
-                                    <img 
-                                        src={item.image_url} 
-                                        alt={item.product_name} 
+                                    <img
+                                        src={item.image_url}
+                                        alt={item.product_name}
                                         className="cart-item-img"
                                     />
                                     <div className="ms-2">
@@ -94,9 +99,9 @@ const Cart = () => {
                         ))}
 
                         {/* Summary Panel */}
-                        <div 
+                        <div
                             className="mt-4 p-3 p-md-4 rounded shadow-lg summary-panel"
-                            style={{ 
+                            style={{
                                 background: "linear-gradient(135deg, #ffecd2, #fcb69f)",
                                 borderRadius: "20px"
                             }}
@@ -106,22 +111,22 @@ const Cart = () => {
                                 <div className="col-12 col-md-6 border-md-end">
                                     <h4 style={{ color: "#8b4513" }}>Delivery Charge</h4>
                                     <div className="form-check mt-2">
-                                        <input 
-                                            type="radio" 
-                                            className="form-check-input" 
-                                            name="delivery" 
-                                            checked={selectedDelivery === "inside"} 
-                                            onChange={() => { setDeliveryCharge(80); setSelectedDelivery("inside"); }} 
+                                        <input
+                                            type="radio"
+                                            className="form-check-input"
+                                            name="delivery"
+                                            checked={selectedDelivery === "inside"}
+                                            onChange={() => { setDeliveryCharge(80); setSelectedDelivery("inside"); }}
                                         />
                                         <label className="form-check-label"><h6 className="mb-0">Inside Dhaka (80৳)</h6></label>
                                     </div>
                                     <div className="form-check mt-2">
-                                        <input 
-                                            type="radio" 
-                                            className="form-check-input" 
-                                            name="delivery" 
-                                            checked={selectedDelivery === "outside"} 
-                                            onChange={() => { setDeliveryCharge(150); setSelectedDelivery("outside"); }} 
+                                        <input
+                                            type="radio"
+                                            className="form-check-input"
+                                            name="delivery"
+                                            checked={selectedDelivery === "outside"}
+                                            onChange={() => { setDeliveryCharge(150); setSelectedDelivery("outside"); }}
                                         />
                                         <label className="form-check-label"><h6 className="mb-0">Outside Dhaka (150৳)</h6></label>
                                     </div>
@@ -133,12 +138,12 @@ const Cart = () => {
                                     <h6 className="mb-1 mt-2">Delivery Charge: {deliveryCharge}৳</h6>
                                     <h5 className="fw-bold mt-3">Final Total: {finalTotal}৳</h5>
                                     <div className="mt-3">
-                                        <button 
+                                        <button
                                             className="btn btn-primary btn-sm  w-md-auto"
-                                            onClick={handleCheckout} 
+                                            onClick={handleCheckout}
                                             disabled={!selectedDelivery}
-                                            style={{ 
-                                                padding: "10px 25px", 
+                                            style={{
+                                                padding: "10px 25px",
                                                 fontSize: "16px",
                                                 background: "linear-gradient(135deg, #667eea, #764ba2)",
                                                 border: "none",
