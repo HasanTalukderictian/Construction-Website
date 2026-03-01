@@ -42,6 +42,50 @@
 
 /* Category list */
 
+.mega-modal {
+    margin-top: 0 !important;
+}
+
+.modal-dialog {
+    margin: 0 auto !important;
+}
+
+.modal-content {
+    margin-top: 90px;
+    background: rgba(221, 221, 221, 0.92);
+    border-radius: 14px;
+    border: none;
+    box-shadow: 0 8px 25px rgba(24, 24, 24, 0.08);
+}
+
+
+/* Top category tabs */
+
+.mega-top-menu {
+    flex-wrap: wrap;
+}
+
+.mega-top-menu span {
+    cursor: pointer;
+    font-weight: 600;
+    padding-bottom: 5px;
+}
+
+.mega-top-menu .active-tab {
+    border-bottom: 3px solid rgb(46, 129, 35);
+}
+
+
+/* Section title */
+
+.mega-title {
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+
+/* Category list */
+
 .mega-list {
     list-style: none;
     padding: 0;
@@ -56,6 +100,123 @@
 .mega-list li:hover {
     color: green;
     font-weight: 600;
+}
+
+
+/* Product images */
+
+.mega-img {
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+.mega-img:hover {
+    transform: scale(1.05);
+}
+
+
+/* Light transparent backdrop */
+
+.modal-backdrop.show {
+    opacity: 0.05 !important;
+    /* very very light */
+}
+
+.mega-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    /* fixed equal columns */
+    grid-template-columns: repeat(3, 160px);
+    gap: 10px 25px;
+    justify-content: start;
+}
+
+
+/* equal size items */
+
+
+/* parent list controls spacing */
+
+.mega-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 160px);
+    column-gap: 25px;
+    /* horizontal gap equal */
+    row-gap: 10px;
+    /* vertical gap equal */
+}
+
+
+/* submenu item */
+
+.mega-list li {
+    cursor: pointer;
+    padding: 6px 10px;
+    /* equal inner padding */
+    font-size: 14px;
+    color: #333;
+    width: 160px;
+    box-sizing: border-box;
+    /* ensures padding doesn't break width */
+    border-radius: 4px;
+    transition: 0.2s;
+}
+
+
+/* hover effect */
+
+.mega-list li:hover {
+    color: #2b8145;
+    font-weight: 600;
+    background-color: rgba(43, 129, 69, 0.05);
+}
+
+
+/* Remove blur completely */
+
+.modal-backdrop {
+    backdrop-filter: none !important;
+}
+
+
+/* ======================== MOBILE RESPONSIVE ======================== */
+
+@media (max-width: 767px) {
+    .mega-top-menu {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        justify-content: flex-start;
+        gap: 10px;
+        padding-bottom: 5px;
+        /* optional, gives space */
+    }
+    .mega-top-menu span {
+        flex: 0 0 auto;
+        font-size: 14px;
+        padding: 8px 12px;
+        white-space: nowrap;
+        /* prevent text from wrapping */
+    }
+    .mega-top-menu {
+        position: relative;
+    }
+    .mega-top-menu::after {
+        content: "»";
+        position: absolute;
+        right: 5px;
+        top: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+        color: #333;
+    }
 }
 
 

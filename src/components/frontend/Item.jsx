@@ -20,14 +20,27 @@ const Item = () => {
       .catch(err => console.log("Error Loading JSON", err));
   }, []);
 
+
+
   // Add to cart
-  const handleAddToCart = (product) => {
-    addToCart(product);
-    setToastMessage("Your order has been created successfully");
+// Add to cart
+const handleAddToCart = (item) => {
+    // Make sure first image is assigned
+    const mainImage = item.images && item.images.length > 0 ? item.images[0] : null;
+
+    const normalizedProduct = {
+        id: item.id,
+        product_name: item.name || "Unknown Product",
+        image_url: mainImage, // <-- assign first image
+        price: parseFloat(item.price) || 0,
+        description: item.description || "",
+    };
+
+    addToCart(normalizedProduct);
+    setToastMessage("Product added to cart!");
     setShowToast(true);
     setTimeout(() => setShowToast(false), 3000);
-  };
-
+};
   // Filter products based on search term
   const filteredTeam = team.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
