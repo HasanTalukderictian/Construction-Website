@@ -4,8 +4,6 @@ import Header from "../common/Header"
 
 import ServiceImage from '../../assets/images/construction1.jpg';
 import ServiceImage1 from '../../assets/images/construction11.jpg';
-import ServiceImage2 from '../../assets/images/construction2.jpg';
-import ServiceImage3 from '../../assets/images/construction3.jpg';
 
 import ServiceImage4 from '../../assets/images/construction10.jpg';
 import ServiceImage5 from '../../assets/images/construction11212.jpg';

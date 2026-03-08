@@ -7,6 +7,9 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScal
 import { Tour } from '@reactour/tour';
 import '../../src/assets/css/dashboard.scss';
 
+export const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
+
 ChartJS.register(ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
 const steps = [
@@ -33,7 +36,7 @@ const Dashboard = () => {
 
     const fetchDashboardData = async () => {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/dashboard-data`, {
+            const response = await fetch(`${API_BASE}/dashboard-data`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

@@ -3,6 +3,8 @@ import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../../src/assets/css/Sidebar.scss";
 
+export const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 const Sidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [header, setHeader] = useState(null); // API data
@@ -18,7 +20,7 @@ const Sidebar = () => {
   // Fetch Header from API
   const fetchHeader = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:8000/api/get-header");
+      const res = await axios.get(`${API_BASE}/get-header`);
       if (res.data.status && res.data.data.length > 0) {
         setHeader(res.data.data[0]);
       }

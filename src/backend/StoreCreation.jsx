@@ -3,6 +3,9 @@ import Layout from "../components/Layout";
 import DashNav from "./DasNav";
 import Footer from "./Footer";
 
+
+export const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 const StoreCreation = () => {
     const [formData, setFormData] = useState({
         full_name: "",
@@ -18,7 +21,7 @@ const StoreCreation = () => {
 
     // Load districts from mapping.json
     useEffect(() => {
-        fetch("../../../public/mapping.json")
+        fetch("/mapping.json")
             .then(res => res.json())
             .then(data => setDistricts(data))
             .catch(err => console.log("District Load Error", err));
@@ -28,7 +31,7 @@ const StoreCreation = () => {
     useEffect(() => {
         const fetchStoreData = async () => {
             try {
-                const response = await fetch("http://127.0.0.1:8000/api/stores");
+                const response = await fetch(`${API_BASE}/stores`);
                 const data = await response.json();
 
                 // ✅ Take first store from the array
@@ -82,7 +85,7 @@ const StoreCreation = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch("http://127.0.0.1:8000/api/stores", {
+            const response = await fetch(`${API_BASE}/stores`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

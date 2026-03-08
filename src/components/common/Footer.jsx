@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../../assets/css/footer.scss';
 
+export const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 const Footer = () => {
     const [headerData, setHeaderData] = useState(null); // For company name & logo
     const [contactData, setContactData] = useState(null); // For phone, email, address
@@ -9,7 +11,7 @@ const Footer = () => {
     // Fetch header info (Company name + logo)
     const fetchHeader = async () => {
         try {
-            const res = await axios.get('http://127.0.0.1:8000/api/get-header');
+            const res = await axios.get(`${API_BASE}/get-header`);
             if (res.data.status && res.data.data.length > 0) {
                 setHeaderData(res.data.data[0]);
             } else {
@@ -24,7 +26,7 @@ const Footer = () => {
     // Fetch contact info
     const fetchContact = async () => {
         try {
-            const res = await axios.get('http://127.0.0.1:8000/api/get-contact');
+            const res = await axios.get(`${API_BASE}/get-contact`);
             if (res.data.status && res.data.data) {
                 setContactData(res.data.data);
             } else {

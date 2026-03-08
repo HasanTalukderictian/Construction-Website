@@ -6,6 +6,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DashNav from "./DasNav";
 
+export const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 const Banner = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,7 +21,7 @@ const Banner = () => {
   // Fetch data
   const fetchData = () => {
     axios
-      .get("http://127.0.0.1:8000/api/get-banner")
+      .get(`${API_BASE}/get-banner`)
       .then((res) => {
         if (res.data.status) setData(res.data.data);
       })
@@ -63,7 +65,7 @@ const Banner = () => {
 
     try {
       const res = await axios.post(
-        "http://127.0.0.1:8000/api/add-banner",
+        `${API_BASE}/add-banner`,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -86,7 +88,7 @@ const Banner = () => {
 
     try {
       const res = await axios.delete(
-        `http://127.0.0.1:8000/api/del-banner/${id}`
+        `${API_BASE}/del-banner/${id}`
       );
       if (res.data.status) {
         fetchData();

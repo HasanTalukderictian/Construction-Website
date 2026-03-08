@@ -6,13 +6,15 @@ import '../../assets/css/about.scss';
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+export const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 const About = () => {
 
     const [team, setTeam] = useState([]);
 
     // Fetch team data from API
     useEffect(() => {
-        axios.get("http://127.0.0.1:8000/api/get-team")
+        axios.get(`${API_BASE}/get-team`)
             .then((res) => {
                 if (res.data.status) {
                     setTeam(res.data.data);

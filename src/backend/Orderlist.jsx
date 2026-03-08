@@ -4,6 +4,10 @@ import Footer from "./Footer";
 import Layout from "../components/Layout";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 
+export const API_STORE = import.meta.env.VITE_API_STORAGE_URL;
+
+export const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 const Orderlist = () => {
     const [orders, setOrders] = useState([]);
     const [filteredOrders, setFilteredOrders] = useState([]); // Added for filtering
@@ -29,7 +33,7 @@ const Orderlist = () => {
     const [filterText, setFilterText] = useState(""); // New state for filter
 
     useEffect(() => {
-        fetch("http://127.0.0.1:8000/api/orders?page=" + currentPage)
+        fetch(`${API_BASE}/orders?page=` + currentPage)
             .then(res => res.json())
             .then(data => {
                 console.log("API FULL RESPONSE:", data);
@@ -70,7 +74,7 @@ const sendToPaperfly = async (order) => {
 
     try {
         // ✅ Fetch sender/store info
-        const storeRes = await fetch("http://127.0.0.1:8000/api/stores");
+        const storeRes = await fetch(`${API_BASE}/stores`);
         const storeData = await storeRes.json();
 
         let storeInfo = {};
@@ -79,7 +83,7 @@ const sendToPaperfly = async (order) => {
         }
 
         // ✅ Fetch courier credentials from API
-        const courierRes = await fetch("http://127.0.0.1:8000/api/couriers");
+        const courierRes = await fetch(`${API_BASE}/couriers`);
         const courierDataResp = await courierRes.json();
 
         let courierInfo = {};
@@ -140,7 +144,7 @@ const sendToPaperfly = async (order) => {
         };
 
         try {
-            const response = await fetch("https://api.paperfly.com.bd/merchant/api/service/new_order.php", {
+            const response = await fetch(`https://api.paperfly.com.bd/merchant/api/service/new_order.php`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -157,7 +161,7 @@ const sendToPaperfly = async (order) => {
                 const trackingNumber = data.success.tracking_number;
 
                 // SAVE TO DATABASE
-                await fetch(`http://127.0.0.1:8000/api/orders/${selectedOrder.id}/tracking`, {
+                await fetch(`${API_BASE}/orders/${selectedOrder.id}/tracking`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -203,7 +207,7 @@ const printInvoice = async (order) => {
     // Fetch sender/store info from API
     let storeData = {};
     try {
-        const res = await fetch("http://127.0.0.1:8000/api/stores");
+        const res = await fetch(`${API_BASE}/stores`);
         const data = await res.json();
         if (res.ok && data.status && Array.isArray(data.data) && data.data.length > 0) {
             storeData = data.data[0];
@@ -295,7 +299,7 @@ ${logoUrl ? `<img src="${logoUrl}" class="watermark"/>` : ""}
 ${order.items.map(item => `
 <tr>
 <td style="display:flex; align-items:center; gap:6px;">
-<img src="${item.image_url ? (item.image_url.startsWith("http") ? item.image_url : `http://127.0.0.1:8000/storage/${item.image_url}`) : "https://via.placeholder.com/30"}"
+<img src="${item.image_url ? (item.image_url.startsWith("http") ? item.image_url : `${API_STORE}/${item.image_url}`) : "https://via.placeholder.com/30"}"
 style="width:30px;height:30px;object-fit:cover;border-radius:4px;" />
 <span>${item.product_name}</span>
 </td>
@@ -343,7 +347,7 @@ Thank you for your Purchase!
         if (!window.confirm("Are you sure you want to delete this order?")) return;
 
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/orders/${orderId}`, {
+            const response = await fetch(`${API_BASE}/orders/${orderId}`, {
                 method: "DELETE",
             });
 
@@ -533,7 +537,7 @@ Thank you for your Purchase!
                                                 src={item.image_url
                                                     ? item.image_url.startsWith("http")
                                                         ? item.image_url      // full URL
-                                                        : `http://127.0.0.1:8000/storage/${item.image_url}` // relative path
+                                                        : `${API_STORE}/${item.image_url}` // relative path
                                                     : "https://via.placeholder.com/50"}
                                                 alt={item.product_name}
                                                 style={{ width: "50px", height: "50px", objectFit: "cover", borderRadius: "4px" }}

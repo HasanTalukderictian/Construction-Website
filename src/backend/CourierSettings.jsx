@@ -3,6 +3,8 @@ import Layout from "../components/Layout";
 import DashNav from "./DasNav";
 import Footer from "./Footer";
 
+export const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 const CourierSettings = () => {
     const [formData, setFormData] = useState({
         paperflyKey: "",
@@ -14,7 +16,7 @@ const CourierSettings = () => {
     useEffect(() => {
         const fetchCourier = async () => {
             try {
-                const response = await fetch("http://127.0.0.1:8000/api/couriers");
+                const response = await fetch(`${API_BASE}/couriers`);
                 const data = await response.json();
                 if (response.ok && data.status && data.data.length > 0) {
                     // Fill form with first courier record
@@ -43,7 +45,7 @@ const CourierSettings = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch("http://127.0.0.1:8000/api/couriers", {
+            const response = await fetch(`${API_BASE}/couriers`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

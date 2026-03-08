@@ -10,8 +10,6 @@ import ServiceImage3 from '../../assets/images/construction3.jpg';
 
 import ServiceImage4 from '../../assets/images/construction10.jpg';
 import ServiceImage5 from '../../assets/images/construction11212.jpg';
-import ServiceImage6 from '../../assets/images/construction1212.jpg';
-import ServiceImage7 from '../../assets/images/construction122 (2).jpg';
 
 const Projects = () => {
   return (

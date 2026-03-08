@@ -6,6 +6,8 @@ import { CartContext } from "./CartContext";
 import Toast from "react-bootstrap/Toast";
 import "../../assets/css/product.scss";
 
+export const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 const Productdetails = () => {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
@@ -23,7 +25,7 @@ const Productdetails = () => {
 
     // Fetch product and related products
     useEffect(() => {
-        fetch("http://127.0.0.1:8000/api/get-products")
+        fetch(`${API_BASE}/get-products`)
             .then((res) => res.json())
             .then((data) => {
                 const selectedProduct = data.find((item) => item.id === parseInt(id));
@@ -93,7 +95,11 @@ const Productdetails = () => {
                         <img
                             src={mainImage || '/placeholder.png'}
                             alt={product.name}
-                            style={{ width: "100%", height: "auto", objectFit: "cover" }}
+                            style={{
+                                width: "100%",
+                                height: "100%", // fill the div height
+                                objectFit: "cover", // maintains aspect ratio, crops if necessary
+                            }}
                         />
 
                         {/* Thumbnails */}
