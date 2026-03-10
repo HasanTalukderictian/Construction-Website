@@ -11,6 +11,9 @@ import imageCompression from 'browser-image-compression';
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
+export const API_BASE = import.meta.env.VITE_API_BASE_URL;
+export const STORE_BASE = import.meta.env.VITE_API_STORAGE_URL;
+
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -43,14 +46,14 @@ const Products = () => {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://127.0.0.1:8000/api/get-products");
+      const res = await axios.get(`${API_BASE}/get-products`);
       const data = res.data.data || res.data;
       const formatted = data.map(product => ({
         ...product,
         images: product.images?.map(img =>
           typeof img === "string"
             ? img
-            : `http://127.0.0.1:8000/storage/${img.image_path}`
+            : `${STORE_BASE}/${img.image_path}`
         )
       }));
       setProducts(formatted);
@@ -64,7 +67,7 @@ const Products = () => {
   // Fetch categories
   useEffect(() => {
     fetchProducts();
-    axios.get("http://127.0.0.1:8000/api/all-category")
+    axios.get(`${API_BASE}/all-category`)
       .then(res => {
         if (res.data.success) setCategories(res.data.data);
       })
@@ -148,12 +151,12 @@ const Products = () => {
 
     try {
       if (editingProductId) {
-        await axios.post(`http://127.0.0.1:8000/api/update-products/${editingProductId}`, formData, {
+        await axios.post(`${API_BASE}/update-products/${editingProductId}`, formData, {
           headers: { "Content-Type": "multipart/form-data" }
         });
         toast.success("Product updated successfully!");
       } else {
-        await axios.post("http://127.0.0.1:8000/api/add-products", formData, {
+        await axios.post(`${API_BASE}/add-products`, formData, {
           headers: { "Content-Type": "multipart/form-data" }
         });
         toast.success("Product saved successfully!");
@@ -185,7 +188,7 @@ const Products = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this product?")) return;
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/products-del/${id}`);
+      await axios.delete(`${API_BASE}/products-del/${id}`);
       fetchProducts();
       toast.success("Product deleted successfully!");
     } catch {

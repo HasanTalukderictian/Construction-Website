@@ -7,6 +7,8 @@ import Toast from "react-bootstrap/Toast";
 import { useLocation } from "react-router-dom";
 import { CartContext } from "./CartContext";
 
+export const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 const Checkout = () => {
 
   const [districts, setDistricts] = useState([]);
@@ -20,49 +22,50 @@ const Checkout = () => {
   const [showToast, setShowToast] = useState(false);
   const [orderSubmitted, setOrderSubmitted] = useState(false);
   const { clearCart } = useContext(CartContext);
+  const [showPaymentToast, setShowPaymentToast] = useState(false);
 
   const location = useLocation();
-const { cartItems, deliveryCharge, totalPrice, selectedDelivery } = location.state || {};
+  const { cartItems, deliveryCharge, totalPrice, selectedDelivery } = location.state || {};
 
   const finalTotal = totalPrice + deliveryCharge;
 
   // Load districts
-useEffect(() => {
-  fetch("../../../public/mapping.json")
-    .then(res => res.json())
-    .then(data => {
+  useEffect(() => {
+    fetch("/mapping.json")
+      .then(res => res.json())
+      .then(data => {
 
-      if (selectedDelivery === "inside") {
+        if (selectedDelivery === "inside") {
 
-        // include all Dhaka related districts
-        const filtered = data.filter(d =>
-          d.district.toLowerCase().includes("dhaka") ||
-          d.district.toLowerCase().includes("savar") ||
-          d.district.toLowerCase().includes("keraniganj") ||
-          d.district.toLowerCase().includes("dhamrai")
-        );
+          // include all Dhaka related districts
+          const filtered = data.filter(d =>
+            d.district.toLowerCase().includes("dhaka") ||
+            d.district.toLowerCase().includes("savar") ||
+            d.district.toLowerCase().includes("keraniganj") ||
+            d.district.toLowerCase().includes("dhamrai")
+          );
 
-        setDistricts(filtered);
+          setDistricts(filtered);
 
-      } else if (selectedDelivery === "outside") {
+        } else if (selectedDelivery === "outside") {
 
-        // exclude Dhaka related districts
-        const filtered = data.filter(d =>
-          !d.district.toLowerCase().includes("dhaka") &&
-          !d.district.toLowerCase().includes("savar") &&
-          !d.district.toLowerCase().includes("keraniganj") &&
-          !d.district.toLowerCase().includes("dhamrai")
-        );
+          // exclude Dhaka related districts
+          const filtered = data.filter(d =>
+            !d.district.toLowerCase().includes("dhaka") &&
+            !d.district.toLowerCase().includes("savar") &&
+            !d.district.toLowerCase().includes("keraniganj") &&
+            !d.district.toLowerCase().includes("dhamrai")
+          );
 
-        setDistricts(filtered);
+          setDistricts(filtered);
 
-      } else {
-        setDistricts(data);
-      }
+        } else {
+          setDistricts(data);
+        }
 
-    })
-    .catch(err => console.log("District Load Error", err));
-}, [selectedDelivery]);
+      })
+      .catch(err => console.log("District Load Error", err));
+  }, [selectedDelivery]);
 
   useEffect(() => {
     if (selectedDistrict) {
@@ -104,27 +107,39 @@ useEffect(() => {
       paymentMethod,
     };
 
-    try {
-      // Online Payment Flow
-      if (paymentMethod === "bkash" || paymentMethod === "rocket") {
-        const response = await fetch(`http://127.0.0.1:8000/api/payment/initiate`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(orderData),
-        });
-        const data = await response.json();
+    // try {
+    //   // Online Payment Flow
+    //   if (paymentMethod === "bkash" || paymentMethod === "rocket") {
 
-        if (data.status && data.payment_url) {
-          // Redirect user to payment gateway
-          window.location.href = data.payment_url;
-        } else {
-          alert("Payment initialization failed!");
-        }
+    //     const response = await fetch(`${API_BASE}/api/payment/initiate`, {
+    //       method: "POST",
+    //       headers: { "Content-Type": "application/json" },
+    //       body: JSON.stringify(orderData),
+    //     });
+
+    //     const data = await response.json();
+
+    //     if (data.status && data.payment_url) {
+    //       // Redirect user to payment gateway
+    //       window.location.href = data.payment_url;
+    //     } else {
+    //       alert("Payment initialization failed!");
+    //     }
+    //     return;
+    //   }
+
+    try {
+      // Online Payment Flow (Temporarily Disabled)
+      if (paymentMethod === "bkash" || paymentMethod === "rocket") {
+        setShowPaymentToast(true);
+        setTimeout(() => setShowPaymentToast(false), 4000);
         return;
       }
 
+
+
       // COD or no payment selected
-      const response = await fetch("http://127.0.0.1:8000/api/order/store", {
+      const response = await fetch(`${API_BASE}/order/store`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderData),
@@ -219,10 +234,31 @@ useEffect(() => {
 
         {/* Toast */}
         <div style={{ position: "fixed", top: 20, right: 20, zIndex: 9999 }}>
+
           <Toast show={showToast} onClose={() => setShowToast(false)} delay={3000} autohide bg="success">
-            <Toast.Header><strong className="me-auto">Order Status</strong></Toast.Header>
-            <Toast.Body className="text-white">Your order has been completed!</Toast.Body>
+            <Toast.Header>
+              <strong className="me-auto">Order Status</strong>
+            </Toast.Header>
+            <Toast.Body className="text-white">
+              Your order has been completed!
+            </Toast.Body>
           </Toast>
+
+          <Toast
+            show={showPaymentToast}
+            onClose={() => setShowPaymentToast(false)}
+            delay={4000}
+            autohide
+            bg="warning"
+          >
+            <Toast.Header>
+              <strong className="me-auto">Payment Notice</strong>
+            </Toast.Header>
+            <Toast.Body className="text-dark">
+              bKash / Rocket payment is under development. Please select Cash on Delivery.
+            </Toast.Body>
+          </Toast>
+
         </div>
       </div>
       <Footer />

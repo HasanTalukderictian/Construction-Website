@@ -5,6 +5,8 @@ import Header from "../common/Header";
 import axios from 'axios';
 import '../../assets/css/map.scss';
 
+export const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 const Contact = () => {
     const [form, setForm] = useState({
         name: '',
@@ -21,7 +23,7 @@ const Contact = () => {
     // Fetch contact info from API
     const fetchContact = async () => {
         try {
-            const res = await axios.get('http://127.0.0.1:8000/api/get-contact');
+            const res = await axios.get(`${API_BASE}/get-contact`);
             if (res.data.status && res.data.data) {
                 setContactData(res.data.data);
             }

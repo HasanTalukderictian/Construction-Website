@@ -3,6 +3,9 @@ import DashNav from "./DasNav";
 import Footer from "./Footer";
 import { useEffect, useState } from "react";
 
+
+export const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 const UserSettings = () => {
     const [users, setUsers] = useState([]);
     const [filteredUsers, setFilteredUsers] = useState([]);
@@ -24,7 +27,7 @@ const UserSettings = () => {
     // fetch users
     const fetchUsers = async () => {
         try {
-            const response = await fetch("http://127.0.0.1:8000/api/users", {
+            const response = await fetch(`${API_BASE}/users`, {
                 headers: {
                     "Accept": "application/json",
                     "Authorization": "Bearer " + JSON.parse(localStorage.getItem("adminUser"))?.token
@@ -49,7 +52,7 @@ const UserSettings = () => {
     // toggle active/inactive
     const toggleStatus = async (userId, currentStatus) => {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/users/${userId}/toggle-status`, {
+            const response = await fetch(`${API_BASE}/users/${userId}/toggle-status`, {
                 method: "POST",
                 headers: {
                     "Accept": "application/json",
@@ -81,7 +84,7 @@ const UserSettings = () => {
         setSuccess("");
 
         try {
-            const response = await fetch("http://127.0.0.1:8000/api/create-user", {
+            const response = await fetch(`${API_BASE}/create-user`, {
                 method: "POST",
                 headers: {
                     "Accept": "application/json",

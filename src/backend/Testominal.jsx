@@ -6,6 +6,9 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DashNav from "./DasNav";
 
+
+export const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 const Testominal = () => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,7 +24,7 @@ const Testominal = () => {
   // Fetch Reviews
   const fetchReviews = () => {
     axios
-      .get("http://127.0.0.1:8000/api/get-reviews")
+      .get(`${API_BASE}/get-reviews`)
       .then((res) => {
         if (res.data.status) setReviews(res.data.data);
       })
@@ -64,7 +67,7 @@ const Testominal = () => {
 
     try {
       const res = await axios.post(
-        "http://127.0.0.1:8000/api/add-reviews",
+        `${API_BASE}/add-reviews`,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -85,7 +88,7 @@ const Testominal = () => {
     if (!window.confirm("Are you sure you want to delete this review?")) return;
 
     try {
-      const res = await axios.delete(`http://127.0.0.1:8000/api/del-reviews/${id}`);
+      const res = await axios.delete(`${API_BASE}/del-reviews/${id}`);
       if (res.data.status) {
         fetchReviews();
         toast.success("Review deleted successfully!");

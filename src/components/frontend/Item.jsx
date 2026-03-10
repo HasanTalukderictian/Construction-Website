@@ -4,6 +4,8 @@ import '../../../src/assets/css/product.scss';
 import Toast from "react-bootstrap/Toast";
 import { CartContext } from "./CartContext";
 
+export const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 const Item = () => {
   const [team, setTeam] = useState([]);
   const [searchTerm, setSearchTerm] = useState(""); // for search input
@@ -14,7 +16,7 @@ const Item = () => {
   const { addToCart } = useContext(CartContext);
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:8000/api/get-products`)
+    fetch(`${API_BASE}/get-products`)
       .then(res => res.json())
       .then(data => setTeam(data))
       .catch(err => console.log("Error Loading JSON", err));

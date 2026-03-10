@@ -6,6 +6,9 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DashNav from "./DasNav";
 
+
+export const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 const Team = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,7 +23,7 @@ const Team = () => {
   // Fetch data
   const fetchData = () => {
     axios
-      .get("http://127.0.0.1:8000/api/get-team")
+      .get(`${API_BASE}/get-team`)
       .then((res) => {
         if (res.data.status) setData(res.data.data);
       })
@@ -66,7 +69,7 @@ const Team = () => {
 
     try {
       const res = await axios.post(
-        "http://127.0.0.1:8000/api/add-team",
+        `${API_BASE}/add-team`,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -89,7 +92,7 @@ const Team = () => {
 
     try {
       const res = await axios.delete(
-        `http://127.0.0.1:8000/api/del-team/${id}`
+        `${API_BASE}/del-team/${id}`
       );
       if (res.data.status) {
         fetchData();

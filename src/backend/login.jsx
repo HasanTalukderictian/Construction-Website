@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+export const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,7 +18,7 @@ export default function Login() {
   useEffect(() => {
     const fetchHeader = async () => {
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/get-header");
+        const res = await fetch(`${API_BASE}/get-header`);
         const data = await res.json();
         if (data.status && data.data.length > 0) {
           setHeaderImage(data.data[0].image); // ✅ Set image from API
@@ -35,7 +37,7 @@ export default function Login() {
     setSuccess("");
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/login", {
+      const response = await fetch(`${API_BASE}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

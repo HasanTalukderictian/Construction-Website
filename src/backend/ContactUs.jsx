@@ -6,6 +6,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DashNav from "./DasNav";
 
+
+export const API_BASE = import.meta.env.VITE_API_BASE_URL;
 const ContactUs = () => {
     const [contact, setContact] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -23,7 +25,7 @@ const ContactUs = () => {
     const fetchContact = () => {
         setLoading(true);
         axios
-            .get("http://127.0.0.1:8000/api/get-contact")
+            .get(`${API_BASE}/get-contact`)
             .then((res) => {
                 if (res.data.status && res.data.data) {
                     setContact(res.data.data);
@@ -86,14 +88,14 @@ const ContactUs = () => {
             if (isEditing && contact) {
                 // Update existing contact
                 res = await axios.post(
-                    `http://127.0.0.1:8000/api/edit-contact/${contact.id}`,
+                    `${API_BASE}/edit-contact/${contact.id}`,
                     formData,
                     { headers: { "Content-Type": "multipart/form-data" } }
                 );
             } else {
                 // Add new contact
                 res = await axios.post(
-                    "http://127.0.0.1:8000/api/add-contact",
+                    `${API_BASE}/add-contact`,
                     formData,
                     { headers: { "Content-Type": "multipart/form-data" } }
                 );

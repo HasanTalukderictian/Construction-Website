@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 import '../assets/css/nav.scss'
 
+
+export const API_BASE = import.meta.env.VITE_API_BASE_URL;
+export const API_STORE = import.meta.env.VITE_API_STORAGE_URL;
+
 const DashNav = () => {
     const [showModal, setShowModal] = useState(false);
     const [companyName, setCompanyName] = useState('Gazi Builders'); // fallback name
@@ -18,7 +22,7 @@ const DashNav = () => {
     // ================================
     const fetchCompanyInfo = async () => {
         try {
-            const response = await fetch('http://127.0.0.1:8000/api/get-header');
+            const response = await fetch(`${API_BASE}/get-header`);
             const data = await response.json();
             if (response.ok && data.status && data.data.length > 0) {
                 const header = data.data[0];
@@ -35,7 +39,7 @@ const DashNav = () => {
     // ================================
     const fetchUserInfo = async () => {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/get-userInfo`, {
+            const response = await fetch(`${API_BASE}/get-userInfo`, {
                 headers: { 'Accept': 'application/json' },
             });
             const data = await response.json();
@@ -44,7 +48,7 @@ const DashNav = () => {
                 const user = data.data[0];
                 setCompanyName(prev => prev); // keep API company name unchanged
                 setYourName(user.your_name || '');
-                setImage(user.image ? `http://127.0.0.1:8000/storage/${user.image}` : null);
+                setImage(user.image ? `${API_STORE}/storage/${user.image}` : null);
                 setUserId(user.id);
             }
         } catch (error) {
@@ -116,7 +120,7 @@ const DashNav = () => {
         }
 
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/edit-userInfo/${userId}`, {
+            const response = await fetch(`${API_BASE}/edit-userInfo/${userId}`, {
                 method: 'POST',
                 body: formData,
             });

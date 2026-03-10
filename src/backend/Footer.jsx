@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+export const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 const Footer = () => {
   const currentYear = new Date().getFullYear(); // Get the current year dynamically
   const [companyName, setCompanyName] = useState("Gazi Builders"); // default fallback
@@ -8,7 +10,7 @@ const Footer = () => {
   // Fetch company name from API
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/api/get-header")
+      .get(`${API_BASE}/get-header`)
       .then((res) => {
         if (res.data.status && res.data.data.length > 0) {
           setCompanyName(res.data.data[0].Companyname);

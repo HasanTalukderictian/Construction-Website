@@ -6,6 +6,9 @@ import Footer from '../common/Footer';
 import { CartContext } from './CartContext';
 import '../../assets/css/ProductDetails.scss';
 
+
+export const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 const ProductPage = () => {
   const { parent, subcategory } = useParams();
   const [products, setProducts] = useState([]);
@@ -25,7 +28,7 @@ const ProductPage = () => {
 
   useEffect(() => {
     axios
-      .get(`http://127.0.0.1:8000/api/products/${parent}/${subcategory}`)
+      .get(`${API_BASE}/products/${parent}/${subcategory}`)
       .then(res => {
         if (res.data.success) {
           setProducts(res.data.data);

@@ -7,6 +7,8 @@ import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import {  BsTrash } from "react-icons/bs";
 
+export const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 const Category = () => {
   const [categories, setCategories] = useState([]);
   const [categoryName, setCategoryName] = useState("");
@@ -18,7 +20,7 @@ const Category = () => {
   // ===============================
   const fetchCategories = () => {
     axios
-      .get(`http://127.0.0.1:8000/api/all-category`)
+      .get(`${API_BASE}/all-category`)
       .then((res) => {
         if (res.data.success) {
           setCategories(res.data.data);
@@ -37,7 +39,7 @@ const Category = () => {
   const handleCategorySubmit = (e) => {
     e.preventDefault();
     axios
-      .post(`http://127.0.0.1:8000/api/parent-category/store`, { name: categoryName })
+      .post(`${API_BASE}/parent-category/store`, { name: categoryName })
       .then((res) => {
         toast.success(res.data.message || "Parent Category created!");
         setCategoryName("");
@@ -56,7 +58,7 @@ const Category = () => {
       return;
     }
     axios
-      .post(`http://127.0.0.1:8000/api/sub-category/store`, {
+      .post(`${API_BASE}/sub-category/store`, {
         name: subCategoryName,
         parent_category_id: parentCategoryId,
       })
@@ -74,7 +76,7 @@ const Category = () => {
   // ===============================
   const handleDeleteCategory = (id) => {
     if (window.confirm("Are you sure you want to delete this category?")) {
-      axios.delete(`http://127.0.0.1:8000/api/delete-parent-category/${id}`)
+      axios.delete(`${API_BASE}/delete-parent-category/${id}`)
         .then(() => {
           toast.success("Category deleted!");
           fetchCategories();
@@ -85,7 +87,7 @@ const Category = () => {
 
   const handleDeleteSubCategory = (id) => {
     if (window.confirm("Are you sure you want to delete this subcategory?")) {
-      axios.delete(`http://127.0.0.1:8000/api/delete-sub-category/${id}`)
+      axios.delete(`${API_BASE}/delete-sub-category/${id}`)
         .then(() => {
           toast.success("SubCategory deleted!");
           fetchCategories();

@@ -11,6 +11,9 @@ import { CartContext } from "../frontend/CartContext";
 import "../../assets/css/header.scss";
 import Logo from "../../assets/images/BDStall logo.png"; // fallback logo
 
+
+export const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 // ===============================
 // Simple module-level cache
 // ===============================
@@ -29,7 +32,7 @@ const Header = () => {
   // ===============================
   useEffect(() => {
     axios
-      .get(`http://127.0.0.1:8000/api/all-category`)
+      .get(`${API_BASE}/all-category`)
       .then((res) => {
         if (res.data.success) {
           const catData = {};
@@ -60,7 +63,7 @@ const Header = () => {
   useEffect(() => {
     if (!headerCache) {
       axios
-        .get("http://127.0.0.1:8000/api/get-header")
+        .get(`${API_BASE}/get-header"`)
         .then((res) => {
           if (res.data.status && res.data.data.length > 0) {
             setDynamicLogo(res.data.data[0].image);

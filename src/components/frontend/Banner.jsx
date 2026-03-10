@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import "../../../src/assets/css/banner.scss";
 
+export const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 const Banner = ({ scrollToItem }) => {
     const [slides, setSlides] = useState([]);
     const [active, setActive] = useState(0);
@@ -17,7 +19,7 @@ const Banner = ({ scrollToItem }) => {
     // ✅ Fetch Banner Data from API
     useEffect(() => {
         axios
-            .get("http://127.0.0.1:8000/api/get-banner")
+            .get(`${API_BASE}/get-banner`)
             .then((res) => {
                 if (res.data.status) {
                     const apiData = res.data.data.map((item, index) => ({
