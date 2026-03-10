@@ -18,6 +18,11 @@ const Orderlist = () => {
     const [lastPage, setLastPage] = useState(1);
     const [toast, setToast] = useState({ show: false, message: "" });
 
+    const [trackingData, setTrackingData] = useState(null);
+    const [showTrackingModal, setShowTrackingModal] = useState(false);
+
+
+
     const [formData, setFormData] = useState({
         full_name: "",
         phone_number: "",
@@ -29,6 +34,95 @@ const Orderlist = () => {
         Password: "",
         paperflyKey: ""
     });
+
+    // const viewTracking = async (order) => {
+
+    //     try {
+
+    //         const courierRes = await fetch(`${API_BASE}/couriers`);
+    //         const courierData = await courierRes.json();
+
+    //         if (courierRes.ok && courierData.status && courierData.data.length > 0) {
+
+    //             const courier = courierData.data[0];
+
+    //             const Username = courier.Username;
+    //             const Password = courier.Password;
+    //             const paperflyKey = courier.paperflyKey;
+
+    //             const response = await fetch("https://api.paperfly.com.bd/API-Order-Tracking", {
+    //                 method: "POST",
+    //                 headers: {
+    //                     "Content-Type": "application/json",
+    //                     "paperflykey": paperflyKey,
+    //                     "Authorization": "Basic " + btoa(`${Username}:${Password}`)
+    //                 },
+    //                 body: JSON.stringify({
+    //                     ReferenceNumber: order.id
+    //                 })
+    //             });
+
+    //             const data = await response.json();
+
+    //             console.log("Tracking Response:", data);
+
+    //         }
+
+    //     } catch (error) {
+
+    //         console.error("Tracking error:", error);
+
+    //     }
+
+    // };
+   
+
+    const viewTracking = async (order) => {
+
+    try {
+
+        const courierRes = await fetch(`${API_BASE}/couriers`);
+        const courierData = await courierRes.json();
+
+        if (courierRes.ok && courierData.status && courierData.data.length > 0) {
+
+            const courier = courierData.data[0];
+
+            const Username = courier.Username;
+            const Password = courier.Password;
+            const paperflyKey = courier.paperflyKey;
+
+            const response = await fetch("https://api.paperfly.com.bd/API-Order-Tracking", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "paperflykey": paperflyKey,
+                    "Authorization": "Basic " + btoa(`${Username}:${Password}`)
+                },
+                body: JSON.stringify({
+                    ReferenceNumber: order.id
+                })
+            });
+
+            const data = await response.json();
+
+            console.log("Tracking Response:", data);
+
+            if (data.success) {
+                setTrackingData(data.success.trackingStatus[0]);
+                setShowTrackingModal(true);
+            }
+
+        }
+
+    } catch (error) {
+
+        console.error("Tracking error:", error);
+
+    }
+
+};
+
 
     const [filterText, setFilterText] = useState(""); // New state for filter
 
@@ -67,50 +161,50 @@ const Orderlist = () => {
     }, [filterText, orders]);
 
     // Modal open
-   // Modal open
-// Modal open / Send to Paperfly
-const sendToPaperfly = async (order) => {
-    setSelectedOrder(order);
+    // Modal open
+    // Modal open / Send to Paperfly
+    const sendToPaperfly = async (order) => {
+        setSelectedOrder(order);
 
-    try {
-        // ✅ Fetch sender/store info
-        const storeRes = await fetch(`${API_BASE}/stores`);
-        const storeData = await storeRes.json();
+        try {
+            // ✅ Fetch sender/store info
+            const storeRes = await fetch(`${API_BASE}/stores`);
+            const storeData = await storeRes.json();
 
-        let storeInfo = {};
-        if (storeRes.ok && storeData.status && Array.isArray(storeData.data) && storeData.data.length > 0) {
-            storeInfo = storeData.data[0];
+            let storeInfo = {};
+            if (storeRes.ok && storeData.status && Array.isArray(storeData.data) && storeData.data.length > 0) {
+                storeInfo = storeData.data[0];
+            }
+
+            // ✅ Fetch courier credentials from API
+            const courierRes = await fetch(`${API_BASE}/couriers`);
+            const courierDataResp = await courierRes.json();
+
+            let courierInfo = {};
+            if (courierRes.ok && courierDataResp.status && Array.isArray(courierDataResp.data) && courierDataResp.data.length > 0) {
+                courierInfo = courierDataResp.data[0];
+            }
+
+            // ✅ Set form data with both store info and courier credentials
+            setFormData({
+                full_name: storeInfo.full_name || "",
+                phone_number: storeInfo.phone_number || "",
+                district_name: storeInfo.district_name || "",
+                thana_name: storeInfo.thana_name || "",
+                address: storeInfo.address || "",
+                label: storeInfo.label || "",
+                Username: courierInfo.Username || "",
+                Password: courierInfo.Password || "",
+                paperflyKey: courierInfo.paperflyKey || ""
+            });
+
+        } catch (error) {
+            console.error("Error fetching sender or courier info:", error);
+            setFormData(prev => ({ ...prev })); // fallback
         }
 
-        // ✅ Fetch courier credentials from API
-        const courierRes = await fetch(`${API_BASE}/couriers`);
-        const courierDataResp = await courierRes.json();
-
-        let courierInfo = {};
-        if (courierRes.ok && courierDataResp.status && Array.isArray(courierDataResp.data) && courierDataResp.data.length > 0) {
-            courierInfo = courierDataResp.data[0];
-        }
-
-        // ✅ Set form data with both store info and courier credentials
-        setFormData({
-            full_name: storeInfo.full_name || "",
-            phone_number: storeInfo.phone_number || "",
-            district_name: storeInfo.district_name || "",
-            thana_name: storeInfo.thana_name || "",
-            address: storeInfo.address || "",
-            label: storeInfo.label || "",
-            Username: courierInfo.Username || "",
-            Password: courierInfo.Password || "",
-            paperflyKey: courierInfo.paperflyKey || ""
-        });
-
-    } catch (error) {
-        console.error("Error fetching sender or courier info:", error);
-        setFormData(prev => ({ ...prev })); // fallback
-    }
-
-    setShowModal(true);
-};
+        setShowModal(true);
+    };
 
     // Modal open
 
@@ -203,36 +297,36 @@ const sendToPaperfly = async (order) => {
 
 
     // Print Invoice
-const printInvoice = async (order) => {
-    // Fetch sender/store info from API
-    let storeData = {};
-    try {
-        const res = await fetch(`${API_BASE}/stores`);
-        const data = await res.json();
-        if (res.ok && data.status && Array.isArray(data.data) && data.data.length > 0) {
-            storeData = data.data[0];
-        } else {
-            console.warn("No store data found in API.");
+    const printInvoice = async (order) => {
+        // Fetch sender/store info from API
+        let storeData = {};
+        try {
+            const res = await fetch(`${API_BASE}/stores`);
+            const data = await res.json();
+            if (res.ok && data.status && Array.isArray(data.data) && data.data.length > 0) {
+                storeData = data.data[0];
+            } else {
+                console.warn("No store data found in API.");
+            }
+        } catch (error) {
+            console.error("Error fetching store info:", error);
         }
-    } catch (error) {
-        console.error("Error fetching store info:", error);
-    }
 
-    const deliveryCharge = order.delivery_charge || 0;
-    const totalAmount = order.final_total || 0;
-    const logoUrl = storeData.logo || ""; // optional if you store logo in API
+        const deliveryCharge = order.delivery_charge || 0;
+        const totalAmount = order.final_total || 0;
+        const logoUrl = storeData.logo || ""; // optional if you store logo in API
 
-    // Use tracking_number from database
-    const trackingNumber = order.tracking_number || "N/A";
+        // Use tracking_number from database
+        const trackingNumber = order.tracking_number || "N/A";
 
-    const invoiceWindow = window.open("", "_blank", "height=900,width=700");
+        const invoiceWindow = window.open("", "_blank", "height=900,width=700");
 
-    if (!invoiceWindow) {
-        alert("Popup blocked!");
-        return;
-    }
+        if (!invoiceWindow) {
+            alert("Popup blocked!");
+            return;
+        }
 
-    const htmlContent = `
+        const htmlContent = `
 <html>
 <head>
 <title>Invoice #${order.id}</title>
@@ -331,15 +425,15 @@ Thank you for your Purchase!
 </html>
 `;
 
-    invoiceWindow.document.open();
-    invoiceWindow.document.write(htmlContent);
-    invoiceWindow.document.close();
+        invoiceWindow.document.open();
+        invoiceWindow.document.write(htmlContent);
+        invoiceWindow.document.close();
 
-    invoiceWindow.onload = () => {
-        invoiceWindow.focus();
-        invoiceWindow.print();
+        invoiceWindow.onload = () => {
+            invoiceWindow.focus();
+            invoiceWindow.print();
+        };
     };
-};
 
 
     // DELETE function
@@ -409,6 +503,7 @@ Thank you for your Purchase!
                                         <th>Tracking Number</th>
                                         <th>Confirm</th>
                                         <th>Invoice</th>
+                                        <th>Tracking Order</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -456,6 +551,16 @@ Thank you for your Purchase!
                                                     disabled={!order.tracking_number}
                                                 >
                                                     Print
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <button
+                                                    className="btn btn-sm btn-info"
+                                                    style={{ fontSize: "11px", padding: "2px 6px" }}
+                                                    onClick={() => viewTracking(order)}
+                                                    disabled={!order.tracking_number}
+                                                >
+                                                    View
                                                 </button>
                                             </td>
 
@@ -585,7 +690,47 @@ Thank you for your Purchase!
                     ></button>
                 </div>
             </div>
+             
+             {showTrackingModal && trackingData && (
+    <div className="modal d-block" style={{ background: "rgba(0,0,0,0.5)" }}>
+        <div className="modal-dialog">
+            <div className="modal-content">
 
+                <div className="modal-header">
+                    <h5 className="modal-title">Order Tracking Status</h5>
+                    <button
+                        className="btn-close"
+                        onClick={() => setShowTrackingModal(false)}
+                    ></button>
+                </div>
+
+                <div className="modal-body">
+
+                   {[
+                { label: "Picked", value: trackingData.Pick, time: trackingData.PickTime },
+                { label: "In Transit", value: trackingData.inTransit, time: trackingData.inTransitTime },
+                { label: "Received At Point", value: trackingData.ReceivedAtPoint, time: trackingData.ReceivedAtPointTime },
+                { label: "Out For Delivery", value: trackingData.PickedForDelivery, time: trackingData.PickedForDeliveryTime },
+                { label: "Delivered", value: trackingData.Delivered, time: trackingData.DeliveredTime },
+                { label: "Returned", value: trackingData.Returned, time: trackingData.ReturnedTime },
+                { label: "Partial Delivery", value: trackingData.Partial, time: trackingData.PartialTime },
+                { label: "On Hold / Schedule", value: trackingData.onHoldSchedule },
+                { label: "Closed", value: trackingData.close, time: trackingData.closeTime }
+            ].map((status, index) => (
+                <div key={index} className="border rounded p-2 mb-2 bg-light">
+                    <strong>{status.label}</strong>
+                    <div style={{ fontSize: "12px", color: "gray" }}>
+                        {status.value || "Pending"} {status.time ? `- ${status.time}` : ""}
+                    </div>
+                </div>
+            ))}
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+)}
 
         </Layout>
     );
