@@ -19,6 +19,31 @@
 }
 
 
+/* DashNav sticky */
+
+.sticky-nav {
+    position: sticky;
+    /* Stays visible when scrolling */
+    top: 0;
+    /* Stick to top */
+    z-index: 999;
+    /* Always above other content */
+    background-color: #ffffff;
+    /* Ensure background covers content behind */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    /* Optional subtle shadow */
+}
+
+.fixed-nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+
 /* 📱 Mobile version */
 
 @media (max-width: 768px) {
