@@ -20,6 +20,7 @@ const Orderlist = () => {
 
     const [trackingData, setTrackingData] = useState(null);
     const [showTrackingModal, setShowTrackingModal] = useState(false);
+    const [confirmFilter, setConfirmFilter] = useState("all"); // all, sent, notSent
 
 
 
@@ -75,53 +76,53 @@ const Orderlist = () => {
     //     }
 
     // };
-   
+
 
     const viewTracking = async (order) => {
 
-    try {
+        try {
 
-        const courierRes = await fetch(`${API_BASE}/couriers`);
-        const courierData = await courierRes.json();
+            const courierRes = await fetch(`${API_BASE}/couriers`);
+            const courierData = await courierRes.json();
 
-        if (courierRes.ok && courierData.status && courierData.data.length > 0) {
+            if (courierRes.ok && courierData.status && courierData.data.length > 0) {
 
-            const courier = courierData.data[0];
+                const courier = courierData.data[0];
 
-            const Username = courier.Username;
-            const Password = courier.Password;
-            const paperflyKey = courier.paperflyKey;
+                const Username = courier.Username;
+                const Password = courier.Password;
+                const paperflyKey = courier.paperflyKey;
 
-            const response = await fetch("https://api.paperfly.com.bd/API-Order-Tracking", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "paperflykey": paperflyKey,
-                    "Authorization": "Basic " + btoa(`${Username}:${Password}`)
-                },
-                body: JSON.stringify({
-                    ReferenceNumber: order.id
-                })
-            });
+                const response = await fetch("https://api.paperfly.com.bd/API-Order-Tracking", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "paperflykey": paperflyKey,
+                        "Authorization": "Basic " + btoa(`${Username}:${Password}`)
+                    },
+                    body: JSON.stringify({
+                        ReferenceNumber: order.id
+                    })
+                });
 
-            const data = await response.json();
+                const data = await response.json();
 
-            console.log("Tracking Response:", data);
+                console.log("Tracking Response:", data);
 
-            if (data.success) {
-                setTrackingData(data.success.trackingStatus[0]);
-                setShowTrackingModal(true);
+                if (data.success) {
+                    setTrackingData(data.success.trackingStatus[0]);
+                    setShowTrackingModal(true);
+                }
+
             }
+
+        } catch (error) {
+
+            console.error("Tracking error:", error);
 
         }
 
-    } catch (error) {
-
-        console.error("Tracking error:", error);
-
-    }
-
-};
+    };
 
 
     const [filterText, setFilterText] = useState(""); // New state for filter
@@ -436,6 +437,32 @@ Thank you for your Purchase!
     };
 
 
+    useEffect(() => {
+        let filtered = [...orders];
+
+        // 1️⃣ Filter by confirm/send status
+        if (confirmFilter === "sent") {
+            filtered = filtered.filter(order => !!order.tracking_number);
+        } else if (confirmFilter === "notSent") {
+            filtered = filtered.filter(order => !order.tracking_number);
+        }
+
+        // 2️⃣ Apply search text
+        if (filterText) {
+            const lowerFilter = filterText.toLowerCase();
+            filtered = filtered.filter(order =>
+                (order.customer_name?.toLowerCase().includes(lowerFilter)) ||
+                (order.phone?.toLowerCase().includes(lowerFilter)) ||
+                (order.district?.toLowerCase().includes(lowerFilter)) ||
+                (order.thana?.toLowerCase().includes(lowerFilter)) ||
+                (order.created_at?.toLowerCase().includes(lowerFilter))
+            );
+        }
+
+        setFilteredOrders(filtered);
+    }, [filterText, confirmFilter, orders]);
+
+
     // DELETE function
     const deleteOrder = async (orderId) => {
         if (!window.confirm("Are you sure you want to delete this order?")) return;
@@ -477,8 +504,18 @@ Thank you for your Purchase!
                     <div className="container mt-4">
                         <h3 className="text-center mb-4">Order List</h3>
 
-                        {/* Filter Input */}
-                        <div className="mb-3 d-flex justify-content-end">
+                        <div className="mb-3 d-flex justify-content-end align-items-center gap-2">
+                            <select
+                                className="form-select w-auto"
+                                value={confirmFilter}
+                                onChange={e => setConfirmFilter(e.target.value)}
+                            >
+                                <option value="all">All Orders</option>
+                                <option value="sent">Already Sent</option>
+                                <option value="notSent">Not Sent</option>
+                            </select>
+
+                            {/* Filter Input */}
                             <input
                                 type="text"
                                 className="form-control w-25"
@@ -487,6 +524,8 @@ Thank you for your Purchase!
                                 onChange={e => setFilterText(e.target.value)}
                             />
                         </div>
+
+
 
                         <div className="table-responsive shadow-sm">
                             <table className="table table-bordered table-striped align-middle text-center" style={{ fontSize: "13px" }}>
@@ -690,47 +729,47 @@ Thank you for your Purchase!
                     ></button>
                 </div>
             </div>
-             
-             {showTrackingModal && trackingData && (
-    <div className="modal d-block" style={{ background: "rgba(0,0,0,0.5)" }}>
-        <div className="modal-dialog">
-            <div className="modal-content">
 
-                <div className="modal-header">
-                    <h5 className="modal-title">Order Tracking Status</h5>
-                    <button
-                        className="btn-close"
-                        onClick={() => setShowTrackingModal(false)}
-                    ></button>
-                </div>
+            {showTrackingModal && trackingData && (
+                <div className="modal d-block" style={{ background: "rgba(0,0,0,0.5)" }}>
+                    <div className="modal-dialog">
+                        <div className="modal-content">
 
-                <div className="modal-body">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Order Tracking Status</h5>
+                                <button
+                                    className="btn-close"
+                                    onClick={() => setShowTrackingModal(false)}
+                                ></button>
+                            </div>
 
-                   {[
-                { label: "Picked", value: trackingData.Pick, time: trackingData.PickTime },
-                { label: "In Transit", value: trackingData.inTransit, time: trackingData.inTransitTime },
-                { label: "Received At Point", value: trackingData.ReceivedAtPoint, time: trackingData.ReceivedAtPointTime },
-                { label: "Out For Delivery", value: trackingData.PickedForDelivery, time: trackingData.PickedForDeliveryTime },
-                { label: "Delivered", value: trackingData.Delivered, time: trackingData.DeliveredTime },
-                { label: "Returned", value: trackingData.Returned, time: trackingData.ReturnedTime },
-                { label: "Partial Delivery", value: trackingData.Partial, time: trackingData.PartialTime },
-                { label: "On Hold / Schedule", value: trackingData.onHoldSchedule },
-                { label: "Closed", value: trackingData.close, time: trackingData.closeTime }
-            ].map((status, index) => (
-                <div key={index} className="border rounded p-2 mb-2 bg-light">
-                    <strong>{status.label}</strong>
-                    <div style={{ fontSize: "12px", color: "gray" }}>
-                        {status.value || "Pending"} {status.time ? `- ${status.time}` : ""}
+                            <div className="modal-body">
+
+                                {[
+                                    { label: "Picked", value: trackingData.Pick, time: trackingData.PickTime },
+                                    { label: "In Transit", value: trackingData.inTransit, time: trackingData.inTransitTime },
+                                    { label: "Received At Point", value: trackingData.ReceivedAtPoint, time: trackingData.ReceivedAtPointTime },
+                                    { label: "Out For Delivery", value: trackingData.PickedForDelivery, time: trackingData.PickedForDeliveryTime },
+                                    { label: "Delivered", value: trackingData.Delivered, time: trackingData.DeliveredTime },
+                                    { label: "Returned", value: trackingData.Returned, time: trackingData.ReturnedTime },
+                                    { label: "Partial Delivery", value: trackingData.Partial, time: trackingData.PartialTime },
+                                    { label: "On Hold / Schedule", value: trackingData.onHoldSchedule },
+                                    { label: "Closed", value: trackingData.close, time: trackingData.closeTime }
+                                ].map((status, index) => (
+                                    <div key={index} className="border rounded p-2 mb-2 bg-light">
+                                        <strong>{status.label}</strong>
+                                        <div style={{ fontSize: "12px", color: "gray" }}>
+                                            {status.value || "Pending"} {status.time ? `- ${status.time}` : ""}
+                                        </div>
+                                    </div>
+                                ))}
+
+                            </div>
+
+                        </div>
                     </div>
                 </div>
-            ))}
-
-                </div>
-
-            </div>
-        </div>
-    </div>
-)}
+            )}
 
         </Layout>
     );
