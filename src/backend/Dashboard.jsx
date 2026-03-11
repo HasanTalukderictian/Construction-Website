@@ -3,6 +3,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useNavigate } from "react-router-dom";
 import { Pie, Bar } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from "chart.js"
+import { FaShoppingCart, FaBox, FaUsers, FaStar } from "react-icons/fa";
 
 import { Tour } from '@reactour/tour';
 import '../../src/assets/css/dashboard.scss';
@@ -51,7 +52,7 @@ const Dashboard = () => {
                     orders: data.orders.length,
                     products: data.products.length,
                     users: data.users.length,
-                     review: data.review ? data.review.length : 0, 
+                    review: data.review ? data.review.length : 0,
                 });
 
                 setIsTourOpen(true);
@@ -83,18 +84,18 @@ const Dashboard = () => {
                 dashboardData.users,
                 dashboardData.review
             ],
-           backgroundColor: [
-    "rgba(255, 99, 132, 0.6)",  // Orders
-    "rgba(54, 162, 235, 0.6)",  // Products
-    "rgba(255, 206, 86, 0.6)",  // Users
-    "rgba(155, 89, 182, 0.6)"   // Reviews (purple)
-],
-borderColor: [
-    "rgba(255, 99, 132, 1)",
-    "rgba(54, 162, 235, 1)",
-    "rgba(255, 206, 86, 1)",
-    "rgba(155, 89, 182, 1)"
-],
+            backgroundColor: [
+                "rgba(255, 99, 132, 0.6)",  // Orders
+                "rgba(54, 162, 235, 0.6)",  // Products
+                "rgba(255, 206, 86, 0.6)",  // Users
+                "rgba(155, 89, 182, 0.6)"   // Reviews (purple)
+            ],
+            borderColor: [
+                "rgba(255, 99, 132, 1)",
+                "rgba(54, 162, 235, 1)",
+                "rgba(255, 206, 86, 1)",
+                "rgba(155, 89, 182, 1)"
+            ],
             borderWidth: 1,
         }]
     };
@@ -127,6 +128,7 @@ borderColor: [
         {
             title: "Total Orders",
             value: dashboardData.orders,
+            icon: <FaShoppingCart />,
             className: "card-title-orders",
             color: "bg-primary",
             url: "/admin-orders/"
@@ -134,6 +136,7 @@ borderColor: [
         {
             title: "Total Products",
             value: dashboardData.products,
+            icon: <FaBox />,
             className: "card-title-products",
             color: "bg-success",
             url: "/admin-products"
@@ -141,19 +144,20 @@ borderColor: [
         {
             title: "Total Users",
             value: dashboardData.users,
+            icon: <FaUsers />,
             className: "card-title-users",
             color: "bg-warning text-dark",
             url: "/admin-users"
         },
         {
             title: "Total Review",
-            value: dashboardData.review || 0,  // use review count
+            value: dashboardData.review || 0,
+            icon: <FaStar />,
             className: "card-title-review",
-            style: { backgroundColor: "#bd34eb", color: "white" }, // custom purple
+            color: "bg-success",
             url: "/admin-testo"
         }
     ];
-
     return (
         <div className="container mt-1 border-2 bg-gradient-secondary">
             <Tour
@@ -167,24 +171,34 @@ borderColor: [
                 <h2 className="dashboard-title">Dashboard</h2>
             </div>
 
+
+
             <div className="row g-4">
                 {cards.map((card, index) => (
-                    <div className="col-lg-4 col-md-6" key={index}>
+                    <div className="col-lg-3 col-md-6 col-sm-6" key={index}>
                         <div
                             className={`card text-center ${card.color} text-white`}
-                            style={card.style ? card.style : { cursor: "pointer" }}
+                            style={{ cursor: "pointer", height: "130px" }}
                             onClick={() => navigate(card.url)}
                         >
-                            <div className="card-body">
-                                <h5 className={card.className}>{card.title}</h5>
-                                <p className="card-text text-white display-4">
-                                    {card.value}
-                                </p>
+                            <div className="card-body d-flex align-items-center justify-content-between">
+                                <div style={{ fontSize: "40px" }}>
+                                    {card.icon}
+                                </div>
+
+                                <div className="text-end">
+                                    <h5 className={card.className}>{card.title}</h5>
+                                    <p className="card-text display-4 mb-0">
+                                        {card.value}
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 ))}
             </div>
+
+
 
             <div className="row g-4 mt-4">
                 <div className="col-lg-6">
