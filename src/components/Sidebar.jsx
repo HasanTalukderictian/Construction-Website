@@ -90,15 +90,14 @@ const Sidebar = () => {
                 <i className={`bi ${item.icon}`}></i>
                 {item.label}
               </NavLink>
+              
             </li>
           ))}
-
-          <li className="nav-item mt-3">
             <button onClick={handleLogout} className="nav-link logout-btn">
               <i className="bi bi-box-arrow-right"></i>
               Logout
             </button>
-          </li>
+          
         </ul>
       </div>
     </>
