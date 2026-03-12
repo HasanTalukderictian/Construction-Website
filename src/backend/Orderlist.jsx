@@ -3,7 +3,8 @@ import DashNav from "./DasNav";
 import Footer from "./Footer";
 import Layout from "../components/Layout";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
-
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 export const API_STORE = import.meta.env.VITE_API_STORAGE_URL;
 
 export const API_BASE = import.meta.env.VITE_API_BASE_URL;
@@ -76,6 +77,37 @@ const Orderlist = () => {
     //     }
 
     // };
+
+
+
+
+    const exportToExcel = () => {
+        if (filteredOrders.length === 0) {
+            alert("No data to export");
+            return;
+        }
+
+        // Map orders to Excel-friendly format
+        const data = filteredOrders.map((order, index) => ({
+            SL: index + 1,
+            Customer: order.customer_name,
+            Phone: order.phone,
+            District: order.district,
+            Thana: order.thana,
+            Products: order.items?.map(i => `${i.product_name} (x${i.quantity})`).join(", ") || "-",
+            Final: order.final_total,
+            Date: order.created_at,
+            TrackingNumber: order.tracking_number || "-"
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(data);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Orders");
+
+        const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+        const file = new Blob([excelBuffer], { type: "application/octet-stream" });
+        saveAs(file, "Orders.xlsx");
+    };
 
 
     const viewTracking = async (order) => {
@@ -505,6 +537,15 @@ Thank you for your Purchase!
                         <h3 className="text-center mb-4">Order List</h3>
 
                         <div className="mb-3 d-flex justify-content-end align-items-center gap-2">
+
+                            {/* Filter Input */}
+                            <input
+                                type="text"
+                                className="form-control w-25"
+                                placeholder="Search by name, phone, district..."
+                                value={filterText}
+                                onChange={e => setFilterText(e.target.value)}
+                            />
                             <select
                                 className="form-select w-auto"
                                 value={confirmFilter}
@@ -515,14 +556,13 @@ Thank you for your Purchase!
                                 <option value="notSent">Not Sent</option>
                             </select>
 
-                            {/* Filter Input */}
-                            <input
-                                type="text"
-                                className="form-control w-25"
-                                placeholder="Search by name, phone, district..."
-                                value={filterText}
-                                onChange={e => setFilterText(e.target.value)}
-                            />
+
+
+
+
+                            <button className="btn btn-success d-flex align-items-center gap-1" onClick={exportToExcel}>
+                                <i className="bi bi-download"></i> Excel
+                            </button>
                         </div>
 
 
