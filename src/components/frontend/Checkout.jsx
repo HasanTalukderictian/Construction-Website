@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom";
 import { CartContext } from "./CartContext";
 
 export const API_BASE = import.meta.env.VITE_API_BASE_URL;
+console.log("API:", API_BASE);
 
 const Checkout = () => {
 
@@ -28,6 +29,39 @@ const Checkout = () => {
   const { cartItems, deliveryCharge, totalPrice, selectedDelivery } = location.state || {};
 
   const finalTotal = totalPrice + deliveryCharge;
+
+
+  const [showOtpModal, setShowOtpModal] = useState(false);
+  const [otp, setOtp] = useState(["", "", "", ""]);
+  const [tempOrderData, setTempOrderData] = useState(null);
+
+  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes = 300 seconds
+
+
+  useEffect(() => {
+    if (showOtpModal) {
+      setTimeLeft(300); // reset timer
+
+      const interval = setInterval(() => {
+        setTimeLeft(prev => {
+          if (prev <= 1) {
+            clearInterval(interval);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [showOtpModal]);
+
+
+  const formatTime = (seconds) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}:${s < 10 ? "0" : ""}${s}`;
+  };
 
   // Load districts
   useEffect(() => {
@@ -75,6 +109,83 @@ const Checkout = () => {
     }
   }, [selectedDistrict, districts]);
 
+
+
+  const createOrder = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/order/store`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(tempOrderData),
+      });
+
+      const data = await response.json();
+
+      if (data.status) {
+        localStorage.setItem("trackingNumber", data.order_id);
+        clearCart();
+        setShowToast(true);
+        setOrderSubmitted(true);
+
+        setCustomerName("");
+        setPhone("");
+        setAddress("");
+        setSelectedDistrict("");
+        setSelectedThana("");
+        setPaymentMethod("");
+
+        setTimeout(() => setShowToast(false), 5000);
+      } else {
+        alert(data.message);
+      }
+
+    } catch (error) {
+      console.error(error);
+      alert("Order failed");
+    }
+  };
+
+
+  const handleVerifyOtp = async () => {
+    const finalOtp = otp.join("");
+
+    try {
+      const res = await fetch(`${API_BASE}/verify-otp`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone, otp: finalOtp }),
+      });
+
+      const data = await res.json();
+
+      if (data.status) {
+        setShowOtpModal(false);
+        createOrder();
+      } else {
+        alert(data.message);
+      }
+
+    } catch (err) {
+      console.log(err);
+      alert("OTP verification failed");
+    }
+  };
+
+
+  const handleOtpChange = (value, index) => {
+    if (!/^\d*$/.test(value)) return;
+
+    const newOtp = [...otp];
+    newOtp[index] = value.slice(-1); // only 1 digit
+    setOtp(newOtp);
+
+    // auto focus next input
+    if (value && index < 3) {
+      document.getElementById(`otp-${index + 1}`).focus();
+    }
+  };
+
+
   // Submit Order
   const handleConfirmOrder = async () => {
     if (orderSubmitted) return;
@@ -91,7 +202,6 @@ const Checkout = () => {
       image_url: item.image_url,
       price: item.price,
       quantity: item.quantity,
-      description: item.description || "",
     }));
 
     const orderData = {
@@ -107,62 +217,27 @@ const Checkout = () => {
       paymentMethod,
     };
 
-    // try {
-    //   // Online Payment Flow
-    //   if (paymentMethod === "bkash" || paymentMethod === "rocket") {
-
-    //     const response = await fetch(`${API_BASE}/api/payment/initiate`, {
-    //       method: "POST",
-    //       headers: { "Content-Type": "application/json" },
-    //       body: JSON.stringify(orderData),
-    //     });
-
-    //     const data = await response.json();
-
-    //     if (data.status && data.payment_url) {
-    //       // Redirect user to payment gateway
-    //       window.location.href = data.payment_url;
-    //     } else {
-    //       alert("Payment initialization failed!");
-    //     }
-    //     return;
-    //   }
-
     try {
-      // Online Payment Flow (Temporarily Disabled)
-      if (paymentMethod === "bkash" || paymentMethod === "rocket") {
-        setShowPaymentToast(true);
-        setTimeout(() => setShowPaymentToast(false), 4000);
-        return;
-      }
 
-
-
-      // COD or no payment selected
-      const response = await fetch(`${API_BASE}/order/store`, {
+      // 🔥 STEP 1: SEND OTP
+      const res = await fetch(`${API_BASE}/send-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(orderData),
+        body: JSON.stringify({ phone }),
       });
 
-      const data = await response.json();
+      const data = await res.json();
 
       if (data.status) {
-        const trackingNumber = data.tracking_number;
-        localStorage.setItem("trackingNumber", trackingNumber);
-        clearCart();
-        setShowToast(true);
-        setOrderSubmitted(true);
-
-        setCustomerName(""); setPhone(""); setAddress(""); setSelectedDistrict(""); setSelectedThana("");
-        setPaymentMethod("");
-        setTimeout(() => setShowToast(false), 5000);
+        setTempOrderData(orderData); // store order temporarily
+        setShowOtpModal(true); // open modal
       } else {
-        alert(data.message);
+        alert("OTP send failed");
       }
-    } catch (error) {
-      console.error("Order Submit Error:", error);
-      alert("Something went wrong. Try again!");
+
+    } catch (err) {
+      console.log(err);
+      alert("Something went wrong");
     }
   };
 
@@ -261,6 +336,42 @@ const Checkout = () => {
 
         </div>
       </div>
+
+      {showOtpModal && (
+        <div className="modal show d-block" style={{ background: "rgba(0,0,0,0.5)" }}>
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content p-4 text-center">
+
+              <h5 className="mb-3">Enter OTP</h5>
+
+              <div className="d-flex justify-content-center gap-2 mb-3">
+                {otp.map((digit, index) => (
+                  <input
+                    key={index}
+                    id={`otp-${index}`}
+                    type="text"
+                    maxLength="1"
+                    className="form-control text-center"
+                    style={{ width: "50px", height: "50px", fontSize: "20px" }}
+                    value={digit}
+                    onChange={(e) => handleOtpChange(e.target.value, index)}
+                  />
+                ))}
+              </div>
+
+              <button className="btn btn-success w-100 mb-2" onClick={handleVerifyOtp}>
+                Verify OTP
+              </button>
+
+              {/* ⏱️ Timer message */}
+              <div className="mt-2 text-muted">
+                OTP will expire in <strong>{formatTime(timeLeft)}</strong>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      )}
       <Footer />
     </>
   );

@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 
 import '../../assets/css/cart.scss';
 
+import emptyCartImage from '../../assets/images/empry-cart.png';
+
 const Cart = () => {
     const { cartItems, increaseQuantity, decreaseQuantity, removeFromCart } = useContext(CartContext);
     const [deliveryCharge, setDeliveryCharge] = useState(0);
@@ -49,7 +51,22 @@ const Cart = () => {
                     borderRadius: "20px"
                 }}
             >
-                <h2 className="mb-4 text-center" style={{ color: "#1e3c72" }}>Your Cart</h2>
+
+                {cartItems.length === 0 && (
+                    <div style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "60vh"
+                    }}>
+                        <img
+                            src={emptyCartImage}
+                            alt="Empty Cart"
+                            style={{ width: "400px", height: "400px", objectFit: "contain" }}
+                        />
+                    </div>
+                )}
+
 
                 {cartItems.length === 0 ? (
                     <p className="text-center" style={{ fontSize: "18px" }}>Your cart is empty</p>
