@@ -371,7 +371,7 @@ const Checkout = () => {
             </div>
           </div>
         </div>
-      )}cls
+      )}
       <Footer />
     </>
   );
