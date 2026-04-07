@@ -3,6 +3,7 @@ import "../../assets/css/userlogin.scss";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebookF } from "react-icons/fa";
 import { FaPhoneAlt } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Userlogin = () => {
     const [phone, setPhone] = useState("");
@@ -12,6 +13,8 @@ const Userlogin = () => {
         e.preventDefault();
         console.log({ phone, password });
     };
+
+    const navigate = useNavigate();
 
     return (
         <div className="login-container">
@@ -50,6 +53,16 @@ const Userlogin = () => {
                 </form>
 
                 <p className="forgot">Forgot Your Password?</p>
+
+                <p>
+                    Do you have account?{" "}
+                    <span
+                        style={{ color: "#4287f5", cursor: "pointer" }}
+                        onClick={() => navigate("/usersign")}
+                    >
+                        Create Account
+                    </span>
+                </p>
 
                 {/* Social Login */}
                 <div className="social-login">

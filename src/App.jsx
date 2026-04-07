@@ -27,6 +27,8 @@ import ContactUs from './backend/ContactUs.jsx';
 import Team from './backend/Team.jsx';
 import Headersetting from './backend/Headersetting.jsx';
 import Userlogin from './components/frontend/userlogin.jsx';
+import Usersign from './components/frontend/Usersign.jsx';
+import Thankyou from './components/frontend/Thankyou.jsx';
 
 
 
@@ -45,7 +47,9 @@ function App() {
           <Route path='/items' element={<Item />} />
           <Route path='/product/:id' element={<Productdetails />} />
           <Route path='/cart' element={<Cart />} />
-             <Route path='/userlogin' element={<Userlogin />} />
+          <Route path='/userlogin' element={<Userlogin />} />
+          <Route path='/usersign' element={<Usersign />} />
+           <Route path='/thanks' element={<Thankyou />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/admin" element={<Login />} />
           <Route path="/admin-home" element={<BackendHome />} />
