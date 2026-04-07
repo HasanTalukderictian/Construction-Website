@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
-import { FaFacebookF } from "react-icons/fa";
-import { FaArrowLeft } from "react-icons/fa";
-
+import { FaFacebookF, FaArrowLeft } from "react-icons/fa";
 
 import * as bootstrap from "bootstrap";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
+
+import { useNavigate } from "react-router-dom";
 
 const Usersign = () => {
     const [phone, setPhone] = useState("");
@@ -15,6 +15,11 @@ const Usersign = () => {
     const [timeLeft, setTimeLeft] = useState(300);
 
     const [isVerified, setIsVerified] = useState(false);
+    const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
+    const [password, setPassword] = useState(""); // ✅ added
+
+    const navigate = useNavigate();
 
     const [form, setForm] = useState({
         firstName: "",
@@ -44,18 +49,41 @@ const Usersign = () => {
         return `${min}:${sec < 10 ? "0" : ""}${sec}`;
     };
 
-    
+    // ✅ FIXED: OTP SEND (same button use, logic same)
+    const handleLogin = async (e) => {
+        e?.preventDefault();
 
-    const handleLogin = () => {
-        if (phone.length !== 11 || !/^01[0-9]{9}$/.test(phone)) {
-            alert("Enter valid 11 digit number");
+        if (phone.length !== 11) {
+            alert("Enter valid phone number");
             return;
         }
 
-        const modalElement = document.getElementById("otpModal");
-        const modal = new bootstrap.Modal(modalElement);
-        modal.show();
+        try {
+            const res = await fetch(`${API_BASE}/send-otp`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ phone }),
+            });
+
+            const data = await res.json();
+
+            if (data.status) {
+                const modal = new bootstrap.Modal(
+                    document.getElementById("otpModal")
+                );
+                modal.show();
+            } else {
+                alert(data.message || "OTP send failed");
+            }
+        } catch (err) {
+            console.log(err);
+            alert("Something went wrong");
+        }
     };
+
+    // ❌ REMOVED wrong Navigate useEffect (important fix)
 
     const handleOtpChange = (value, index) => {
         if (!/^[0-9]?$/.test(value)) return;
@@ -67,16 +95,6 @@ const Usersign = () => {
         if (value && index < 3) {
             document.getElementById(`otp-${index + 1}`)?.focus();
         }
-
-        // ✅ AUTO SWITCH TO SIGNUP PAGE
-        if (newOtp.join("").length === 4 && !newOtp.includes("")) {
-            setIsVerified(true);
-
-            // close modal
-            const modalElement = document.getElementById("otpModal");
-            const modalInstance = bootstrap.Modal.getInstance(modalElement);
-            modalInstance?.hide();
-        }
     };
 
     const handleChange = (e) => {
@@ -86,41 +104,85 @@ const Usersign = () => {
         });
     };
 
-    const handleSubmit = () => {
+    const handleVerifyOtp = async () => {
+        const finalOtp = otp.join("");
+
+        if (finalOtp.length !== 4) {
+            alert("Enter 4 digit OTP");
+            return;
+        }
+
+        try {
+            const res = await fetch(`${API_BASE}/verify-otp`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    phone,
+                    otp: finalOtp,
+                }),
+            });
+
+            const data = await res.json();
+
+            if (data.status) {
+                setIsVerified(true);
+
+                const modalElement = document.getElementById("otpModal");
+                const modalInstance =
+                    bootstrap.Modal.getInstance(modalElement);
+                modalInstance?.hide();
+            } else {
+                alert(data.message || "Invalid OTP");
+            }
+        } catch (err) {
+            console.log(err);
+            alert("OTP verification failed");
+        }
+    };
+
+    const handleSubmit = async () => {
         if (form.password !== form.confirmPassword) {
             alert("Passwords do not match");
             return;
         }
 
-        // 🔴 duplicate check
-        const existingUsers = JSON.parse(localStorage.getItem("users")) || [];
+        try {
+            const res = await fetch(`${API_BASE}/register`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    firstName: form.firstName,
+                    lastName: form.lastName,
+                    email: form.email,
+                    phone: phone,
+                    password: form.password,
+                }),
+            });
 
-        const isDuplicate = existingUsers.some(
-            (user) => user.phone === phone
-        );
+            const data = await res.json();
 
-        if (isDuplicate) {
-            alert("This phone number is already registered!");
-            return;
+            if (data.status) {
+                alert("Registration Successful ✅");
+
+                localStorage.setItem("user", JSON.stringify(data.user));
+
+                // ✅ optional redirect
+                navigate("/");
+            } else {
+                alert(data.message);
+            }
+        } catch (err) {
+            console.log(err);
+            alert("Something went wrong");
         }
-
-        // ✅ save user
-        const newUser = {
-            ...form,
-            phone: phone,
-        };
-
-        existingUsers.push(newUser);
-        localStorage.setItem("users", JSON.stringify(existingUsers));
-
-        console.log("Signup Data:", newUser);
-        alert("Signup successful (frontend only)");
     };
 
     return (
         <div className="login-container">
-
-            {/* ================= LOGIN UI ================= */}
             {!isVerified && (
                 <div className="login-box">
                     <h3>Welcome to BDStall!</h3>
@@ -156,12 +218,9 @@ const Usersign = () => {
                 </div>
             )}
 
-            {/* ================= SIGNUP UI ================= */}
             {isVerified && (
                 <div className="login-box">
                     <h4 className="mb-4 d-flex align-items-center gap-2">
-
-                        {/* Back Icon */}
                         <span
                             onClick={() => setIsVerified(false)}
                             style={{
@@ -173,13 +232,12 @@ const Usersign = () => {
                                 alignItems: "center",
                                 justifyContent: "center",
                                 cursor: "pointer",
-                                marginRight: "10px"
+                                marginRight: "10px",
                             }}
                         >
                             <FaArrowLeft size={14} />
                         </span>
 
-                        {/* Title */}
                         <span className="flex-grow-1 text-center">
                             Enter Your Details and Password
                         </span>
@@ -259,7 +317,9 @@ const Usersign = () => {
                         </span>
                     </p>
 
-                    <div className="divider my-3 text-center">Or Login With</div>
+                    <div className="divider my-3 text-center">
+                        Or Login With
+                    </div>
 
                     <div className="social-login d-flex gap-2 justify-content-center">
                         <button className="google-btn">
@@ -273,7 +333,6 @@ const Usersign = () => {
                 </div>
             )}
 
-            {/* ================= OTP MODAL ================= */}
             <div className="modal fade" id="otpModal" tabIndex="-1">
                 <div className="modal-dialog modal-dialog-centered modal-sm">
                     <div className="modal-content p-3 text-center">
@@ -288,7 +347,10 @@ const Usersign = () => {
                                     maxLength="1"
                                     value={digit}
                                     onChange={(e) =>
-                                        handleOtpChange(e.target.value, index)
+                                        handleOtpChange(
+                                            e.target.value,
+                                            index
+                                        )
                                     }
                                     className="form-control text-center"
                                     style={{ width: "45px", height: "45px" }}
@@ -298,8 +360,11 @@ const Usersign = () => {
 
                         <p>OTP expires in: {formatTime()}</p>
 
-                        <button className="btn btn-secondary w-100">
-                            Enter 4 digit OTP
+                        <button
+                            className="btn btn-success w-100"
+                            onClick={handleVerifyOtp}
+                        >
+                            Verify OTP
                         </button>
                     </div>
                 </div>
