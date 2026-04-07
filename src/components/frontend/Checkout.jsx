@@ -7,11 +7,15 @@ import Toast from "react-bootstrap/Toast";
 import { useLocation } from "react-router-dom";
 import { CartContext } from "./CartContext";
 
+import { useNavigate } from "react-router-dom";
+
 export const API_BASE = import.meta.env.VITE_API_BASE_URL;
-console.log("API:", API_BASE);
+
 
 const Checkout = () => {
 
+
+  const navigate = useNavigate();
   const [districts, setDistricts] = useState([]);
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [thanas, setThanas] = useState([]);
@@ -122,11 +126,14 @@ const Checkout = () => {
       const data = await response.json();
 
       if (data.status) {
-        localStorage.setItem("trackingNumber", data.order_id);
+        const orderId = data.order_id;
+
+        localStorage.setItem("trackingNumber", orderId);
         clearCart();
         setShowToast(true);
         setOrderSubmitted(true);
 
+        // reset form
         setCustomerName("");
         setPhone("");
         setAddress("");
@@ -134,11 +141,16 @@ const Checkout = () => {
         setSelectedThana("");
         setPaymentMethod("");
 
-        setTimeout(() => setShowToast(false), 5000);
+        setTimeout(() => setShowToast(false), 3000);
+
+        // ✅ redirect to thank you page with order id
+        navigate("/thanks", {
+          state: { orderId: orderId }
+        });
+
       } else {
         alert(data.message);
       }
-
     } catch (error) {
       console.error(error);
       alert("Order failed");
