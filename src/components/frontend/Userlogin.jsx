@@ -9,12 +9,51 @@ const Userlogin = () => {
     const [phone, setPhone] = useState("");
     const [password, setPassword] = useState("");
 
-    const handleLogin = (e) => {
-        e.preventDefault();
-        console.log({ phone, password });
-    };
-
     const navigate = useNavigate();
+    const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+
+        if (!phone || phone.length !== 11) {
+            alert("Enter valid phone number");
+            return;
+        }
+
+        if (!password) {
+            alert("Password is required");
+            return;
+        }
+
+        try {
+            const res = await fetch(`${API_BASE}/login`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    phone,
+                    password,
+                }),
+            });
+
+            const data = await res.json();
+
+            if (data.status) {
+                localStorage.setItem("user", JSON.stringify(data.user));
+
+                alert("Login successful ✅");
+
+                navigate("/");
+            } else {
+                alert(data.message || "Login failed");
+            }
+
+        } catch (error) {
+            console.error(error);
+            alert("Something went wrong");
+        }
+    };
 
     return (
         <div className="login-container">
@@ -23,7 +62,6 @@ const Userlogin = () => {
                 <h3>Welcome to BDStall!</h3>
                 <p>Please login.</p>
 
-                {/* Phone Login Button */}
                 <button className="phone-login-btn">
                     <FaPhoneAlt style={{ marginRight: "8px" }} />
                     Login with Phone Number
@@ -31,7 +69,6 @@ const Userlogin = () => {
 
                 <div className="divider">Or</div>
 
-                {/* Form */}
                 <form onSubmit={handleLogin}>
                     <input
                         type="text"
@@ -64,7 +101,6 @@ const Userlogin = () => {
                     </span>
                 </p>
 
-                {/* Social Login */}
                 <div className="social-login">
                     <button className="google-btn">
                         <FcGoogle size={20} style={{ marginRight: "8px" }} />
