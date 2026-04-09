@@ -17,6 +17,8 @@ const Userlogin = () => {
 
     const location = useLocation();
 
+
+
     const handleLogin = async (e) => {
         e.preventDefault();
 
@@ -47,6 +49,7 @@ const Userlogin = () => {
             if (data.status) {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("user", JSON.stringify(data.user));
+                localStorage.setItem("user_id", data.user.id);
 
                 alert("Login successful");
 
