@@ -5,6 +5,8 @@ import { FaFacebookF } from "react-icons/fa";
 import { FaPhoneAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import Header from "../common/Header";
+import Footer from "../common/Footer";
 
 const Userlogin = () => {
     const [phone, setPhone] = useState("");
@@ -43,11 +45,12 @@ const Userlogin = () => {
             const data = await res.json();
 
             if (data.status) {
+                localStorage.setItem("token", data.token);
                 localStorage.setItem("user", JSON.stringify(data.user));
 
                 alert("Login successful");
 
-                // 🔥 redirect back
+                // 🔥 redirect logic fix
                 if (location.state?.redirectTo === "/checkout") {
                     navigate("/checkout", {
                         state: {
@@ -57,8 +60,10 @@ const Userlogin = () => {
                             selectedDelivery: location.state.selectedDelivery
                         }
                     });
+                } else if (location.state?.redirectTo === "/profile") {
+                    navigate("/profile"); // ✅ add this
                 } else {
-                    navigate("/");
+                    navigate("/profile"); // ✅ default profile page
                 }
             }
 
@@ -69,65 +74,69 @@ const Userlogin = () => {
     };
 
     return (
-        <div className="login-container">
-            <div className="login-box">
+        <>
+            <Header />
+            <div className="login-container">
+                <div className="login-box">
 
-                <h3>Welcome to BDStall!</h3>
-                <p>Please login.</p>
+                    <h3>Welcome to BDStall!</h3>
+                    <p>Please login.</p>
 
-                <button className="phone-login-btn">
-                    <FaPhoneAlt style={{ marginRight: "8px" }} />
-                    Login with Phone Number
-                </button>
-
-                <div className="divider">Or</div>
-
-                <form onSubmit={handleLogin}>
-                    <input
-                        type="text"
-                        placeholder="Phone Number"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                    />
-
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-
-                    <button type="submit" className="login-btn">
-                        Login
-                    </button>
-                </form>
-
-                <p className="forgot">Forgot Your Password?</p>
-
-                <p>
-                    Do you have account?{" "}
-                    <span
-                        style={{ color: "#4287f5", cursor: "pointer" }}
-                        onClick={() => navigate("/usersign")}
-                    >
-                        Create Account
-                    </span>
-                </p>
-
-                <div className="social-login">
-                    <button className="google-btn">
-                        <FcGoogle size={20} style={{ marginRight: "8px" }} />
-                        Google
+                    <button className="phone-login-btn">
+                        <FaPhoneAlt style={{ marginRight: "8px" }} />
+                        Login with Phone Number
                     </button>
 
-                    <button className="facebook-btn">
-                        <FaFacebookF size={18} style={{ marginRight: "8px" }} />
-                        Facebook
-                    </button>
+                    <div className="divider">Or</div>
+
+                    <form onSubmit={handleLogin}>
+                        <input
+                            type="text"
+                            placeholder="Phone Number"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                        />
+
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+
+                        <button type="submit" className="login-btn">
+                            Login
+                        </button>
+                    </form>
+
+                    <p className="forgot">Forgot Your Password?</p>
+
+                    <p>
+                        Do you have account?{" "}
+                        <span
+                            style={{ color: "#4287f5", cursor: "pointer" }}
+                            onClick={() => navigate("/usersign")}
+                        >
+                            Create Account
+                        </span>
+                    </p>
+
+                    <div className="social-login">
+                        <button className="google-btn">
+                            <FcGoogle size={20} style={{ marginRight: "8px" }} />
+                            Google
+                        </button>
+
+                        <button className="facebook-btn">
+                            <FaFacebookF size={18} style={{ marginRight: "8px" }} />
+                            Facebook
+                        </button>
+                    </div>
+
                 </div>
-
             </div>
-        </div>
+            <Footer />
+        </>
     );
 };
 

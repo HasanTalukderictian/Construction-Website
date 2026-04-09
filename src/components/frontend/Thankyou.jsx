@@ -71,7 +71,8 @@ const Thankyou = () => {
                         Continue Shopping
                     </button>
 
-                    <button className="btn btn-outline-primary w-100">
+                    <button className="btn btn-outline-primary w-100"
+                     onClick={() => navigate("/profile")}>
                         View Order
                     </button>
                 </div>
