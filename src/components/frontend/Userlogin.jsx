@@ -4,6 +4,7 @@ import { FcGoogle } from "react-icons/fc";
 import { FaFacebookF } from "react-icons/fa";
 import { FaPhoneAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const Userlogin = () => {
     const [phone, setPhone] = useState("");
@@ -11,6 +12,8 @@ const Userlogin = () => {
 
     const navigate = useNavigate();
     const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
+    const location = useLocation();
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -42,11 +45,21 @@ const Userlogin = () => {
             if (data.status) {
                 localStorage.setItem("user", JSON.stringify(data.user));
 
-                alert("Login successful ✅");
+                alert("Login successful");
 
-                navigate("/");
-            } else {
-                alert(data.message || "Login failed");
+                // 🔥 redirect back
+                if (location.state?.redirectTo === "/checkout") {
+                    navigate("/checkout", {
+                        state: {
+                            cartItems: location.state.cartItems,
+                            deliveryCharge: location.state.deliveryCharge,
+                            totalPrice: location.state.totalPrice,
+                            selectedDelivery: location.state.selectedDelivery
+                        }
+                    });
+                } else {
+                    navigate("/");
+                }
             }
 
         } catch (error) {
