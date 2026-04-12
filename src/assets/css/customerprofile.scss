@@ -1,0 +1,46 @@
+/* Sidebar Styling */
+
+.sidebar-menu .list-group-item {
+    color: #4a4a4a;
+    transition: all 0.2s ease;
+    border-left: 4px solid transparent !important;
+}
+
+.sidebar-menu .list-group-item:hover {
+    background-color: #f8f9fa;
+    color: #0d6efd;
+}
+
+.active-menu {
+    background-color: #e7f1ff !important;
+    color: #0d6efd !important;
+    border-left: 4px solid #0d6efd !important;
+}
+
+.active-menu i {
+    color: #0d6efd;
+}
+
+
+/* Card Improvements */
+
+.card {
+    background-color: #ffffff;
+}
+
+label {
+    font-size: 0.8rem;
+    letter-spacing: 0.3px;
+}
+
+p {
+    color: #212529;
+}
+
+
+/* Rounded pills for buttons */
+
+.btn-outline-primary {
+    border-width: 1.5px;
+    font-weight: 500;
+}

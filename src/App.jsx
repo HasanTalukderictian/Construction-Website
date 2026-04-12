@@ -29,12 +29,16 @@ import Headersetting from './backend/Headersetting.jsx';
 import Userlogin from './components/frontend/userlogin.jsx';
 import Usersign from './components/frontend/Usersign.jsx';
 import Thankyou from './components/frontend/Thankyou.jsx';
+import CustomerProfile from './components/frontend/CustomerPanel/CustomerProfile.jsx';
+import { GoogleOAuthProvider } from "@react-oauth/google";
+
 
 
 
 
 function App() {
   return (
+       <GoogleOAuthProvider clientId="215091741709-0kqqa12vc6ie5926qq6rh0j7t1jeh4ol.apps.googleusercontent.com">
     <CartProvider>
       <BrowserRouter>
         <Routes>
@@ -48,6 +52,7 @@ function App() {
           <Route path='/product/:id' element={<Productdetails />} />
           <Route path='/cart' element={<Cart />} />
           <Route path='/userlogin' element={<Userlogin />} />
+          <Route path='/profile' element={ <CustomerProfile/>} />
           <Route path='/usersign' element={<Usersign />} />
            <Route path='/thanks' element={<Thankyou />} />
           <Route path="/checkout" element={<Checkout />} />
@@ -70,6 +75,7 @@ function App() {
         </Routes>
       </BrowserRouter>
     </CartProvider>
+    </GoogleOAuthProvider>
   );
 }
 

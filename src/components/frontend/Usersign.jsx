@@ -8,6 +8,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 import { useNavigate } from "react-router-dom";
+import Header from "../common/Header";
+import Footer from "../common/Footer";
 
 const Usersign = () => {
     const [phone, setPhone] = useState("");
@@ -17,7 +19,7 @@ const Usersign = () => {
     const [isVerified, setIsVerified] = useState(false);
     const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
-    const [password, setPassword] = useState(""); // ✅ added
+
 
     const navigate = useNavigate();
 
@@ -182,194 +184,208 @@ const Usersign = () => {
     };
 
     return (
-        <div className="login-container">
-            {!isVerified && (
-                <div className="login-box">
-                    <h3>Welcome to BDStall!</h3>
-                    <p>Please login.</p>
+        <>
+            <Header />
+            <div className="login-container">
+                {!isVerified && (
+                    <div className="login-box">
+                        <h3>Welcome to BDStall!</h3>
+                        <p>Please login.</p>
 
-                    <button className="login-btn" onClick={handleLogin}>
-                        Sign Up / Login
-                    </button>
-
-                    <div className="divider">Or</div>
-
-                    <input
-                        type="text"
-                        placeholder="Phone Number"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        maxLength={11}
-                    />
-
-                    <button className="login-btn" onClick={handleLogin}>
-                        Sign Up / Login
-                    </button>
-
-                    <div className="social-login">
-                        <button className="google-btn">
-                            <FcGoogle size={20} /> Google
+                        <button className="login-btn" onClick={handleLogin}>
+                            Sign Up / Login
                         </button>
 
-                        <button className="facebook-btn">
-                            <FaFacebookF size={18} /> Facebook
-                        </button>
-                    </div>
-                </div>
-            )}
+                        <div className="divider">Or</div>
 
-            {isVerified && (
-                <div className="login-box">
-                    <h4 className="mb-4 d-flex align-items-center gap-2">
-                        <span
-                            onClick={() => setIsVerified(false)}
-                            style={{
-                                width: "35px",
-                                height: "35px",
-                                border: "1px solid #ccc",
-                                borderRadius: "50%",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                cursor: "pointer",
-                                marginRight: "10px",
-                            }}
-                        >
-                            <FaArrowLeft size={14} />
-                        </span>
-
-                        <span className="flex-grow-1 text-center">
-                            Enter Your Details and Password
-                        </span>
-                    </h4>
-
-                    <div className="mb-2">
                         <input
-                            name="firstName"
-                            placeholder="First Name"
-                            className="form-control"
-                            onChange={handleChange}
-                        />
-                    </div>
-
-                    <div className="mb-2">
-                        <input
-                            name="lastName"
-                            placeholder="Last Name"
-                            className="form-control"
-                            onChange={handleChange}
-                        />
-                    </div>
-
-                    <div className="mb-2">
-                        <input
-                            name="email"
-                            placeholder="Email"
-                            className="form-control"
-                            onChange={handleChange}
-                        />
-                    </div>
-
-                    <div className="mb-2">
-                        <input
-                            name="phone"
+                            type="text"
+                            placeholder="Phone Number"
                             value={phone}
-                            className="form-control"
-                            disabled
+                            onChange={(e) => setPhone(e.target.value)}
+                            maxLength={11}
                         />
-                    </div>
 
-                    <div className="mb-2">
-                        <input
-                            name="password"
-                            type="password"
-                            placeholder="Password"
-                            className="form-control"
-                            onChange={handleChange}
-                        />
-                    </div>
-
-                    <div className="mb-3">
-                        <input
-                            name="confirmPassword"
-                            type="password"
-                            placeholder="Confirm Password"
-                            className="form-control"
-                            onChange={handleChange}
-                        />
-                    </div>
-
-                    <button
-                        className="btn btn-success w-100 mb-3"
-                        onClick={handleSubmit}
-                    >
-                        Create Account
-                    </button>
-
-                    <p className="small text-center">
-                        By continuing, I accept the{" "}
-                        <span style={{ color: "#4287f5", cursor: "pointer" }}>
-                            Terms and Condition
-                        </span>{" "}
-                        and the{" "}
-                        <span style={{ color: "#4287f5", cursor: "pointer" }}>
-                            Privacy Policy
-                        </span>
-                    </p>
-
-                    <div className="divider my-3 text-center">
-                        Or Login With
-                    </div>
-
-                    <div className="social-login d-flex gap-2 justify-content-center">
-                        <button className="google-btn">
-                            <FcGoogle size={20} /> Google
+                        <button className="login-btn" onClick={handleLogin}>
+                            Sign Up / Login
                         </button>
+                        <p>
+                            Already have an Account?{" "}
+                            <span
+                                onClick={() => navigate("/userlogin")}
+                                style={{ color: "#007bff", cursor: "pointer", fontWeight: "500" }}
+                            >
+                                Login
+                            </span>
+                        </p>
 
-                        <button className="facebook-btn">
-                            <FaFacebookF size={18} /> Facebook
-                        </button>
+                        <div className="social-login">
+                            <button className="google-btn">
+                                <FcGoogle size={20} /> Google
+                            </button>
+
+                            <button className="facebook-btn">
+                                <FaFacebookF size={18} /> Facebook
+                            </button>
+                        </div>
                     </div>
-                </div>
-            )}
+                )}
 
-            <div className="modal fade" id="otpModal" tabIndex="-1">
-                <div className="modal-dialog modal-dialog-centered modal-sm">
-                    <div className="modal-content p-3 text-center">
-                        <h3>Enter OTP</h3>
+                {isVerified && (
+                    <div className="login-box">
+                        <h4 className="mb-4 d-flex align-items-center gap-2">
+                            <span
+                                onClick={() => setIsVerified(false)}
+                                style={{
+                                    width: "35px",
+                                    height: "35px",
+                                    border: "1px solid #ccc",
+                                    borderRadius: "50%",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    cursor: "pointer",
+                                    marginRight: "10px",
+                                }}
+                            >
+                                <FaArrowLeft size={14} />
+                            </span>
 
-                        <div className="otp-inputs d-flex justify-content-center gap-2 my-3">
-                            {otp.map((digit, index) => (
-                                <input
-                                    key={index}
-                                    id={`otp-${index}`}
-                                    type="text"
-                                    maxLength="1"
-                                    value={digit}
-                                    onChange={(e) =>
-                                        handleOtpChange(
-                                            e.target.value,
-                                            index
-                                        )
-                                    }
-                                    className="form-control text-center"
-                                    style={{ width: "45px", height: "45px" }}
-                                />
-                            ))}
+                            <span className="flex-grow-1 text-center">
+                                Enter Your Details and Password
+                            </span>
+                        </h4>
+
+                        <div className="mb-2">
+                            <input
+                                name="firstName"
+                                placeholder="First Name"
+                                className="form-control"
+                                onChange={handleChange}
+                            />
                         </div>
 
-                        <p>OTP expires in: {formatTime()}</p>
+                        <div className="mb-2">
+                            <input
+                                name="lastName"
+                                placeholder="Last Name"
+                                className="form-control"
+                                onChange={handleChange}
+                            />
+                        </div>
+
+                        <div className="mb-2">
+                            <input
+                                name="email"
+                                placeholder="Email"
+                                className="form-control"
+                                onChange={handleChange}
+                            />
+                        </div>
+
+                        <div className="mb-2">
+                            <input
+                                name="phone"
+                                value={phone}
+                                className="form-control"
+                                disabled
+                            />
+                        </div>
+
+                        <div className="mb-2">
+                            <input
+                                name="password"
+                                type="password"
+                                placeholder="Password"
+                                className="form-control"
+                                onChange={handleChange}
+                            />
+                        </div>
+
+                        <div className="mb-3">
+                            <input
+                                name="confirmPassword"
+                                type="password"
+                                placeholder="Confirm Password"
+                                className="form-control"
+                                onChange={handleChange}
+                            />
+                        </div>
 
                         <button
-                            className="btn btn-success w-100"
-                            onClick={handleVerifyOtp}
+                            className="btn btn-success w-100 mb-3"
+                            onClick={handleSubmit}
                         >
-                            Verify OTP
+                            Create Account
                         </button>
+
+                        <p className="small text-center">
+                            By continuing, I accept the{" "}
+                            <span style={{ color: "#4287f5", cursor: "pointer" }}>
+                                Terms and Condition
+                            </span>{" "}
+                            and the{" "}
+                            <span style={{ color: "#4287f5", cursor: "pointer" }}>
+                                Privacy Policy
+                            </span>
+                        </p>
+
+                        <div className="divider my-3 text-center">
+                            Or Login With
+                        </div>
+
+                        <div className="social-login d-flex gap-2 justify-content-center">
+                            <button className="google-btn">
+                                <FcGoogle size={20} /> Google
+                            </button>
+
+                            <button className="facebook-btn">
+                                <FaFacebookF size={18} /> Facebook
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                <div className="modal fade" id="otpModal" tabIndex="-1">
+                    <div className="modal-dialog modal-dialog-centered modal-sm">
+                        <div className="modal-content p-3 text-center">
+                            <h3>Enter OTP</h3>
+
+                            <div className="otp-inputs d-flex justify-content-center gap-2 my-3">
+                                {otp.map((digit, index) => (
+                                    <input
+                                        key={index}
+                                        id={`otp-${index}`}
+                                        type="text"
+                                        maxLength="1"
+                                        value={digit}
+                                        onChange={(e) =>
+                                            handleOtpChange(
+                                                e.target.value,
+                                                index
+                                            )
+                                        }
+                                        className="form-control text-center"
+                                        style={{ width: "45px", height: "45px" }}
+                                    />
+                                ))}
+                            </div>
+
+                            <p>OTP expires in: {formatTime()}</p>
+
+                            <button
+                                className="btn btn-success w-100"
+                                onClick={handleVerifyOtp}
+                            >
+                                Verify OTP
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+
+            <Footer />
+        </>
     );
 };
 

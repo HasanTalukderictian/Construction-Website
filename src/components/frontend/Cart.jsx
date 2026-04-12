@@ -18,28 +18,49 @@ const Cart = () => {
     const finalTotal = totalPrice + deliveryCharge;
 
     const handleCheckout = () => {
-        if (!selectedDelivery) {
-            alert("Please select a delivery option!");
-            return;
-        }
 
-        const mappedCartItems = cartItems.map(item => ({
-            id: item.id,
-            product_name: item.product_name,
-            image_url: item.image_url,
-            price: item.price,
-            quantity: item.quantity,
-        }));
+    if (!selectedDelivery) {
+        alert("Please select a delivery option!");
+        return;
+    }
 
-        navigate("/checkout", {
+    const user = localStorage.getItem("user");
+
+    // ❌ Not logged in → go login page
+    if (!user) {
+      
+
+        navigate("/userlogin", {
             state: {
-                cartItems: mappedCartItems,
+                redirectTo: "/checkout", // 🔥 after login redirect back
+                cartItems,
                 deliveryCharge,
                 totalPrice,
-                selectedDelivery   // ✅ add this line
-            },
+                selectedDelivery
+            }
         });
-    };
+
+        return;
+    }
+
+    // ✅ Logged in → go checkout
+    const mappedCartItems = cartItems.map(item => ({
+        id: item.id,
+        product_name: item.product_name,
+        image_url: item.image_url,
+        price: item.price,
+        quantity: item.quantity,
+    }));
+
+    navigate("/checkout", {
+        state: {
+            cartItems: mappedCartItems,
+            deliveryCharge,
+            totalPrice,
+            selectedDelivery
+        },
+    });
+};
 
     return (
         <>
@@ -179,7 +200,7 @@ const Cart = () => {
             <Footer />
 
             {/* Custom CSS */}
-            <style jsx>{`
+            <style>{`
                 .cart-item-img {
                     width: 80px;
                     height: 80px;

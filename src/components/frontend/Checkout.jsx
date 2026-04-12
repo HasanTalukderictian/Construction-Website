@@ -30,9 +30,12 @@ const Checkout = () => {
   const [showPaymentToast, setShowPaymentToast] = useState(false);
 
   const location = useLocation();
+
   const { cartItems, deliveryCharge, totalPrice, selectedDelivery } = location.state || {};
 
   const finalTotal = totalPrice + deliveryCharge;
+
+
 
 
   const [showOtpModal, setShowOtpModal] = useState(false);
@@ -117,9 +120,14 @@ const Checkout = () => {
 
   const createOrder = async () => {
     try {
+      const token = localStorage.getItem("token");
+
       const response = await fetch(`${API_BASE}/order/store`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
         body: JSON.stringify(tempOrderData),
       });
 
@@ -200,6 +208,8 @@ const Checkout = () => {
 
   // Submit Order
   const handleConfirmOrder = async () => {
+
+    const userId = localStorage.getItem("user_id");
     if (orderSubmitted) return;
 
     if (!customerName.trim()) { alert("Customer name is required!"); return; }
@@ -207,6 +217,11 @@ const Checkout = () => {
     if (!address.trim()) { alert("Full address is required!"); return; }
     if (!selectedDistrict) { alert("Please select a district!"); return; }
     if (!selectedThana) { alert("Please select a thana!"); return; }
+
+    if (!cartItems || cartItems.length === 0) {
+      alert("Cart is empty or page refreshed. Please add items again.");
+      return;
+    }
 
     const mappedCartItems = cartItems.map(item => ({
       id: item.id,
@@ -217,6 +232,7 @@ const Checkout = () => {
     }));
 
     const orderData = {
+      customer_id: userId,
       customerName,
       phone,
       address,
@@ -240,10 +256,13 @@ const Checkout = () => {
 
       const data = await res.json();
 
+      console.log("OTP API response:", data);
+
       if (data.status) {
-        setTempOrderData(orderData); // store order temporarily
-        setShowOtpModal(true); // open modal
+        setTempOrderData(orderData);
+        setShowOtpModal(true);
       } else {
+        console.log("OTP failed:", data);
         alert("OTP send failed");
       }
 

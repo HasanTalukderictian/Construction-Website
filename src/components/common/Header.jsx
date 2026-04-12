@@ -27,6 +27,8 @@ const Header = () => {
   const [categories, setCategories] = useState({});
   const [dynamicLogo, setDynamicLogo] = useState(headerCache?.image || null); // cache use
 
+  const [user, setUser] = useState(null);
+
   // ===============================
   // Fetch categories from API
   // ===============================
@@ -57,6 +59,20 @@ const Header = () => {
       .catch((err) => console.log("API Error: ", err));
   }, []);
 
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+    navigate("/userlogin");
+  };
+
   // ===============================
   // Fetch dynamic logo from API (with cache)
   // ===============================
@@ -75,7 +91,7 @@ const Header = () => {
   }, []);
 
   // Tabs list
-const tabs = Object.keys(categories);
+  const tabs = Object.keys(categories);
 
   return (
     <>
@@ -117,6 +133,16 @@ const tabs = Object.keys(categories);
                   )}
                 </Nav.Link>
                 <Nav.Link onClick={() => navigate("/contact")}>Contact</Nav.Link>
+
+                {user ? (
+                  <Nav.Link onClick={() => navigate("/profile")} style={{  fontWeight: "600" }}>
+                    My Profile
+                  </Nav.Link>
+                ) : (
+                  <Nav.Link onClick={() => navigate("/userlogin")}>
+                    Login
+                  </Nav.Link>
+                )}
               </Nav>
             </Navbar.Collapse>
           </Navbar>
