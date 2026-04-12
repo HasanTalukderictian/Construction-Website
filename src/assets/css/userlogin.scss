@@ -4,6 +4,13 @@
     justify-content: center;
     align-items: center;
     background: #f5f6fa;
+    overflow: visible;
+}
+
+.facebook-btn,
+.google-login-button {
+    height: 42px;
+    border-radius: 8px;
 }
 
 .login-box {
@@ -76,6 +83,14 @@ input {
     margin-bottom: 15px;
     border-radius: 8px;
     border: 1px solid #ccc;
+}
+
+.Toastify__toast-container {
+    z-index: 999999 !important;
+}
+
+.Toastify__toast {
+    z-index: 999999 !important;
 }
 
 

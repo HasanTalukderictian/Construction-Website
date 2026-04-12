@@ -135,8 +135,8 @@ const Header = () => {
                 <Nav.Link onClick={() => navigate("/contact")}>Contact</Nav.Link>
 
                 {user ? (
-                  <Nav.Link onClick={handleLogout} style={{ color: "red", fontWeight: "600" }}>
-                    Logout
+                  <Nav.Link onClick={() => navigate("/profile")} style={{  fontWeight: "600" }}>
+                    My Profile
                   </Nav.Link>
                 ) : (
                   <Nav.Link onClick={() => navigate("/userlogin")}>

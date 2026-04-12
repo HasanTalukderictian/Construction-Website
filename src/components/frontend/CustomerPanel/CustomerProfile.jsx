@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios'; // Ensure axios is installed: npm install axios
 import Header from '../../common/Header';
 import Footer from '../../common/Footer';
+import { useNavigate } from "react-router-dom";
 import '../../../assets/css/customerprofile.scss';
 
 const CustomerProfile = () => {
@@ -10,6 +11,9 @@ const CustomerProfile = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState("Account Information");
+
+    const [user, setUser] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchCustomerData = async () => {
@@ -78,6 +82,14 @@ const CustomerProfile = () => {
         }
     }, [activeTab, customer?.id]);
 
+    const handleLogout = () => {
+        localStorage.removeItem("token");   // ✅ token remove
+        localStorage.removeItem("user");    // ✅ user remove
+        setUser(null);
+
+        navigate("/userlogin");             // ✅ redirect
+    };
+
 
     const sidebarItems = [
         { icon: "bi-person", label: "Account Information", active: true },
@@ -88,7 +100,7 @@ const CustomerProfile = () => {
         { icon: "bi-share", label: "Share & Earn" },
         { icon: "bi-geo-alt", label: "Manage Addresses" },
         { icon: "bi-credit-card", label: "Saved Payment Methods" },
-        { icon: "bi-question-circle", label: "Help & Knowledge Base" },
+        { icon: "bi-question-circle", label: "Logout" },
     ];
 
     if (loading) return <div className="text-center py-5">Loading...</div>;
@@ -109,9 +121,15 @@ const CustomerProfile = () => {
                                     {sidebarItems.map((item, index) => (
                                         <button
                                             key={index}
-                                            onClick={() => setActiveTab(item.label)} // ✅ THIS LINE ADD
+                                            onClick={() => {
+                                                if (item.label === "Logout") {
+                                                    handleLogout();   // ✅ logout call
+                                                } else {
+                                                    setActiveTab(item.label);
+                                                }
+                                            }}
                                             className={`list-group-item list-group-item-action border-0 d-flex align-items-center py-3 
-                                             ${activeTab === item.label ? 'active-menu' : ''}`} // ✅ dynamic active
+        ${activeTab === item.label ? 'active-menu' : ''}`}
                                         >
                                             <i className={`bi ${item.icon} me-3 fs-5`}></i>
                                             <span className="small fw-medium">{item.label}</span>
@@ -123,6 +141,14 @@ const CustomerProfile = () => {
 
                         {/* RIGHT CONTENT AREA */}
                         <div className="col-lg-8 col-xl-9">
+
+
+                            {!["Account Information", "My Orders"].includes(activeTab) && (
+                                <div className="card border-0 shadow-sm rounded-4 p-4 text-center">
+                                    <h5 className="fw-bold mb-3">{activeTab}</h5>
+                                    <p className="text-muted">🚧 Under Development</p>
+                                </div>
+                            )}
 
                             {activeTab === "Account Information" && (
                                 <>
