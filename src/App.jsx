@@ -38,43 +38,43 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 
 function App() {
   return (
-       <GoogleOAuthProvider clientId="215091741709-0kqqa12vc6ie5926qq6rh0j7t1jeh4ol.apps.googleusercontent.com">
-    <CartProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/about' element={<About />} />
-          <Route path='/service' element={<Services />} />
-          <Route path='/projects' element={<Projects />} />
-          <Route path="/products/:parent/:subcategory" element={<ProductPage />} />
-          <Route path='/contact' element={<Contact />} />
-          <Route path='/items' element={<Item />} />
-          <Route path='/product/:id' element={<Productdetails />} />
-          <Route path='/cart' element={<Cart />} />
-          <Route path='/userlogin' element={<Userlogin />} />
-          <Route path='/profile' element={ <CustomerProfile/>} />
-          <Route path='/usersign' element={<Usersign />} />
-           <Route path='/thanks' element={<Thankyou />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/admin" element={<Login />} />
-          <Route path="/admin-home" element={<BackendHome />} />
-          <Route path="/admin-orders" element={<Orderlist />} />
-          <Route path="/admin-couirer" element={<CourierSettings />} />
-          <Route path="/admin-store" element={<StoreCreation />} />
-          <Route path="/admin-products" element={<Products />} />
-          <Route path="/admin-users" element={<UserSettings />} />
-          <Route path="/admin-category" element={<Category />} />
-          <Route path="/admin-testo" element={<Testominal />} />
-          <Route path="/admin-banner" element={<Banner />} />
-          <Route path="/admin-contact" element={<ContactUs />} />
-          <Route path="/admin-team" element={<Team />} />
-          <Route path="/admin-header" element={<Headersetting />} />
+    <GoogleOAuthProvider clientId="215091741709-0kqqa12vc6ie5926qq6rh0j7t1jeh4ol.apps.googleusercontent.com">
+      <CartProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/about' element={<About />} />
+            <Route path='/service' element={<Services />} />
+            <Route path='/projects' element={<Projects />} />
+            <Route path="/products/:parent/:subcategory" element={<ProductPage />} />
+            <Route path='/contact' element={<Contact />} />
+            <Route path='/items' element={<Item />} />
+            <Route path='/product/:id' element={<Productdetails />} />
+            <Route path='/cart' element={<Cart />} />
+            <Route path='/userlogin' element={<Userlogin />} />
+            <Route path='/profile' element={<CustomerProfile />} />
+            <Route path='/usersign' element={<Usersign />} />
+            <Route path='/thanks' element={<Thankyou />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/admin" element={<Login />} />
+            <Route path="/admin-home" element={<BackendHome />} />
+            <Route path="/admin-orders" element={<Orderlist />} />
+            <Route path="/admin-couirer" element={<CourierSettings />} />
+            <Route path="/admin-store" element={<StoreCreation />} />
+            <Route path="/admin-products" element={<Products />} />
+            <Route path="/admin-users" element={<UserSettings />} />
+            <Route path="/admin-category" element={<Category />} />
+            <Route path="/admin-testo" element={<Testominal />} />
+            <Route path="/admin-banner" element={<Banner />} />
+            <Route path="/admin-contact" element={<ContactUs />} />
+            <Route path="/admin-team" element={<Team />} />
+            <Route path="/admin-header" element={<Headersetting />} />
 
-          {/* Catch-all route */}
-          <Route path="*" element={<Nullpage />} />
-        </Routes>
-      </BrowserRouter>
-    </CartProvider>
+            {/* Catch-all route */}
+            <Route path="*" element={<Nullpage />} />
+          </Routes>
+        </BrowserRouter>
+      </CartProvider>
     </GoogleOAuthProvider>
   );
 }

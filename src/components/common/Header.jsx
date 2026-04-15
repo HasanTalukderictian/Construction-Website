@@ -67,11 +67,6 @@ const Header = () => {
     }
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    setUser(null);
-    navigate("/userlogin");
-  };
 
   // ===============================
   // Fetch dynamic logo from API (with cache)
