@@ -129,7 +129,7 @@ const CustomerProfile = () => {
                                                 }
                                             }}
                                             className={`list-group-item list-group-item-action border-0 d-flex align-items-center py-3 
-        ${activeTab === item.label ? 'active-menu' : ''}`}
+                                             ${activeTab === item.label ? 'active-menu' : ''}`}
                                         >
                                             <i className={`bi ${item.icon} me-3 fs-5`}></i>
                                             <span className="small fw-medium">{item.label}</span>

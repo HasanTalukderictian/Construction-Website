@@ -124,7 +124,7 @@ const Userlogin = () => {
                 } else {
                     toast.error("Login failed");
                 }
-            } catch (err) {
+            } catch (error) {
                 toast.error("Google login error");
             }
         },
@@ -133,7 +133,7 @@ const Userlogin = () => {
 
 
 
-   
+
 
 
 
