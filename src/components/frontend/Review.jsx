@@ -92,22 +92,17 @@ const Review = () => {
       >
         {displaySlides.map((slide, idx) => (
           <div key={idx} className="swiper-slide">
-            <div className="testimonial-card">
-              {slide.image && (
-                <img
-                  src={slide.image}
-                  alt={slide.name}
-                  className="testimonial-image"
-                />
-              )}
-              <h3>{slide.name}</h3>
-              <p>{slide.designation}</p>
 
-              <div className="rating">
-                {"⭐".repeat(Math.floor(slide.rating))}
+            <div className="testimonial-card">
+              <img src={slide.image} alt={slide.name} className="testimonial-image" />
+              <h3 className="fw-bold">{slide.name}</h3>
+              <small className="text-muted">{slide.designation}</small>
+
+              <div className="rating my-2">
+                {"★".repeat(Math.floor(slide.rating))}
               </div>
 
-              <p>{slide.comment}</p>
+              <p className="text-center px-3">"{slide.comment}"</p>
             </div>
           </div>
         ))}

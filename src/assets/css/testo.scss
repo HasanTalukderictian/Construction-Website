@@ -1,123 +1,115 @@
 .swiper-container {
     position: relative;
-    width: 80%;
-    padding: auto;
-    margin: 0 auto;
-    margin-top: 10px;
-    margin-bottom: 20px;
+    width: 100%; // 90% theke 100% korun jeno buttons slide-er bhitore thake
+    margin: 50px auto;
     overflow: hidden;
+    padding: 20px 60px; // Sides-e padding dile button gulo paka jayga pabe
 }
 
 .swiper-wrapper {
     display: flex;
-    height: 400px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    background-color: #fff;
-    transition: transform 0.5s ease;
-    gap: 10px;
-    /* 🔥 Reduce gap between slides */
+    transition: transform 0.7s ease-in-out;
+    gap: 20px;
+    /* কার্ডের মাঝের দূরত্ব */
 }
 
 .swiper-slide {
-    min-width: 100%;
-    box-sizing: border-box;
-    padding: 10px;
-    /* 🔥 Reduce slide padding to make cards closer */
+    display: flex;
+    justify-content: center;
+    padding: 20px;
 }
 
 .testimonial-card {
-    background: #ece8e8;
-    border-radius: 10px;
-    padding: 20px;
-    margin-top: 10px;
-    width: 350px;
-    height: 450px;
-    box-shadow: 0 4px 10px rgba(105, 104, 104, 0.1);
-    text-align: center;
+    background: #ffffff;
+    border-radius: 50px;
+    /* এটিকে বৃত্তাকার করার জন্য */
+    padding: 30px;
+    width: 300px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #eee;
+    &:hover {
+        transform: scale(1.05);
+        /* Hover করলে বড় হবে */
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
 }
 
 .testimonial-image {
-    width: 100px;
-    height: 100px;
-    margin-top: 12px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     object-fit: cover;
-}
-
-.prev-button,
-.next-button {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.prev-button {
-    left: 10px;
-}
-
-.next-button {
-    right: 10px;
+    border: 2px solid #cfdfc2;
+    /* ইমেজের চারপাশে বর্ডার */
+    margin-bottom: 15px;
 }
 
 h3 {
-    margin: 10px 0;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
+    margin: 10px 0 5px;
+    color: #333;
 }
 
 p {
-    font-size: 1rem;
-    color: #555;
+    font-size: 0.9rem;
+    color: #777;
+    margin-bottom: 10px;
 }
 
 .rating {
-    font-size: 1.2rem;
-    color: gold;
+    color: #ffc107;
+    margin-bottom: 10px;
 }
+
+
+/* বাটন পজিশন ঠিক করা */
 
 .swiper-button {
     background: #007bff;
-    color: #faf7f7;
+    color: white;
     border: none;
-    padding: 15px 20px;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
     cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%); // Perfect vertical center
+    z-index: 10;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease;
-    font-size: 1.5rem;
-}
-
-.swiper-button:hover {
-    background: #0056b3;
-}
-
-.swiper-button i {
-    font-size: 4rem;
-}
-
-
-/* Media queries */
-
-@media (min-width: 1200px) {
-    .swiper-slide {
-        min-width: 25%;
-        /* 4 items */
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+    transition: all 0.3s ease;
+    &:hover {
+        background: #0056b3;
+        transform: translateY(-50%) scale(1.1);
     }
 }
 
-@media (min-width: 768px) and (max-width: 1199px) {
-    .swiper-slide {
-        min-width: 33.33%;
-        /* 3 items */
-    }
+.prev-button {
+    left: 10px; // Negative soriye positive 10px din
 }
 
-@media (max-width: 767px) {
-    .swiper-slide {
-        min-width: 100%;
-        /* 1 item */
+.next-button {
+    right: 10px; // Negative soriye positive 10px din
+}
+
+
+/* Mobile responsive-er jonno */
+
+@media (max-width: 768px) {
+    .swiper-container {
+        padding: 20px 40px;
+    }
+    .swiper-button {
+        width: 35px;
+        height: 35px;
     }
 }

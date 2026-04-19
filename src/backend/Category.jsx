@@ -15,6 +15,7 @@ const Category = () => {
   const [categoryName, setCategoryName] = useState("");
   const [subCategoryName, setSubCategoryName] = useState("");
   const [parentCategoryId, setParentCategoryId] = useState("");
+  const [categoryImage, setCategoryImage] = useState(null);
 
   // Pagination state
   const [categoryPage, setCategoryPage] = useState(1);
@@ -44,11 +45,23 @@ const Category = () => {
   // ===============================
   const handleCategorySubmit = (e) => {
     e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("name", categoryName);
+    if (categoryImage) {
+      formData.append("image", categoryImage);
+    }
+
     axios
-      .post(`${API_BASE}/parent-category/store`, { name: categoryName })
+      .post(`${API_BASE}/parent-category/store`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then((res) => {
         toast.success(res.data.message || "Parent Category created!");
         setCategoryName("");
+        setCategoryImage(null);
         fetchCategories();
       })
       .catch(() => toast.error("Failed to create category"));
@@ -146,6 +159,16 @@ const Category = () => {
                       required
                     />
                   </div>
+
+                  <div className="mb-3">
+                    <label className="form-label">Category Image</label>
+                    <input
+                      type="file"
+                      className="form-control"
+                      accept="image/*"
+                      onChange={(e) => setCategoryImage(e.target.files[0])}
+                    />
+                  </div>
                   <button type="submit" className="btn btn-success">Submit</button>
                 </form>
               </div>
@@ -199,6 +222,7 @@ const Category = () => {
                         <th>#</th>
                         <th>Category</th>
                         <th>Action</th>
+                        <th>Image</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -210,6 +234,15 @@ const Category = () => {
                             <button className="btn btn-sm btn-danger" title="Delete" onClick={() => handleDeleteCategory(cat.id)}>
                               <BsTrash />
                             </button>
+                          </td>
+                          <td>
+                            {cat.image_url ? (
+                              <img
+                                src={cat.image_url}
+                                alt={cat.name}
+                                style={{ width: "50px", height: "50px", objectFit: "cover" }}
+                              />
+                            ) : "N/A"}
                           </td>
                         </tr>
                       )) : (
