@@ -4,6 +4,7 @@ import Footer from '../common/Footer';
 import Header from '../common/Header';
 import Banner from './Banner';
 import Item from './Item';
+import Percel from './Percel';
 import Review from "./Review";
 import '../../assets/css/Global.scss';
 
@@ -34,7 +35,8 @@ const Home = () => {
                 <Banner scrollToItem={scrollToItem} />
 
                 <div ref={itemRef}>
-                    <Item />
+                    {/* <Item /> */}
+                    <Percel/>
                 </div>
 
                 <Review />
