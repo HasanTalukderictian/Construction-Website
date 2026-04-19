@@ -7,6 +7,7 @@ import Item from './Item';
 import Percel from './Percel';
 import Review from "./Review";
 import '../../assets/css/Global.scss';
+import AllCategory from "./AllCategory";
 
 const Home = () => {
 
@@ -33,6 +34,8 @@ const Home = () => {
 
             <main className="content-area">
                 <Banner scrollToItem={scrollToItem} />
+
+                <AllCategory/>
 
                 <div ref={itemRef}>
                     {/* <Item /> */}
