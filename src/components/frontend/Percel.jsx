@@ -47,7 +47,17 @@ const Percel = () => {
                 <img src={item.images?.[0] || "/placeholder.png"} alt="" />
             </div>
             <div className="card-body">
-                <h6>{item.name}</h6>
+                <h4>{item.name}</h4>
+                <div className="d-flex align-items-center gap-1">
+                    {Array.from({ length: 5 }, (_, index) => (
+                        <span key={index} style={{ color: index < Math.round(item.rating) ? "#ffc107" : "#ddd" }}>
+                            ★
+                        </span>
+                    ))}
+                    <small className="ms-1 text-muted">
+                        ({item.rating})
+                    </small>
+                </div>
                 <p>৳{item.price}</p>
                 <button
                     onClick={(e) => {
@@ -83,8 +93,15 @@ const Percel = () => {
                     return (
                         <div key={cat} className="category-block">
 
-                            <div className="header-row">
-                                <h3>{cat}</h3>
+                            <div className="header-row d-flex justify-content-between align-items-center mb-2">
+                                <h3 className="m-0">{cat}</h3>
+
+                                <button
+                                    className="btn btn-sm btn-outline-success"
+                                    onClick={() => navigate(`/category/${encodeURIComponent(cat)}`)}
+                                >
+                                    View All
+                                </button>
                             </div>
 
                             {/* FIRST 4 */}
