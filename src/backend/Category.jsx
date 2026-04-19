@@ -221,8 +221,9 @@ const Category = () => {
                       <tr>
                         <th>#</th>
                         <th>Category</th>
-                        <th>Action</th>
+                       
                         <th>Image</th>
+                         <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -230,11 +231,6 @@ const Category = () => {
                         <tr key={cat.id}>
                           <td>{(categoryPage - 1) * itemsPerPage + idx + 1}</td>
                           <td>{cat.name}</td>
-                          <td>
-                            <button className="btn btn-sm btn-danger" title="Delete" onClick={() => handleDeleteCategory(cat.id)}>
-                              <BsTrash />
-                            </button>
-                          </td>
                           <td>
                             {cat.image_url ? (
                               <img
@@ -244,6 +240,12 @@ const Category = () => {
                               />
                             ) : "N/A"}
                           </td>
+                          <td>
+                            <button className="btn btn-sm btn-danger" title="Delete" onClick={() => handleDeleteCategory(cat.id)}>
+                              <BsTrash />
+                            </button>
+                          </td>
+                          
                         </tr>
                       )) : (
                         <tr><td colSpan="3">No categories found</td></tr>
