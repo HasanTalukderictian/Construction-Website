@@ -173,7 +173,7 @@ const Dashboard = () => {
 
 
 
-            <div className="row g-4">
+            {/* <div className="row g-4">
                 {cards.map((card, index) => (
                     <div className="col-lg-3 col-md-6 col-sm-6" key={index}>
                         <div
@@ -196,7 +196,33 @@ const Dashboard = () => {
                         </div>
                     </div>
                 ))}
+            </div> */}
+
+            <div className="row g-4">
+    {cards.map((card, index) => (
+        <div className="col-lg-3 col-md-6 col-sm-6" key={index}>
+            <div
+                className={`card border-0 shadow-sm ${card.color} text-white`}
+                style={{ cursor: "pointer", minHeight: "130px", borderRadius: "10px" }}
+                onClick={() => navigate(card.url)}
+            >
+                <div className="card-body d-flex flex-column justify-content-center align-items-center">
+                    <div style={{ fontSize: "30px", marginBottom: "5px" }}>
+                        {card.icon}
+                    </div>
+                    <div className="text-center">
+                        <h6 className={`mb-1 ${card.className}`} style={{ fontWeight: "600" }}>
+                            {card.title}
+                        </h6>
+                        <h2 className="mb-0 fw-bold">
+                            {card.value}
+                        </h2>
+                    </div>
+                </div>
             </div>
+        </div>
+    ))}
+</div>
 
 
 
