@@ -31,6 +31,7 @@ import Usersign from './components/frontend/Usersign.jsx';
 import Thankyou from './components/frontend/Thankyou.jsx';
 import CustomerProfile from './components/frontend/CustomerPanel/CustomerProfile.jsx';
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import CategoryDetails from './components/frontend/CategoryDetails.jsx';
 
 
 
@@ -68,6 +69,7 @@ function App() {
             <Route path="/admin-banner" element={<Banner />} />
             <Route path="/admin-contact" element={<ContactUs />} />
             <Route path="/admin-team" element={<Team />} />
+            <Route path="/category/:name" element={<CategoryDetails />} />
             <Route path="/admin-header" element={<Headersetting />} />
 
             {/* Catch-all route */}

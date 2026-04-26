@@ -57,6 +57,32 @@
 }
 
 
+/* কার্ডের ভেতরের নাম্বারগুলো ঠিক করার জন্য */
+
+.card-body h2 {
+    font-size: 2.2rem;
+    /* বড় স্ক্রিনের জন্য */
+}
+
+@media (max-width: 991px) {
+    .card-body h2 {
+        font-size: 1.8rem;
+        /* মোবাইলের জন্য সামান্য ছোট */
+    }
+    .card-body div {
+        font-size: 25px !important;
+        /* আইকন ছোট করার জন্য */
+    }
+}
+
+
+/* নিশ্চিত করুন কার্ডের কন্টেন্ট যেন ওভারফ্লো না হয় */
+
+.card {
+    overflow: hidden;
+}
+
+
 /* Charts styling */
 
 .pie-chart,
