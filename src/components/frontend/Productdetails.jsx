@@ -23,8 +23,11 @@ const Productdetails = () => {
     const [imagePreview, setImagePreview] = useState(null);
     const [reviewData, setReviewData] = useState({
         price: 0, value: 0, quality: 0, service: 0,
-        title: "", feedback: "", image: null
+        title: "", feedback: "", image: null, customer_name: "",
     });
+
+    // New state for View More functionality
+    const [showAllReviews, setShowAllReviews] = useState(false);
 
     useEffect(() => {
         const handleResize = () => setWindowWidth(window.innerWidth);
@@ -94,6 +97,7 @@ const Productdetails = () => {
         formData.append('quality_rating', reviewData.quality);
         formData.append('service_rating', reviewData.service);
         formData.append('title', reviewData.title);
+        formData.append('customer_name', reviewData.customer_name);
         formData.append('feedback', reviewData.feedback);
         if (reviewData.image) formData.append('image', reviewData.image);
 
@@ -112,6 +116,11 @@ const Productdetails = () => {
             alert("Connection to server failed!");
         }
     };
+
+    // Slice reviews based on state
+    const reviewsToShow = showAllReviews 
+        ? product.reviews 
+        : product.reviews?.slice(0, 2);
 
     return (
         <>
@@ -145,11 +154,10 @@ const Productdetails = () => {
                     </div>
                 </div>
 
-                {/* --- Ratings & Reviews Section (As per Design) --- */}
+                {/* --- Ratings & Reviews Section --- */}
                 <div className="ratings-section mt-5 p-4 border-top">
                     <h4 className="mb-4">Ratings & Reviews</h4>
                     <div className="row">
-                        {/* Left Side: Summary */}
                         <div className="col-md-4 border-end">
                             <div className="d-flex align-items-center gap-3">
                                 <h1 className="display-4 fw-bold mb-0">{product.avg_rating || "0.0"}/5</h1>
@@ -170,35 +178,50 @@ const Productdetails = () => {
                             </div>
                         </div>
 
-                        {/* Right Side: Reviews List */}
                         <div className="col-md-8 ps-md-5">
                             <div className="d-flex justify-content-between align-items-center mb-3">
                                 <h5>Product Reviews</h5>
                                 <button onClick={() => setShowRateModal(true)} className="btn btn-sm text-white" style={{ backgroundColor: "#385486" }}>Rate Product</button>
                             </div>
 
-                            {product.reviews && product.reviews.length > 0 ? (
-                                product.reviews.map((rev) => (
-                                    <div key={rev.id} className="review-item mb-4 pb-3 border-bottom">
-                                        <div className="d-flex gap-3">
-                                            <div style={{ width: "45px", height: "45px", backgroundColor: "#eee", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                                <i className="bi bi-person-fill text-secondary"></i>
-                                            </div>
-                                            <div className="flex-grow-1">
-                                                <div className="d-flex justify-content-between">
-                                                    <h6 className="mb-0">Customer Name</h6>
-                                                    <small className="text-muted">({rev.price_rating}.0) {renderStars(rev.price_rating)}</small>
+                            {reviewsToShow && reviewsToShow.length > 0 ? (
+                                <>
+                                    {reviewsToShow.map((rev) => (
+                                        <div key={rev.id} className="review-item mb-4 pb-3 border-bottom">
+                                            <div className="d-flex gap-3">
+                                                <div style={{ width: "45px", height: "45px", backgroundColor: "#eee", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                                    <i className="bi bi-person-fill text-secondary"></i>
                                                 </div>
-                                                <small className="text-muted d-block mb-2">Posted on {rev.created_at}</small>
-                                                <p className="fw-bold mb-1">{rev.title}</p>
-                                                <p className="small text-dark">{rev.feedback}</p>
-                                                {rev.image && (
-                                                    <img src={rev.image} alt="review" style={{ width: "80px", height: "80px", objectFit: "cover", borderRadius: "4px", marginTop: "10px" }} />
-                                                )}
+                                                <div className="flex-grow-1">
+                                                    <div className="d-flex justify-content-between align-items-center">
+                                                        <h6 className="mb-0 fw-bold">{rev.customer_name ? rev.customer_name : "Anonymous Customer"}</h6>
+                                                        <small className="text-muted">({rev.price_rating || 0}.0) {renderStars(rev.price_rating || 0)}</small>
+                                                    </div>
+                                                    <small className="text-muted d-block mb-2">Posted on {rev.created_at ? new Date(rev.created_at).toLocaleDateString() : "N/A"}</small>
+                                                    <p className="mb-1">{rev.title || "No Title"}</p>
+                                                    <p className="small text-dark mb-2">{rev.feedback || "No feedback provided."}</p>
+                                                    {rev.image && (
+                                                        <div className="mt-2">
+                                                            <img src={rev.image} alt="review" style={{ width: "80px", height: "80px", objectFit: "cover", borderRadius: "6px", border: "1px solid #ddd" }} />
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                ))
+                                    ))}
+                                    
+                                    {/* View More / View Less Button */}
+                                    {product.reviews.length > 2 && (
+                                        <div className="text-center mt-3">
+                                            <button 
+                                                className="btn btn-outline-secondary btn-sm" 
+                                                onClick={() => setShowAllReviews(!showAllReviews)}
+                                            >
+                                                {showAllReviews ? "View Less" : "View More"}
+                                            </button>
+                                        </div>
+                                    )}
+                                </>
                             ) : (
                                 <p className="text-muted">No reviews yet. Be the first to rate!</p>
                             )}
@@ -206,17 +229,17 @@ const Productdetails = () => {
                     </div>
                 </div>
 
-                {/* Related Products */}
+                {/* Related Products Section */}
                 {relatedProducts.length > 0 && (
                     <div className="related-products mt-5">
                         <h3>Related Products</h3>
                         <div className="d-flex flex-wrap mt-3" style={{ gap: "20px" }}>
                             {relatedProducts.map((item) => (
                                 <div key={item.id} className="card" style={{ width: "200px" }}>
-                                    <img src={item.images?.[0] || '/placeholder.png'} className="card-img-top" style={{ height: "150px", objectFit: "cover" }} />
+                                    <img src={item.images?.[0] || '/placeholder.png'} className="card-img-top" style={{ height: "150px", objectFit: "cover" }} alt={item.name} />
                                     <div className="card-body">
                                         <h5 style={{ fontSize: "14px" }}>{item.name}</h5>
-                                        <Link to={`/product/${item.id}`} className="btn btn-primary btn-sm">View</Link>
+                                        <Link to={`/product/${item.id}`} className="btn btn-success btn-sm">View</Link>
                                     </div>
                                 </div>
                             ))}
@@ -238,6 +261,10 @@ const Productdetails = () => {
                         ))}
                     </div>
                     <Form>
+                        <Form.Group className="mb-3">
+                            <Form.Label className="fw-bold">Your Name</Form.Label>
+                            <Form.Control type="text" placeholder="Your Name" onChange={(e) => setReviewData({ ...reviewData, customer_name: e.target.value })} />
+                        </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label className="fw-bold">Review Title</Form.Label>
                             <Form.Control type="text" placeholder="Summarize your experience" onChange={(e) => setReviewData({ ...reviewData, title: e.target.value })} />

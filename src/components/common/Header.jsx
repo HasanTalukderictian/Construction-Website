@@ -1,5 +1,3 @@
-
-
 import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "react-bootstrap/Navbar";
@@ -11,12 +9,8 @@ import { CartContext } from "../frontend/CartContext";
 import "../../assets/css/header.scss";
 import Logo from "../../assets/images/BDStall logo.png"; // fallback logo
 
-
 export const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
-// ===============================
-// Simple module-level cache
-// ===============================
 let headerCache = null;
 
 const Header = () => {
@@ -25,13 +19,9 @@ const Header = () => {
   const [showModal, setShowModal] = useState(false);
   const [activeTab, setActiveTab] = useState("MEN");
   const [categories, setCategories] = useState({});
-  const [dynamicLogo, setDynamicLogo] = useState(headerCache?.image || null); // cache use
-
+  const [dynamicLogo, setDynamicLogo] = useState(headerCache?.image || null);
   const [user, setUser] = useState(null);
 
-  // ===============================
-  // Fetch categories from API
-  // ===============================
   useEffect(() => {
     axios
       .get(`${API_BASE}/all-category`)
@@ -51,14 +41,12 @@ const Header = () => {
             };
           });
           setCategories(catData);
-
           const firstTab = Object.keys(catData)[0];
           if (firstTab) setActiveTab(firstTab);
         }
       })
       .catch((err) => console.log("API Error: ", err));
   }, []);
-
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -67,10 +55,6 @@ const Header = () => {
     }
   }, []);
 
-
-  // ===============================
-  // Fetch dynamic logo from API (with cache)
-  // ===============================
   useEffect(() => {
     if (!headerCache) {
       axios
@@ -78,24 +62,75 @@ const Header = () => {
         .then((res) => {
           if (res.data.status && res.data.data.length > 0) {
             setDynamicLogo(res.data.data[0].image);
-            headerCache = res.data.data[0]; // store in cache
+            headerCache = res.data.data[0];
           }
         })
         .catch((err) => console.log("Header API Error:", err));
     }
   }, []);
 
-  // Tabs list
   const tabs = Object.keys(categories);
+
+  // --- Animation Styles (Slow & Loop) ---
+  const subHeaderStyle = {
+    background: "linear-gradient(90deg, #1c8b41, #385486)",
+    color: "#fff",
+    padding: "10px 0",
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+    fontSize: "14px",
+    fontWeight: "500",
+    borderBottom: "1px solid rgba(255,255,255,0.1)",
+    display: "flex",
+    alignItems: "center"
+  };
+
+  const marqueeStyle = `
+    @keyframes marquee {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-150%); } 
+    }
+    .marquee-container {
+      width: 100%;
+      overflow: hidden;
+    }
+    .marquee-text {
+      display: inline-block;
+      padding-left: 100%;
+      /* 45s duration makes it slow. Increase to 60s for even slower movement */
+      animation: marquee 200s linear infinite; 
+    }
+    .marquee-text:hover {
+      animation-play-state: paused;
+      cursor: pointer;
+    }
+  `;
+
+  const scrollingMessage = `Welcome to BDStall! Enjoy our exclusive Eid Special Offer with up to 50% discount on all premium electronics, fashion, and home appliances. We are committed to providing you with the best quality products at the most competitive prices in Bangladesh. Shop with confidence and experience lightning-fast home delivery across all 64 districts. Our dedicated customer support team is available 24/7 to assist you with your shopping needs. Don't miss out on our limited-time flash sales and bundle deals specially curated for our loyal customers. Join our community today and upgrade your lifestyle with BDStall's latest collections. Happy shopping!`;
 
   return (
     <>
+      <style>{marqueeStyle}</style>
+
+      {/* --- SUB HEADER --- */}
+      <div style={subHeaderStyle}>
+        <div className="marquee-container">
+          <div className="marquee-text">
+            <i className="bi bi-megaphone-fill me-2" style={{ color: '#ffc107' }}></i>
+            {scrollingMessage}
+            &nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;
+            <i className="bi bi-stars me-2" style={{ color: '#ffc107' }}></i>
+            Get Extra 5% Discount on Pre-payment!
+          </div>
+        </div>
+      </div>
+
       <header className="sticky-header">
         <div className="container py-3">
           <Navbar expand="lg">
             <Navbar.Brand onClick={() => navigate("/")} style={{ cursor: "pointer" }}>
               <img
-                src={dynamicLogo || Logo} // dynamic logo with fallback
+                src={dynamicLogo || Logo}
                 alt="BDStall Logo"
                 style={{ maxHeight: "60px", width: "auto" }}
               />
@@ -130,7 +165,7 @@ const Header = () => {
                 <Nav.Link onClick={() => navigate("/contact")}>Contact</Nav.Link>
 
                 {user ? (
-                  <Nav.Link onClick={() => navigate("/profile")} style={{  fontWeight: "600" }}>
+                  <Nav.Link onClick={() => navigate("/profile")} style={{ fontWeight: "600" }}>
                     My Profile
                   </Nav.Link>
                 ) : (
@@ -161,7 +196,7 @@ const Header = () => {
           </div>
 
           <div className="row">
-            <div className="col-md-6 d-flex gap-5">
+            <div className="col-md-12 d-flex gap-5">
               {categories[activeTab] && (
                 <>
                   <div>
