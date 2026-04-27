@@ -32,6 +32,7 @@ import Thankyou from './components/frontend/Thankyou.jsx';
 import CustomerProfile from './components/frontend/CustomerPanel/CustomerProfile.jsx';
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import CategoryDetails from './components/frontend/CategoryDetails.jsx';
+import AboutPage from './backend/AboutPage.jsx';
 
 
 
@@ -59,6 +60,7 @@ function App() {
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/admin" element={<Login />} />
             <Route path="/admin-home" element={<BackendHome />} />
+            <Route path="/admin-about" element={<AboutPage />} />
             <Route path="/admin-orders" element={<Orderlist />} />
             <Route path="/admin-couirer" element={<CourierSettings />} />
             <Route path="/admin-store" element={<StoreCreation />} />
