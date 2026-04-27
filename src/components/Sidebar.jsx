@@ -78,6 +78,7 @@ const Sidebar = () => {
             { to: "/admin-contact", icon: "bi-person-lines-fill", label: "Contact" },
             { to: "/admin-team", icon: "bi-person", label: "Team" },
             { to: "/admin-header", icon: "bi-sliders", label: "Header" },
+            { to: "/admin-about", icon: "bi-sliders", label: "About Page" },
           ].map((item, index) => (
             <li key={index} className="nav-item">
               <NavLink
