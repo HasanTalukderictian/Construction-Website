@@ -37,49 +37,7 @@ const Orderlist = () => {
         paperflyKey: ""
     });
 
-    // const viewTracking = async (order) => {
-
-    //     try {
-
-    //         const courierRes = await fetch(`${API_BASE}/couriers`);
-    //         const courierData = await courierRes.json();
-
-    //         if (courierRes.ok && courierData.status && courierData.data.length > 0) {
-
-    //             const courier = courierData.data[0];
-
-    //             const Username = courier.Username;
-    //             const Password = courier.Password;
-    //             const paperflyKey = courier.paperflyKey;
-
-    //             const response = await fetch("https://api.paperfly.com.bd/API-Order-Tracking", {
-    //                 method: "POST",
-    //                 headers: {
-    //                     "Content-Type": "application/json",
-    //                     "paperflykey": paperflyKey,
-    //                     "Authorization": "Basic " + btoa(`${Username}:${Password}`)
-    //                 },
-    //                 body: JSON.stringify({
-    //                     ReferenceNumber: order.id
-    //                 })
-    //             });
-
-    //             const data = await response.json();
-
-    //             console.log("Tracking Response:", data);
-
-    //         }
-
-    //     } catch (error) {
-
-    //         console.error("Tracking error:", error);
-
-    //     }
-
-    // };
-
-
-
+  
 
     const exportToExcel = () => {
         if (filteredOrders.length === 0) {

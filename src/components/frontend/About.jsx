@@ -1,13 +1,12 @@
 import Footer from "../common/Footer";
 import Header from "../common/Header";
-import { default as AboutNew } from '../common/About';
 import '../../assets/css/about.scss';
 
 import { useEffect, useState } from "react";
 import axios from "axios";
 
 // Base URL configuration (backend location)
-const BACKEND_URL = "http://localhost:8000";
+const BACKEND_URL = import.meta.env.VITE_API_BASE_URL;
 export const API_BASE = `${BACKEND_URL}/api`;
 
 const About = () => {

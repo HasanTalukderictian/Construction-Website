@@ -1,17 +1,34 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 import "../../../src/assets/css/testo.scss";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 const API_STORE = import.meta.env.VITE_API_STORAGE_URL;
 
 const Review = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
   const [slides, setSlides] = useState([]);
-  const intervalRef = useRef(null);
 
-  const slidesToShow = 4;
+  // Carousel Responsive settings
+  const responsive = {
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 4, // ডেক্সটপে ৪টি স্লাইড দেখাবে
+      slidesToSlide: 1,
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 2, // ট্যাবলেটে ২টি স্লাইড
+      slidesToSlide: 1,
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1, // মোবাইলে ১টি স্লাইড
+      slidesToSlide: 1,
+    },
+  };
 
-  // Fetch slides from API
+  // API থেকে ডাটা ফেচ করা
   useEffect(() => {
     const fetchSlides = async () => {
       try {
@@ -27,94 +44,63 @@ const Review = () => {
                 : `${API_STORE}/${slide.image}`
               : null,
           }));
-
           setSlides(apiSlides);
-        } else {
-          setSlides([]);
         }
       } catch (err) {
         console.error("Error fetching reviews:", err);
-        setSlides([]);
       }
     };
-
     fetchSlides();
   }, []);
 
-  // Auto-slide
-  useEffect(() => {
-    if (slides.length === 0) return;
-
-    intervalRef.current = setInterval(nextSlide, 5000);
-    return () => clearInterval(intervalRef.current);
-  }, [slides]);
-
-  const resetInterval = () => {
-    clearInterval(intervalRef.current);
-    intervalRef.current = setInterval(nextSlide, 5000);
-  };
-
-  const nextSlide = () => {
-    setActiveIndex((prevIndex) => {
-      const newIndex = prevIndex + slidesToShow;
-      return newIndex >= slides.length ? 0 : newIndex;
-    });
-    resetInterval();
-  };
-
-  const prevSlide = () => {
-    setActiveIndex((prevIndex) => {
-      const newIndex = prevIndex - slidesToShow;
-      return newIndex < 0
-        ? slides.length - (slides.length % slidesToShow || slidesToShow)
-        : newIndex;
-    });
-    resetInterval();
-  };
-
-  const displaySlides = [...slides, ...slides];
-
   return (
-    <div className="swiper-container mt-5 mb-5">
+    <div className="carousel-container mt-5 mb-5 container">
       <div className="section-header text-center mb-4">
-        <span>Testimonial</span>
-        <h2>Customer Reviews</h2>
+        <span className="text-primary fw-bold">Testimonial</span>
+        <h2 className="fw-bold">Customer Reviews</h2>
       </div>
 
-      <div
-        className="swiper-wrapper"
-        style={{
-          transform: `translateX(-${(activeIndex / slidesToShow) * 100}%)`,
-          transition: "transform 0.7s ease-in-out",
-          display: "flex",
-          gap: "10px",
-        }}
-      >
-        {displaySlides.map((slide, idx) => (
-          <div key={idx} className="swiper-slide">
+      {slides.length > 0 ? (
+        <Carousel
+          responsive={responsive}
+          infinite={true}
+          autoPlay={true}
+          autoPlaySpeed={5000}
+          keyBoardControl={true}
+          customTransition="transform 700ms ease-in-out"
+          transitionDuration={700}
+          containerClass="carousel-container"
+          removeArrowOnDeviceType={["tablet", "mobile"]}
+          dotListClass="custom-dot-list-style"
+          itemClass="px-2" // কার্ডগুলোর মাঝখানে গ্যাপ রাখার জন্য
+        >
+          {slides.map((slide, idx) => (
+            <div key={idx} className="testimonial-card shadow-sm border p-3 bg-white rounded text-center">
+              <div className="image-wrapper mb-3">
+                <img 
+                  src={slide.image} 
+                  alt={slide.name} 
+                  className="rounded-circle mx-auto" 
+                  style={{ width: "80px", height: "80px", objectFit: "cover" }}
+                />
+              </div>
+              <h4 className="fw-bold mb-1">{slide.name}</h4>
+              <p className="text-muted small mb-2">{slide.designation}</p>
 
-            <div className="testimonial-card">
-              <img src={slide.image} alt={slide.name} className="testimonial-image" />
-              <h3 className="fw-bold">{slide.name}</h3>
-              <small className="text-muted">{slide.designation}</small>
-
-              <div className="rating my-2">
+              <div className="rating text-warning mb-2">
                 {"★".repeat(Math.floor(slide.rating))}
+                {"☆".repeat(5 - Math.floor(slide.rating))}
               </div>
 
-              <p className="text-center px-3">"{slide.comment}"</p>
+              <p className="text-secondary font-italic">
+                <i className="bi bi-quote"></i> {slide.comment} <i className="bi bi-quote"></i>
+              </p>
             </div>
-          </div>
-        ))}
-      </div>
-
-      <button onClick={prevSlide} className="swiper-button prev-button">
-        ◀
-      </button>
-
-      <button onClick={nextSlide} className="swiper-button next-button">
-        ▶
-      </button>
+          ))}
+        </Carousel>
+      ) : (
+        <div className="text-center">Loading reviews...</div>
+      )}
     </div>
   );
 };

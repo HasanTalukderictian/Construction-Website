@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Layout from '../components/Layout'
 import DashNav from './DasNav'
 import Footer from './Footer'
@@ -20,7 +20,7 @@ const AboutPage = () => {
     const [description, setDescription] = useState('');
     const [image, setImage] = useState(null);
 
-    const API_BASE_URL = "http://localhost:8000/api";
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
     const handleClose = () => {
         setShow(false);

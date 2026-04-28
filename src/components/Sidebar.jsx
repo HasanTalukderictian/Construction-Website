@@ -61,24 +61,25 @@ const Sidebar = () => {
               }}
             />
           )}
-          <h2 style={{ fontSize: "20px", margin: 0 , color : 'white'}}>{header?.Companyname}</h2>
+          <h2 style={{ fontSize: "20px", margin: 0, color: 'white' }}>{header?.Companyname}</h2>
         </div>
 
         <ul className="nav flex-column">
           {[
-            { to: "/admin-home", icon: "bi-speedometer2", label: "Dashboard" },
-            { to: "/admin-orders", icon: "bi-receipt", label: "Orders" },
-            { to: "/admin-category", icon: "bi-tags", label: "Category" },
-            { to: "/admin-products", icon: "bi-box-seam", label: "Products" },
-            { to: "/admin-store", icon: "bi-pencil-square", label: "Store Settings" },
-            { to: "/admin-couirer", icon: "bi-truck", label: "Courier Settings" },
-            { to: "/admin-users", icon: "bi-people", label: "User Settings" },
-            { to: "/admin-testo", icon: "bi-star-fill", label: "Testimonial" },
-            { to: "/admin-banner", icon: "bi-megaphone-fill", label: "Banner" },
-            { to: "/admin-contact", icon: "bi-person-lines-fill", label: "Contact" },
-            { to: "/admin-team", icon: "bi-person", label: "Team" },
-            { to: "/admin-header", icon: "bi-sliders", label: "Header" },
-            { to: "/admin-about", icon: "bi-sliders", label: "About Page" },
+            { to: "/admin-home", icon: "bi-grid-1x2-fill", label: "Dashboard" }, // Modern Grid Look
+            { to: "/admin-orders", icon: "bi-cart-check", label: "Orders" },     // Sales focused
+            { to: "/admin-category", icon: "bi-layers", label: "Category" },     // Layers for hierarchy
+            { to: "/admin-products", icon: "bi-bag-plus", label: "Products" },    // E-commerce specific
+            { to: "/admin-store", icon: "bi-shop", label: "Store Settings" },    // Real shop icon
+            { to: "/admin-couirer", icon: "bi-bicycle", label: "Courier Settings" }, // Fast delivery feel
+            { to: "/admin-users", icon: "bi-shield-lock", label: "User Settings" }, // Security/Admin feel
+            { to: "/admin-testo", icon: "bi-chat-heart", label: "Testimonial" },   // Customer love/review
+            { to: "/admin-banner", icon: "bi-images", label: "Banner" },           // Visual/Slideshow feel
+            { to: "/admin-contact", icon: "bi-headset", label: "Contact" },        // Support feel
+            { to: "/admin-team", icon: "bi-people-fill", label: "Team" },          // Professional group
+            { to: "/admin-header", icon: "bi-layout-text-sidebar-reverse", label: "Header" }, // Header layout
+            { to: "/admin-about", icon: "bi-info-square", label: "About Page" },   // Info specific
+            { to: "/admin-ecommerce", icon: "bi-info-square", label: "Ecommerce Page" }    // EcommerceInfo specific
           ].map((item, index) => (
             <li key={index} className="nav-item">
               <NavLink
@@ -91,14 +92,14 @@ const Sidebar = () => {
                 <i className={`bi ${item.icon}`}></i>
                 {item.label}
               </NavLink>
-              
+
             </li>
           ))}
-            <button onClick={handleLogout} className="nav-link logout-btn">
-              <i className="bi bi-box-arrow-right"></i>
-              Logout
-            </button>
-          
+          <button onClick={handleLogout} className="nav-link logout-btn">
+           <i className="bi bi-power me-2"></i>
+            Logout
+          </button>
+
         </ul>
       </div>
     </>

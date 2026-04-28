@@ -3,11 +3,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Footer from '../common/Footer';
 import Header from '../common/Header';
 import Banner from './Banner';
-import Item from './Item';
 import Percel from './Percel';
 import Review from "./Review";
 import '../../assets/css/Global.scss';
 import AllCategory from "./AllCategory";
+import Ecommerce from "./Ecommerce";
 
 const Home = () => {
 
@@ -41,7 +41,7 @@ const Home = () => {
                     {/* <Item /> */}
                     <Percel/>
                 </div>
-
+                 <Ecommerce/>
                 <Review />
             </main>
 
