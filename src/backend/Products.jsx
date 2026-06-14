@@ -256,7 +256,7 @@ const Products = () => {
                         <td>{p.images && p.images.length > 0 ? <img src={p.images[0]} width="60" height="60" style={{ objectFit: "cover", borderRadius: "5px" }} /> : "No Image"}</td>
                         <td>{p.name}</td>
                         <td>{p.price}৳</td>
-                        <td>{p.rating}</td>
+                        <td>{p.reviews.quality_rating}</td>
                         <td>{p.quantity}</td>
                         <td className="text-center">
                           <button className="btn btn-warning btn-sm me-1" onClick={() => handleEdit(p)}><i className="bi bi-pencil"></i></button>
