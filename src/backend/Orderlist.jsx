@@ -236,7 +236,7 @@ const Orderlist = () => {
         
         const deliveryCharge = order.delivery_charge || 0;
         const totalAmount = order.final_total || 0;
-        const logoUrl = storeData.logo || "";
+    
         const trackingNumber = order.tracking_number || "N/A";
         const invoiceWindow = window.open("", "_blank", "height=900,width=700");
         if (!invoiceWindow) { alert("Popup blocked!"); return; }
