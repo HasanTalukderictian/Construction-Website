@@ -7,7 +7,7 @@ import axios from "axios";
 
 // Base URL configuration (backend location)
 const BACKEND_URL = import.meta.env.VITE_API_BASE_URL;
-export const API_BASE = `${BACKEND_URL}/api`;
+export const API_BASE = `${BACKEND_URL}`;
 
 const About = () => {
     const [team, setTeam] = useState([]);

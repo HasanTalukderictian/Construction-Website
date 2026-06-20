@@ -244,31 +244,41 @@ const Checkout = () => {
       cartItems: mappedCartItems,
       paymentMethod,
     };
+try {
+        // 🔥 STEP 1: SEND OTP
+        const res = await fetch(`${API_BASE}/send-otp`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ phone }),
+        });
 
-    try {
+        // 🔥 LOG THE FULL RESPONSE
+        console.log('Response status:', res.status);
+        const text = await res.text(); // Get raw response first
+        console.log('Raw response:', text);
+        
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch (e) {
+            console.error('Invalid JSON:', text);
+            alert('Server returned invalid response');
+            return;
+        }
 
-      // 🔥 STEP 1: SEND OTP
-      const res = await fetch(`${API_BASE}/send-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone }),
-      });
+        console.log("OTP API response:", data);
 
-      const data = await res.json();
-
-      console.log("OTP API response:", data);
-
-      if (data.status) {
-        setTempOrderData(orderData);
-        setShowOtpModal(true);
-      } else {
-        console.log("OTP failed:", data);
-        alert("OTP send failed");
-      }
+        if (data.status) {
+            setTempOrderData(orderData);
+            setShowOtpModal(true);
+        } else {
+            console.log("OTP failed:", data);
+            alert(data.message || "OTP send failed");
+        }
 
     } catch (err) {
-      console.log(err);
-      alert("Something went wrong");
+        console.error('Full error:', err);
+        alert("Something went wrong: " + err.message);
     }
   };
 
