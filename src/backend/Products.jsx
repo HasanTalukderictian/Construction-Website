@@ -3,7 +3,7 @@ import Layout from "../components/Layout";
 import DashNav from "./DasNav";
 import Footer from "./Footer";
 import axios from "axios";
-import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
+import { BsChevronLeft, BsChevronRight, BsSearch, BsPlus, BsPencil, BsTrash, BsImage } from "react-icons/bs";
 import '../assets/css/Price.scss';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -99,28 +99,28 @@ const Products = () => {
 
   // Image upload & preview
   const handleImageChange = async (e) => {
-  const files = Array.from(e.target.files);
-  const compressedFiles = [...imageFiles]; // keep old uploaded files
-  const previewUrls = [...previews]; // keep old previews
+    const files = Array.from(e.target.files);
+    const compressedFiles = [...imageFiles];
+    const previewUrls = [...previews];
 
-  for (let file of files) {
-    try {
-      const compressed = await imageCompression(file, {
-        maxSizeMB: 1,
-        maxWidthOrHeight: 1024,
-        useWebWorker: true
-      });
-      compressedFiles.push(compressed);
-      previewUrls.push(URL.createObjectURL(compressed));
-    } catch {
-      compressedFiles.push(file);
-      previewUrls.push(URL.createObjectURL(file));
+    for (let file of files) {
+      try {
+        const compressed = await imageCompression(file, {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 1024,
+          useWebWorker: true
+        });
+        compressedFiles.push(compressed);
+        previewUrls.push(URL.createObjectURL(compressed));
+      } catch {
+        compressedFiles.push(file);
+        previewUrls.push(URL.createObjectURL(file));
+      }
     }
-  }
 
-  setImageFiles(compressedFiles);
-  setPreviews(previewUrls);
-};
+    setImageFiles(compressedFiles);
+    setPreviews(previewUrls);
+  };
 
   // Remove single image
   const removeImage = (index) => {
@@ -209,18 +209,153 @@ const Products = () => {
   const prevPage = () => setCurrentPage(prev => Math.max(prev - 1, 1));
   const goToPage = (page) => setCurrentPage(page);
 
+  // Table styles
+  const tableStyles = `
+    .product-table-container {
+      background: white;
+      border-radius: 12px;
+      overflow-x: auto;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .product-table {
+      margin-bottom: 0;
+      width: 100%;
+    }
+    .product-table thead th {
+      background: #f8f9fa;
+      color: #2c3e50;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 12px 8px;
+      border-bottom: 2px solid #e9ecef;
+      vertical-align: middle;
+    }
+    .product-table tbody td {
+      padding: 12px 8px;
+      vertical-align: middle;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .product-table tbody tr:hover {
+      background: #f8f9fa;
+    }
+    .product-img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .product-name {
+      font-weight: 500;
+      color: #2c3e50;
+    }
+    .price-tag {
+      color: #28a745;
+      font-weight: 600;
+    }
+    .rating-badge {
+      background: #ffc107;
+      color: #000;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-block;
+    }
+    .action-btns {
+      display: flex;
+      gap: 5px;
+    }
+    .btn-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-edit {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeeba;
+    }
+    .btn-edit:hover {
+      background: #ffeaa7;
+      color: #856404;
+    }
+    .btn-delete {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    .btn-delete:hover {
+      background: #f1b0b7;
+      color: #721c24;
+    }
+    .search-box {
+      position: relative;
+      width: 280px;
+    }
+    .search-box input {
+      padding-right: 35px;
+      border-radius: 20px;
+      border: 1px solid #dee2e6;
+    }
+    .search-box input:focus {
+      outline: none;
+      border-color: #28a745;
+    }
+    .search-box .search-icon {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #adb5bd;
+    }
+    .btn-upload {
+      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+      border: none;
+      padding: 8px 20px;
+      border-radius: 25px;
+      font-weight: 500;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-upload:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(40,167,69,0.3);
+    }
+    @media (max-width: 768px) {
+      .product-table thead th { font-size: 0.7rem; padding: 8px 4px; }
+      .product-table tbody td { padding: 8px 4px; font-size: 0.8rem; }
+      .product-img { width: 35px; height: 35px; }
+      .btn-icon { width: 28px; height: 28px; }
+      .action-btns { gap: 3px; }
+      .search-box { width: 100%; }
+    }
+  `;
+
   return (
     <Layout>
+      <style>{tableStyles}</style>
       <div className="d-flex">
         <div className="flex-grow-1">
           <DashNav />
           <div className="container mt-4">
-
-            {/* Header */}
-            <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap">
-              <h2>Product List</h2>
-              <div className="d-flex align-items-center flex-wrap">
-                <div style={{ position: "relative", width: "250px", marginRight: "15px" }}>
+            {/* Header Section */}
+            <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+              <div>
+                <h3 className="mb-1" style={{ color: '#2c3e50', fontWeight: '600' }}>Products Management</h3>
+                <p className="text-muted mb-0 small">Manage your product inventory</p>
+              </div>
+              <div className="d-flex gap-3">
+                <div className="search-box">
                   <input
                     type="text"
                     placeholder="Search products..."
@@ -228,56 +363,113 @@ const Products = () => {
                     value={searchTerm}
                     onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
                   />
-                  <i className="bi bi-search" style={{ position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)", cursor: "pointer" }}></i>
+                  <BsSearch className="search-icon" />
                 </div>
-                <button className="btn btn-success mb-2" onClick={() => { resetForm(); setShowModal(true); }}>Upload Product</button>
+                <button 
+                  className="btn-upload" 
+                  onClick={() => { resetForm(); setShowModal(true); }}
+                >
+                  <BsPlus size={20} /> Upload Product
+                </button>
+              </div>
+            </div>
+
+            {/* Stats Cards */}
+            <div className="row mb-4">
+              <div className="col-md-3 col-6 mb-2">
+                <div className="bg-white p-3 rounded shadow-sm">
+                  <small className="text-muted">Total Products</small>
+                  <h4 className="mb-0">{products.length}</h4>
+                </div>
+              </div>
+              <div className="col-md-3 col-6 mb-2">
+                <div className="bg-white p-3 rounded shadow-sm">
+                  <small className="text-muted">Low Stock</small>
+                  <h4 className="mb-0 text-warning">{products.filter(p => p.quantity < 10).length}</h4>
+                </div>
               </div>
             </div>
 
             {/* Product Table */}
-            <table className="table table-bordered table-striped custom-product-table">
-              <thead className="table-dark">
-                <tr>
-                  <th>SL</th>
-                  <th>Image</th>
-                  <th>Name</th>
-                  <th>Price</th>
-                  <th>Rating</th>
-                  <th>Quantity</th>
-                  <th>ACTION</th>
-                </tr>
-              </thead>
-              <tbody>
-                {loading ? <tr><td colSpan="9" className="text-center">Loading...</td></tr> :
-                  filteredProducts.length === 0 ? <tr><td colSpan="9" className="text-center text-danger">No Products Found</td></tr> :
+            <div className="product-table-container">
+              <table className="product-table">
+                <thead>
+                  <tr>
+                    <th style={{ width: '60px' }}>#</th>
+                    <th style={{ width: '80px' }}>Image</th>
+                    <th>Product Name</th>
+                    <th style={{ width: '100px' }}>Price</th>
+                    <th style={{ width: '80px' }}>Rating</th>
+                    <th style={{ width: '100px' }}>Stock</th>
+                    <th style={{ width: '100px' }}>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loading ? (
+                    <tr><td colSpan="7" className="text-center py-5">Loading products...</td></tr>
+                  ) : filteredProducts.length === 0 ? (
+                    <tr><td colSpan="7" className="text-center py-5 text-muted">No products found</td></tr>
+                  ) : (
                     currentProducts.map((p, idx) => (
                       <tr key={p.id}>
-                        <td>{indexOfFirstItem + idx + 1}</td>
-                        <td>{p.images && p.images.length > 0 ? <img src={p.images[0]} width="60" height="60" style={{ objectFit: "cover", borderRadius: "5px" }} /> : "No Image"}</td>
-                        <td>{p.name}</td>
-                        <td>{p.price}৳</td>
-                        <td>{p.rating}</td>
-                        <td>{p.quantity}</td>
-                        <td className="text-center">
-                          <button className="btn btn-warning btn-sm me-1" onClick={() => handleEdit(p)}><i className="bi bi-pencil"></i></button>
-                          <button className="btn btn-danger btn-sm" onClick={() => handleDelete(p.id)}><i className="bi bi-trash"></i></button>
+                        <td className="text-muted">{indexOfFirstItem + idx + 1}</td>
+                        <td>
+                          {p.images && p.images.length > 0 ? 
+                            <img src={p.images[0]} className="product-img" alt={p.name} /> : 
+                            <div className="product-img bg-light d-flex align-items-center justify-content-center"><BsImage color="#ccc" /></div>
+                          }
+                        </td>
+                        <td><span className="product-name">{p.name}</span></td>
+                        <td><span className="price-tag">৳{p.price}</span></td>
+                        <td><span className="rating-badge">⭐ {p.reviews?.quality_rating || p.rating || 'N/A'}</span></td>
+                        <td>
+                          <span className={`badge ${p.quantity > 10 ? 'bg-success' : p.quantity > 0 ? 'bg-warning' : 'bg-danger'}`}>
+                            {p.quantity} units
+                          </span>
+                        </td>
+                        <td>
+                          <div className="action-btns">
+                            <button className="btn-icon btn-edit" onClick={() => handleEdit(p)} title="Edit">
+                              <BsPencil size={14} />
+                            </button>
+                            <button className="btn-icon btn-delete" onClick={() => handleDelete(p.id)} title="Delete">
+                              <BsTrash size={14} />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))
-                }
-              </tbody>
-            </table>
+                  )}
+                </tbody>
+              </table>
+            </div>
 
             {/* Pagination */}
-            <nav>
-              <ul className="pagination justify-content-center">
-                <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}><button className="page-link" onClick={prevPage}><BsChevronLeft /> Prev</button></li>
-                {Array.from({ length: totalPages }, (_, i) => (
-                  <li key={i} className={`page-item ${currentPage === i + 1 ? "active" : ""}`}><button className="page-link" onClick={() => goToPage(i + 1)}>{i + 1}</button></li>
-                ))}
-                <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}><button className="page-link" onClick={nextPage}>Next <BsChevronRight /></button></li>
-              </ul>
-            </nav>
+            {totalPages > 1 && (
+              <nav className="mt-4">
+                <ul className="pagination justify-content-center">
+                  <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                    <button className="page-link" onClick={prevPage}><BsChevronLeft /> Prev</button>
+                  </li>
+                  {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+                    let pageNum;
+                    if (totalPages <= 5) pageNum = i + 1;
+                    else if (currentPage <= 3) pageNum = i + 1;
+                    else if (currentPage >= totalPages - 2) pageNum = totalPages - 4 + i;
+                    else pageNum = currentPage - 2 + i;
+                    
+                    return (
+                      <li key={pageNum} className={`page-item ${currentPage === pageNum ? "active" : ""}`}>
+                        <button className="page-link" onClick={() => goToPage(pageNum)}>{pageNum}</button>
+                      </li>
+                    );
+                  })}
+                  <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
+                    <button className="page-link" onClick={nextPage}>Next <BsChevronRight /></button>
+                  </li>
+                </ul>
+              </nav>
+            )}
 
           </div>
           <Footer />
@@ -286,44 +478,44 @@ const Products = () => {
 
       {/* Modal */}
       {showModal && (
-        <div className="modal fade show" style={{ display: "block", background: "rgba(0,0,0,0.5)" }}>
+        <div className="modal fade show" style={{ display: "block", background: "rgba(0,0,0,0.5)", zIndex: 1050 }}>
           <div className="modal-dialog modal-lg">
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">{editingProductId ? "Edit Product" : "Upload New Product"}</h5>
-                <button className="btn-close" onClick={() => { setShowModal(false); resetForm(); }}></button>
+                <button type="button" className="btn-close" onClick={() => { setShowModal(false); resetForm(); }}></button>
               </div>
               <div className="modal-body">
                 <div className="row">
                   <div className="col-md-6 mb-3">
-                    <label className="form-label">Product Name</label>
-                    <input type="text" className="form-control" value={productName} onChange={(e) => setProductName(e.target.value)} />
+                    <label className="form-label">Product Name <span className="text-danger">*</span></label>
+                    <input type="text" className="form-control" value={productName} onChange={(e) => setProductName(e.target.value)} placeholder="Enter product name" />
                   </div>
                   <div className="col-md-6 mb-3">
-                    <label className="form-label">Price</label>
-                    <input type="number" className="form-control" value={price} onChange={(e) => setPrice(e.target.value)} />
+                    <label className="form-label">Price <span className="text-danger">*</span></label>
+                    <input type="number" className="form-control" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="Enter price" />
                   </div>
                 </div>
                 <div className="row">
                   <div className="col-md-6 mb-3">
                     <label className="form-label">Rating</label>
-                    <input type="number" className="form-control" value={rating} onChange={(e) => setRating(e.target.value)} />
+                    <input type="number" step="0.1" className="form-control" value={rating} onChange={(e) => setRating(e.target.value)} placeholder="0-5" />
                   </div>
                   <div className="col-md-6 mb-3">
-                    <label className="form-label">Quantity</label>
-                    <input type="number" className="form-control" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+                    <label className="form-label">Quantity <span className="text-danger">*</span></label>
+                    <input type="number" className="form-control" value={quantity} onChange={(e) => setQuantity(e.target.value)} placeholder="Enter quantity" />
                   </div>
                 </div>
                 <div className="row">
                   <div className="col-md-6 mb-3">
-                    <label className="form-label">Category</label>
+                    <label className="form-label">Category <span className="text-danger">*</span></label>
                     <select className="form-select" value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
                       <option value="">Select Category</option>
                       {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                     </select>
                   </div>
                   <div className="col-md-6 mb-3">
-                    <label className="form-label">SubCategory</label>
+                    <label className="form-label">SubCategory <span className="text-danger">*</span></label>
                     <select className="form-select" value={subCategoryId} onChange={(e) => setSubCategoryId(e.target.value)}>
                       <option value="">Select SubCategory</option>
                       {subCategories.map(sc => <option key={sc.id} value={sc.id}>{sc.name}</option>)}
@@ -335,23 +527,28 @@ const Products = () => {
                   <ReactQuill theme="snow" value={description} onChange={setDescription} placeholder="Write product description..." />
                 </div>
                 <div className="mb-3">
-                  <label className="form-label">Product Image</label>
+                  <label className="form-label">Product Images</label>
                   <input type="file" className="form-control" multiple accept="image/*" onChange={handleImageChange} />
+                  <small className="text-muted">You can select multiple images</small>
                 </div>
                 {previews.length > 0 && (
-                  <div className="d-flex flex-wrap gap-2">
+                  <div className="d-flex flex-wrap gap-2 mt-2">
                     {previews.map((img, index) => (
                       <div key={index} className="position-relative">
-                        <img src={img} width="120" height="120" style={{ objectFit: "cover", borderRadius: "10px", border: "1px solid #ccc" }} />
-                        <button onClick={() => removeImage(index)} style={{ position: "absolute", top: "-8px", right: "-8px", background: "red", color: "#fff", border: "none", width: "22px", height: "22px", borderRadius: "50%" }}>×</button>
+                        <img src={img} width="80" height="80" style={{ objectFit: "cover", borderRadius: "8px", border: "1px solid #ddd" }} alt="Preview" />
+                        <button
+                          type="button"
+                          onClick={() => removeImage(index)}
+                          style={{ position: "absolute", top: "-8px", right: "-8px", background: "red", color: "#fff", border: "none", width: "22px", height: "22px", borderRadius: "50%", fontSize: "14px", cursor: "pointer" }}
+                        >×</button>
                       </div>
                     ))}
                   </div>
                 )}
               </div>
               <div className="modal-footer">
-                <button className="btn btn-danger" onClick={() => { setShowModal(false); resetForm(); }}>Close</button>
-                <button className="btn btn-success" onClick={submitProduct}>{editingProductId ? "Update Product" : "Save Product"}</button>
+                <button type="button" className="btn btn-secondary" onClick={() => { setShowModal(false); resetForm(); }}>Cancel</button>
+                <button type="button" className="btn btn-success" onClick={submitProduct}>{editingProductId ? "Update Product" : "Save Product"}</button>
               </div>
             </div>
           </div>

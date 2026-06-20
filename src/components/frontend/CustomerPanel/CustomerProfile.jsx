@@ -1,16 +1,20 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios'; // Ensure axios is installed: npm install axios
+import axios from 'axios';
 import Header from '../../common/Header';
 import Footer from '../../common/Footer';
 import { useNavigate } from "react-router-dom";
 import '../../../assets/css/customerprofile.scss';
 
 const CustomerProfile = () => {
-
     const [customer, setCustomer] = useState(null);
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState("Account Information");
+    const [visibleOrders, setVisibleOrders] = useState(2);
+
+    // সাপোর্ট টিকিটের জন্য নতুন স্টেট
+    const [tickets, setTickets] = useState([]); 
+    const [showTicketForm, setShowTicketForm] = useState(false);
 
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
@@ -18,81 +22,64 @@ const CustomerProfile = () => {
     useEffect(() => {
         const fetchCustomerData = async () => {
             try {
-                const token = localStorage.getItem("token"); // ✅ correct way
-
+                const token = localStorage.getItem("token");
                 if (!token) {
-                    console.log("No token found");
-                    window.location.href = "/userlogin"; // ✅ redirect if not login
+                    window.location.href = "/userlogin";
                     return;
                 }
-
                 const response = await axios.get(
                     `${import.meta.env.VITE_API_BASE_URL}/profile`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
+                    { headers: { Authorization: `Bearer ${token}` } }
                 );
-
-                // ✅ backend returns { status, data }
                 setCustomer(response.data.data);
                 setLoading(false);
-
             } catch (error) {
                 console.error("Error fetching customer data", error);
-
-                // ❗ token invalid হলে logout
                 localStorage.removeItem("token");
                 localStorage.removeItem("user");
-
                 window.location.href = "/userlogin";
-
                 setLoading(false);
             }
         };
-
         fetchCustomerData();
     }, []);
 
-
-
-    // ২. অর্ডার ডেটা ফেচ করা (যখন My Orders ট্যাবে ক্লিক করা হবে)
     useEffect(() => {
         if (activeTab === "My Orders") {
             const fetchOrders = async () => {
                 try {
-                    const token = localStorage.getItem("token"); // ✅ ADD THIS
-
+                    const token = localStorage.getItem("token");
                     const response = await axios.get(
                         `${import.meta.env.VITE_API_BASE_URL}/customer-orders/${customer?.id}`,
-                        {
-                            headers: { Authorization: `Bearer ${token}` }
-                        }
+                        { headers: { Authorization: `Bearer ${token}` } }
                     );
-
                     setOrders(response.data.data);
-
                 } catch (error) {
                     console.error("Orders fetch failed", error);
                 }
             };
-
             if (customer?.id) fetchOrders();
+        }
+        
+        // সাপোর্ট টিকিট ফেচ করার লজিক (প্রয়োজন হলে এখানে API কল করতে পারেন)
+        if (activeTab === "Support Tickets") {
+            // fetchTickets(); 
         }
     }, [activeTab, customer?.id]);
 
     const handleLogout = () => {
-        localStorage.removeItem("token");   // ✅ token remove
-        localStorage.removeItem("user");    // ✅ user remove
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
         setUser(null);
-
-        navigate("/userlogin");             // ✅ redirect
+        navigate("/userlogin");
     };
 
+    const handleViewMore = () => {
+        setVisibleOrders((prevValue) => prevValue + 2);
+    };
 
     const sidebarItems = [
-        { icon: "bi-person", label: "Account Information", active: true },
+        { icon: "bi-person", label: "Account Information" },
         { icon: "bi-box-seam", label: "My Orders" },
         { icon: "bi-star", label: "My Product Reviews" },
         { icon: "bi-chat-left-dots", label: "Support Tickets" },
@@ -123,9 +110,11 @@ const CustomerProfile = () => {
                                             key={index}
                                             onClick={() => {
                                                 if (item.label === "Logout") {
-                                                    handleLogout();   // ✅ logout call
+                                                    handleLogout();
                                                 } else {
                                                     setActiveTab(item.label);
+                                                    setVisibleOrders(2);
+                                                    setShowTicketForm(false); // ট্যাব চেঞ্জ করলে ফর্ম বন্ধ হয়ে যাবে
                                                 }
                                             }}
                                             className={`list-group-item list-group-item-action border-0 d-flex align-items-center py-3 
@@ -141,100 +130,157 @@ const CustomerProfile = () => {
 
                         {/* RIGHT CONTENT AREA */}
                         <div className="col-lg-8 col-xl-9">
-
-
-                            {!["Account Information", "My Orders"].includes(activeTab) && (
+                            
+                            {/* Default Under Development View */}
+                            {!["Account Information", "My Orders", "Support Tickets"].includes(activeTab) && (
                                 <div className="card border-0 shadow-sm rounded-4 p-4 text-center">
                                     <h5 className="fw-bold mb-3">{activeTab}</h5>
                                     <p className="text-muted">🚧 Under Development</p>
                                 </div>
                             )}
 
+                            {/* Account Information Tab */}
                             {activeTab === "Account Information" && (
-                                <>
-                                    {/* Account Information Card */}
-                                    <div className="card border-0 shadow-sm rounded-4 mb-4">
-                                        <div className="card-body p-4">
-                                            <div className="d-flex justify-content-between align-items-center mb-4">
-                                                <h5 className="mb-0 fw-bold">Account Information</h5>
-                                                <button className="btn btn-outline-primary btn-sm px-4 rounded-pill">Edit</button>
+                                <div className="card border-0 shadow-sm rounded-4 mb-4">
+                                    <div className="card-body p-4">
+                                        <div className="d-flex justify-content-between align-items-center mb-4">
+                                            <h5 className="mb-0 fw-bold">Account Information</h5>
+                                            <button className="btn btn-outline-primary btn-sm px-4 rounded-pill">Edit</button>
+                                        </div>
+                                        <div className="row g-4">
+                                            <div className="col-md-6">
+                                                <label className="text-muted small d-block mb-1">First Name</label>
+                                                <p className="fw-semibold mb-0">{customer?.first_name || 'N/A'}</p>
                                             </div>
-
-                                            <div className="row g-4">
-                                                <div className="col-md-6">
-                                                    <label className="text-muted small d-block mb-1">First Name</label>
-                                                    <p className="fw-semibold mb-0">{customer?.first_name || 'N/A'}</p>
-                                                </div>
-
-                                                <div className="col-md-6">
-                                                    <label className="text-muted small d-block mb-1">Last Name</label>
-                                                    <p className="fw-semibold mb-0">{customer?.last_name || 'N/A'}</p>
-                                                </div>
-
-                                                <div className="col-md-6 border-top pt-3">
-                                                    <label className="text-muted small d-block mb-1">Contact Number</label>
-                                                    <p className="fw-semibold mb-0">{customer?.phone || 'N/A'}</p>
-                                                </div>
-
-                                                <div className="col-md-6 border-top pt-3">
-                                                    <label className="text-muted small d-block mb-1">Email</label>
-                                                    <p className="text-muted small mb-0">{customer?.email || 'N/A'}</p>
-                                                </div>
-
-                                                <div className="col-md-6 border-top pt-3">
-                                                    <label className="text-muted small d-block mb-1">Gender</label>
-                                                    <p className="fw-semibold mb-0">{customer?.gender || 'None'}</p>
-                                                </div>
+                                            <div className="col-md-6">
+                                                <label className="text-muted small d-block mb-1">Last Name</label>
+                                                <p className="fw-semibold mb-0">{customer?.last_name || 'N/A'}</p>
+                                            </div>
+                                            <div className="col-md-6 border-top pt-3">
+                                                <label className="text-muted small d-block mb-1">Contact Number</label>
+                                                <p className="fw-semibold mb-0">{customer?.phone || 'N/A'}</p>
+                                            </div>
+                                            <div className="col-md-6 border-top pt-3">
+                                                <label className="text-muted small d-block mb-1">Email</label>
+                                                <p className="text-muted small mb-0">{customer?.email || 'N/A'}</p>
                                             </div>
                                         </div>
                                     </div>
-
-                                    {/* Account Security Card */}
-                                    <div className="card border-0 shadow-sm rounded-4">
-                                        <div className="card-body p-4">
-                                            <h5 className="mb-4 fw-bold">Account Security</h5>
-                                            <div className="row g-4">
-                                                <div className="col-md-6">
-                                                    <label className="text-muted small d-block mb-1">Email</label>
-                                                    <p className="fw-semibold mb-1">{customer?.email}</p>
-                                                    <a href="#" className="small text-decoration-none">Change email address</a>
-                                                </div>
-
-                                                <div className="col-md-6">
-                                                    <label className="text-muted small d-block mb-1">Password</label>
-                                                    <p className="fw-semibold mb-1">********</p>
-                                                    <a href="#" className="small text-decoration-none">Change password</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </>
+                                </div>
                             )}
 
-
+                            {/* My Orders Tab */}
                             {activeTab === "My Orders" && (
                                 <div className="card border-0 shadow-sm rounded-4 p-4">
                                     <h5 className="fw-bold mb-4">Order History</h5>
                                     {orders.length > 0 ? (
-                                        orders.map((order) => (
-                                            <div key={order.order_id} className="border rounded p-3 mb-3">
-                                                <div className="d-flex justify-content-between">
-                                                    <h6>Order #{order.order_id}</h6>
-                                                    <span className="badge bg-success">{order.final_total} BDT</span>
-                                                </div>
-                                                <hr />
-                                                {order.products.map((p, i) => (
-                                                    <div key={i} className="d-flex align-items-center mb-2">
-                                                        <img src={p.image_url} width="40" className="me-2 rounded" alt="" />
-                                                        <small>{p.product_name} (x{p.quantity})</small>
+                                        <>
+                                            {orders.slice(0, visibleOrders).map((order) => (
+                                                <div key={order.order_id} className="border rounded p-3 mb-3 shadow-sm bg-white">
+                                                    <div className="d-flex justify-content-between">
+                                                        <h6 className="fw-bold text-primary">Order #{order.order_id}</h6>
+                                                        <span className="badge bg-success">{order.final_total} BDT</span>
                                                     </div>
-                                                ))}
-                                                <small className="text-muted">Date: {new Date(order.created_at).toLocaleDateString()}</small>
-                                            </div>
-                                        ))
-                                    ) : <p>No orders found.</p>}
+                                                    <hr className="my-2 text-muted" />
+                                                    {order.products.map((p, i) => (
+                                                        <div key={i} className="d-flex align-items-center mb-2">
+                                                            <img src={p.image_url} width="40" height="40" className="me-3 rounded border" alt="" />
+                                                            <small className="fw-medium">{p.product_name} (x{p.quantity})</small>
+                                                        </div>
+                                                    ))}
+                                                    <div className="mt-2 text-end">
+                                                        <small className="text-muted">Date: {new Date(order.created_at).toLocaleDateString()}</small>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                            {orders.length > visibleOrders && (
+                                                <div className="text-center mt-4">
+                                                    <button onClick={handleViewMore} className="btn btn-primary rounded-pill px-5 py-2 shadow-sm">View More</button>
+                                                </div>
+                                            )}
+                                        </>
+                                    ) : <p className="text-center text-muted py-4">No orders found.</p>}
                                 </div>
                             )}
+
+                            {/* Support Tickets Tab */}
+                            {activeTab === "Support Tickets" && (
+                                <div className="card border-0 shadow-sm rounded-4 p-4">
+                                    <div className="d-flex justify-content-between align-items-center mb-4">
+                                        <h5 className="fw-bold mb-0">Support Tickets</h5>
+                                        <button 
+                                            className="btn btn-primary btn-sm rounded-pill px-3"
+                                            onClick={() => setShowTicketForm(!showTicketForm)}
+                                        >
+                                            {showTicketForm ? "View All Tickets" : "+ Create Ticket"}
+                                        </button>
+                                    </div>
+
+                                    {showTicketForm ? (
+                                        <div className="ticket-form row g-3">
+                                            <div className="col-12">
+                                                <label className="form-label small fw-bold">Subject</label>
+                                                <input type="text" className="form-control rounded-3" placeholder="Briefly describe the issue" />
+                                            </div>
+                                            <div className="col-md-6">
+                                                <label className="form-label small fw-bold">Issue Category</label>
+                                                <select className="form-select rounded-3">
+                                                    <option>Delivery Issue</option>
+                                                    <option>Payment Problem</option>
+                                                    <option>Product Quality</option>
+                                                    <option>Others</option>
+                                                </select>
+                                            </div>
+                                            <div className="col-md-6">
+                                                <label className="form-label small fw-bold">Priority</label>
+                                                <select className="form-select rounded-3">
+                                                    <option>Low</option>
+                                                    <option>Medium</option>
+                                                    <option>High</option>
+                                                </select>
+                                            </div>
+                                            <div className="col-12">
+                                                <label className="form-label small fw-bold">Message Details</label>
+                                                <textarea className="form-control rounded-3" rows="4" placeholder="Write your message here..."></textarea>
+                                            </div>
+                                            <div className="col-12">
+                                                <button className="btn btn-primary px-4 rounded-pill">Submit Ticket</button>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="table-responsive">
+                                            <table className="table table-hover align-middle border-top">
+                                                <thead className="small text-muted">
+                                                    <tr>
+                                                        <th>Ticket ID</th>
+                                                        <th>Subject</th>
+                                                        <th>Status</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {tickets.length > 0 ? tickets.map((ticket, index) => (
+                                                        <tr key={index}>
+                                                            <td className="fw-bold">#TK-{ticket.id}</td>
+                                                            <td>{ticket.subject}</td>
+                                                            <td><span className="badge bg-warning-subtle text-warning rounded-pill">Pending</span></td>
+                                                            <td><button className="btn btn-sm btn-light border rounded-pill px-3">View</button></td>
+                                                        </tr>
+                                                    )) : (
+                                                        <tr>
+                                                            <td colSpan="4" className="text-center py-5 text-muted">
+                                                                <i className="bi bi-chat-left-text d-block fs-1 mb-2 opacity-25"></i>
+                                                                No tickets found. Need help? Create a ticket.
+                                                            </td>
+                                                        </tr>
+                                                    )}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
                         </div>
                     </div>
                 </div>
