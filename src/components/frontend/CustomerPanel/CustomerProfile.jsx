@@ -12,12 +12,89 @@ const CustomerProfile = () => {
     const [activeTab, setActiveTab] = useState("Account Information");
     const [visibleOrders, setVisibleOrders] = useState(2);
 
+    const [ticketForm, setTicketForm] = useState({
+        subject: '',
+        category: 'Delivery Issue',
+        priority: 'Medium',
+        message: ''
+    });
+
+    const [loadingTicket, setLoadingTicket] = useState(false);
+
     // সাপোর্ট টিকিটের জন্য নতুন স্টেট
-    const [tickets, setTickets] = useState([]); 
+    const [tickets, setTickets] = useState([]);
     const [showTicketForm, setShowTicketForm] = useState(false);
 
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
+
+
+    const handleTicketChange = (e) => {
+        setTicketForm({
+            ...ticketForm,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const fetchTickets = async () => {
+        try {
+            const token = localStorage.getItem("token");
+
+            const res = await axios.get(
+                `${import.meta.env.VITE_API_BASE_URL}/support-tickets`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            setTickets(res.data.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        if (activeTab === "Support Tickets") {
+            fetchTickets();
+        }
+    }, [activeTab]);
+
+    const submitTicket = async () => {
+        try {
+            setLoadingTicket(true);
+
+            const token = localStorage.getItem("token");
+
+            await axios.post(
+                `${import.meta.env.VITE_API_BASE_URL}/support-tickets`,
+                ticketForm,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            alert("Ticket created successfully");
+
+            setTicketForm({
+                subject: '',
+                category: 'Delivery Issue',
+                priority: 'Medium',
+                message: ''
+            });
+
+            setShowTicketForm(false);
+            fetchTickets();
+
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoadingTicket(false);
+        }
+    };
 
     useEffect(() => {
         const fetchCustomerData = async () => {
@@ -60,7 +137,7 @@ const CustomerProfile = () => {
             };
             if (customer?.id) fetchOrders();
         }
-        
+
         // সাপোর্ট টিকিট ফেচ করার লজিক (প্রয়োজন হলে এখানে API কল করতে পারেন)
         if (activeTab === "Support Tickets") {
             // fetchTickets(); 
@@ -130,7 +207,7 @@ const CustomerProfile = () => {
 
                         {/* RIGHT CONTENT AREA */}
                         <div className="col-lg-8 col-xl-9">
-                            
+
                             {/* Default Under Development View */}
                             {!["Account Information", "My Orders", "Support Tickets"].includes(activeTab) && (
                                 <div className="card border-0 shadow-sm rounded-4 p-4 text-center">
@@ -206,78 +283,143 @@ const CustomerProfile = () => {
                             {/* Support Tickets Tab */}
                             {activeTab === "Support Tickets" && (
                                 <div className="card border-0 shadow-sm rounded-4 p-4">
+
                                     <div className="d-flex justify-content-between align-items-center mb-4">
                                         <h5 className="fw-bold mb-0">Support Tickets</h5>
-                                        <button 
+
+                                        <button
                                             className="btn btn-primary btn-sm rounded-pill px-3"
                                             onClick={() => setShowTicketForm(!showTicketForm)}
                                         >
-                                            {showTicketForm ? "View All Tickets" : "+ Create Ticket"}
+                                            {showTicketForm ? "View Tickets" : "+ Create Ticket"}
                                         </button>
                                     </div>
 
+                                    {/* ================= FORM ================= */}
                                     {showTicketForm ? (
                                         <div className="ticket-form row g-3">
+
                                             <div className="col-12">
                                                 <label className="form-label small fw-bold">Subject</label>
-                                                <input type="text" className="form-control rounded-3" placeholder="Briefly describe the issue" />
+                                                <input
+                                                    type="text"
+                                                    name="subject"
+                                                    value={ticketForm.subject}
+                                                    onChange={handleTicketChange}
+                                                    className="form-control rounded-3"
+                                                    placeholder="Briefly describe the issue"
+                                                />
                                             </div>
+
                                             <div className="col-md-6">
-                                                <label className="form-label small fw-bold">Issue Category</label>
-                                                <select className="form-select rounded-3">
+                                                <label className="form-label small fw-bold">Category</label>
+                                                <select
+                                                    name="category"
+                                                    value={ticketForm.category}
+                                                    onChange={handleTicketChange}
+                                                    className="form-select rounded-3"
+                                                >
                                                     <option>Delivery Issue</option>
                                                     <option>Payment Problem</option>
                                                     <option>Product Quality</option>
                                                     <option>Others</option>
                                                 </select>
                                             </div>
+
                                             <div className="col-md-6">
                                                 <label className="form-label small fw-bold">Priority</label>
-                                                <select className="form-select rounded-3">
+                                                <select
+                                                    name="priority"
+                                                    value={ticketForm.priority}
+                                                    onChange={handleTicketChange}
+                                                    className="form-select rounded-3"
+                                                >
                                                     <option>Low</option>
                                                     <option>Medium</option>
                                                     <option>High</option>
                                                 </select>
                                             </div>
+
                                             <div className="col-12">
-                                                <label className="form-label small fw-bold">Message Details</label>
-                                                <textarea className="form-control rounded-3" rows="4" placeholder="Write your message here..."></textarea>
+                                                <label className="form-label small fw-bold">Message</label>
+                                                <textarea
+                                                    name="message"
+                                                    value={ticketForm.message}
+                                                    onChange={handleTicketChange}
+                                                    rows="4"
+                                                    className="form-control rounded-3"
+                                                    placeholder="Write your message here..."
+                                                ></textarea>
                                             </div>
+
                                             <div className="col-12">
-                                                <button className="btn btn-primary px-4 rounded-pill">Submit Ticket</button>
+                                                <button
+                                                    onClick={submitTicket}
+                                                    disabled={loadingTicket}
+                                                    className="btn btn-primary px-4 rounded-pill"
+                                                >
+                                                    {loadingTicket ? "Submitting..." : "Submit Ticket"}
+                                                </button>
                                             </div>
+
                                         </div>
                                     ) : (
+
+                                        /* ================= TABLE ================= */
                                         <div className="table-responsive">
+
                                             <table className="table table-hover align-middle border-top">
+
                                                 <thead className="small text-muted">
                                                     <tr>
                                                         <th>Ticket ID</th>
                                                         <th>Subject</th>
                                                         <th>Status</th>
-                                                        <th>Action</th>
+                                                        <th>Date</th>
                                                     </tr>
                                                 </thead>
+
                                                 <tbody>
-                                                    {tickets.length > 0 ? tickets.map((ticket, index) => (
-                                                        <tr key={index}>
-                                                            <td className="fw-bold">#TK-{ticket.id}</td>
-                                                            <td>{ticket.subject}</td>
-                                                            <td><span className="badge bg-warning-subtle text-warning rounded-pill">Pending</span></td>
-                                                            <td><button className="btn btn-sm btn-light border rounded-pill px-3">View</button></td>
-                                                        </tr>
-                                                    )) : (
+                                                    {tickets.length > 0 ? (
+                                                        tickets.map((ticket) => (
+                                                            <tr key={ticket.id}>
+                                                                <td className="fw-bold">
+                                                                    #TK-{ticket.ticket_no || ticket.id}
+                                                                </td>
+
+                                                                <td>{ticket.subject}</td>
+
+                                                                <td>
+                                                                    <span className={`badge rounded-pill
+                                            ${ticket.status === "Pending" && "bg-warning"}
+                                            ${ticket.status === "Resolved" && "bg-success"}
+                                            ${ticket.status === "In Progress" && "bg-primary"}
+                                            ${ticket.status === "Closed" && "bg-dark"}
+                                        `}>
+                                                                        {ticket.status}
+                                                                    </span>
+                                                                </td>
+
+                                                                <td className="text-muted small">
+                                                                    {new Date(ticket.created_at).toLocaleDateString()}
+                                                                </td>
+                                                            </tr>
+                                                        ))
+                                                    ) : (
                                                         <tr>
                                                             <td colSpan="4" className="text-center py-5 text-muted">
-                                                                <i className="bi bi-chat-left-text d-block fs-1 mb-2 opacity-25"></i>
-                                                                No tickets found. Need help? Create a ticket.
+                                                                <i className="bi bi-chat-left-text fs-1 d-block mb-2 opacity-25"></i>
+                                                                No tickets found. Create your first ticket.
                                                             </td>
                                                         </tr>
                                                     )}
                                                 </tbody>
+
                                             </table>
+
                                         </div>
                                     )}
+
                                 </div>
                             )}
 
